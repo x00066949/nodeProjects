@@ -1,1 +1,1 @@
-# ScumMaster-bot
+# ScrumMaster-bot
