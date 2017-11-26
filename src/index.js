@@ -20,6 +20,7 @@ var requireEnv = require("require-environment-variables");
 const log = debug('watsonwork-scrumbot');
 
 var message;
+var content;
 
 app.use(express.static(__dirname + '/view'));
 //Store all HTML files in view folder.
@@ -29,128 +30,130 @@ app.use(express.static(__dirname + '/script'));
 //to show in browser
 //set route for homepage 
 const gitConnect = () => {
-	rp({
-		uri: 'https://api.github.com/',
-		
-		headers: {
+  rp({
+    uri: 'https://api.github.com/',
+
+    headers: {
       'User-Agent': 'simple_rest_app',
-		},
-		qs: {
-		  //q: id,
-		  //client_id: env.GIT_CLIENT_ID,
+    },
+    qs: {
+      //q: id,
+      //client_id: env.GIT_CLIENT_ID,
       //client_secret : env.GIT_CLIENT_SECRET
       client_id: process.env.GIT_CLIENT_ID,
-      client_secret : process.env.GIT_CLIENT_SECRET
-		},
-		json: true
-	  })
-		.then((data) => {
-      message = data;	
+      client_secret: process.env.GIT_CLIENT_SECRET
+    },
+    json: true
+  })
+    .then((data) => {
+      message = data;
       log(data)
-      
-		  //response.send(data)
-		})
-		.catch((err) => {
-      console.log(err)
-		  //response.send('error : '+err)
+
+      //response.send(data)
     })
-	
+    .catch((err) => {
+      console.log(err)
+      //response.send('error : '+err)
+    })
+
 };
 
-export const scrumbot = (appId, token) => (req,res) => {
-   // Respond to the Webhook right away, as the response message will
+export const scrumbot = (appId, token) => (req, res) => {
+  // Respond to the Webhook right away, as the response message will
   // be sent asynchronously
   res.status(201).end();
-  
+
   // Only handle message-created Webhook events, and ignore the app's
   // own messages
-  if(req.body.userId === appId){
+  if (req.body.userId === appId) {
     console.log('error %o', req.body);
     return;
-    
+
   }
-  if(res.statusCode !== 201 ) {
+  if (res.statusCode !== 201) {
     log(res);
     return;
   }
 
-  if(req.body.type === 'message-annotation-added' && req.body.annotationType === 'actionSelected'){  
+  if (req.body.type === 'message-annotation-added' && req.body.annotationType === 'actionSelected') {
     const annotationPayload = req.body.annotationPayload;
     //if (annotationPayload.actionId ===  ''){
-        log(req.body);
+    log(req.body);
     //}
 
-  }  
+  }
 
   //handle new messages and ignore the app's own messages
-  if(req.body.type === 'message-created' && req.body.userId !== appId){  
+  if (req.body.type === 'message-created' && req.body.userId !== appId) {
     log('Got a message %o', req.body);
+
+    //call gitconnect function
     gitConnect();
     
+
     //send to space
     send(req.body.spaceId,
       util.format(
         'Hey %s, result is: %s',
-        req.body.userName, message.issues_url ),
+        req.body.userName, message.issues_url),
       token(),
       (err, res) => {
-        if(!err)
+        if (!err)
           log('Sent message to space %s', req.body.spaceId);
       })
   };
 };
 
-export const getRepo = (appId, token) => (req,res) => {
+export const getRepo = (appId, token) => (req, res) => {
   // Respond to the Webhook right away, as the response message will
- // be sent asynchronously
- res.status(201).end();
- 
- // Only handle message-created Webhook events, and ignore the app's
- // own messages
- if(req.body.type !== 'action-selected' || req.body.userId === appId){
-   console.log('error %o', req.body);
-   return;
-   
- }
- if(res.statusCode !== 201 ) {
-   log(res);
-   return;
- }
-   
- log('Got a message %o', req.body);
- gitConnect();
- 
- //send to space
- send(req.body.spaceId,
-   util.format(
-     'Hey %s, result is: %s',
-     req.body.userName, message.issues_url ),
-   token(),
-   (err, res) => {
-     if(!err)
-       log('Sent message to space %s', req.body.spaceId);
-   })
+  // be sent asynchronously
+  res.status(201).end();
+
+  // Only handle message-created Webhook events, and ignore the app's
+  // own messages
+  if (req.body.type !== 'message-created' || req.body.userId === appId) {
+    console.log('error %o', req.body);
+    return;
+
+  }
+  if (res.statusCode !== 201) {
+    log(res);
+    return;
+  }
+
+  log('Got a message %o', req.body);
+  
+  //send to space
+  send(req.body.spaceId,
+    util.format(
+      'Hey %s, result is: %s',
+      req.body.userName, message.issues_url),
+    token(),
+    (err, res) => {
+      if (!err)
+        log('Sent message to space %s', req.body.spaceId);
+    })
 };
 
-app.get('/r/:repo/:issue',function(request,response) {
-	rp({
-		uri: 'https://api.zenhub.io/p1/repositories/'+request.params.repo+'/issues/'+request.params.issue,
-		
-		headers: {
-			'X-Authentication-Token': process.env.ZENHUB_TOKEN
-		},
-	
-		json: true
-   	})
-		.then((data) => {
-		  //console.log(data)
-		  response.send(data)
-		})
-		.catch((err) => {
-		  console.log(err)
-		  response.render('error')
+app.get('/r/:repo/:issue', function (request, response) {
+  rp({
+    uri: 'https://api.zenhub.io/p1/repositories/' + request.params.repo + '/issues/' + request.params.issue,
+
+    headers: {
+      'X-Authentication-Token': process.env.ZENHUB_TOKEN
+    },
+
+    json: true
+  })
+    .then((data) => {
+      //console.log(data)
+      response.send(data)
     })
-  });
+    .catch((err) => {
+      console.log(err)
+      response.render('error')
+    })
+});
 
 // Send an app message to the conversation in a space
 const send = (spaceId, text, tok, cb) => {
@@ -179,7 +182,7 @@ const send = (spaceId, text, tok, cb) => {
         }]
       }
     }, (err, res) => {
-      if(err || res.statusCode !== 201) {
+      if (err || res.statusCode !== 201) {
         log('Error sending message %o', err || res.statusCode);
         cb(err || new Error(res.statusCode));
         return;
@@ -216,7 +219,7 @@ const dialog = (spaceId, text, tok, cb) => {
         }]
       }
     }, (err, res) => {
-      if(err || res.statusCode !== 201) {
+      if (err || res.statusCode !== 201) {
         log('Error sending message %o', err || res.statusCode);
         cb(err || new Error(res.statusCode));
         return;
@@ -228,7 +231,7 @@ const dialog = (spaceId, text, tok, cb) => {
 
 // Verify Watson Work request signature
 export const verify = (wsecret) => (req, res, buf, encoding) => {
-  if(req.get('X-OUTBOUND-TOKEN') !==
+  if (req.get('X-OUTBOUND-TOKEN') !==
     createHmac('sha256', wsecret).update(buf).digest('hex')) {
     log('Invalid request signature');
     const err = new Error('Invalid request signature');
@@ -239,7 +242,7 @@ export const verify = (wsecret) => (req, res, buf, encoding) => {
 
 // Handle Watson Work Webhook challenge requests
 export const challenge = (wsecret) => (req, res, next) => {
-  if(req.body.type === 'verification') {
+  if (req.body.type === 'verification') {
     log('Got Webhook verification challenge %o', req.body);
     const body = JSON.stringify({
       response: req.body.challenge
@@ -256,7 +259,7 @@ export const challenge = (wsecret) => (req, res, next) => {
 export const webapp = (appId, secret, wsecret, cb) => {
   // Authenticate the app and get an OAuth token
   oauth.run(appId, secret, (err, token) => {
-    if(err) {
+    if (err) {
       cb(err);
       return;
     }
@@ -267,73 +270,73 @@ export const webapp = (appId, secret, wsecret, cb) => {
       // Configure Express route for the app Webhook
       .post('/scrumbot',
 
-        // Verify Watson Work request signature and parse request body
-        bparser.json({
-          type: '*/*',
-          verify: verify(wsecret)
-        }),
+      // Verify Watson Work request signature and parse request body
+      bparser.json({
+        type: '*/*',
+        verify: verify(wsecret)
+      }),
 
-        // Handle Watson Work Webhook challenge requests
-        challenge(wsecret),
+      // Handle Watson Work Webhook challenge requests
+      challenge(wsecret),
 
-        // Handle Watson Work messages
-        scrumbot(appId, token)));
+      // Handle Watson Work messages
+      scrumbot(appId, token)));
   });
 };
 
 // App main entry point
 const main = (argv, env, cb) => {
-  
+
   // Create Express Web app
   webapp(
     env.SCRUMBOT_APPID, env.SCRUMBOT_SECRET,
     env.SCRUMBOT_WEBHOOK_SECRET, (err, app) => {
-      
-      if(err) {
+
+      if (err) {
         cb(err);
-        log("an error occoured "+err);
-        
+        log("an error occoured " + err);
+
         return;
       }
 
-      if(env.PORT) {
+      if (env.PORT) {
         log('HTTP server listening on port %d', env.PORT);
 
-//        http.createServer(app).listen(env.PORT, cb);
-        
+        //        http.createServer(app).listen(env.PORT, cb);
+
       }
 
       else
         // Listen on the configured HTTPS port, default to 443
         ssl.conf(env, (err, conf) => {
-          if(err) {
+          if (err) {
             cb(err);
             return;
           }
           const port = env.SSLPORT || 443;
           log('HTTPS server listening on port %d', port);
-         // https.createServer(conf, app).listen(port, cb);
+          // https.createServer(conf, app).listen(port, cb);
         });
     });
 };
 
-if (require.main === module){
+if (require.main === module) {
   main(process.argv, process.env, (err) => {
-    
-    if(err) {
+
+    if (err) {
       console.log('Error starting app:', err);
       return;
     }
-    
+
     log('App started');
   });
-  
+
 }
 
 //set listening port
 http.createServer(app).listen(process.env.PORT || 9000);
-if(process.env.PORT){
+if (process.env.PORT) {
   log('HTTP server listening on port %d', process.env.PORT);
-}else{
-  log('running on port 9000...');  
+} else {
+  log('running on port 9000...');
 }

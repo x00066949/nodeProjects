@@ -163,4 +163,10 @@ describe('watsonwork-scrumbot', () => {
         });
       });
     });
+
+    it('rejects messages with invalid signature', (done) => {
+      
+
+    });
+
   });
