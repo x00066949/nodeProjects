@@ -9,7 +9,7 @@ require.cache[require.resolve('request')].exports = {
 };
 
 // Load the scrumbot app
-const echo = require('../index');
+const scrumbot = require('../index');
 
 // Generate a test OAuth token
 const token = jsonwebtoken.sign({}, 'secret', { expiresIn: '1h' });
@@ -55,7 +55,7 @@ describe('watsonwork-scrumbot', () => {
     };
 
     // Create the Echo Web app
-    echo.webapp('testappid', 'testsecret', 'testwsecret', (err, app) => {
+    scrumbot.webapp('testappid', 'testsecret', 'testwsecret', (err, app) => {
       expect(err).to.equal(null);
       check();
     });
