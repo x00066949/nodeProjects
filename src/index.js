@@ -8,24 +8,18 @@ import * as http from 'http';
 import * as https from 'https';
 import * as oauth from './watson';
 
-//import * as ssl from './ssl';
 import debug from 'debug';
 var bodyParser = require('body-parser');
 var path = require('path');
 var rp = require('request-promise');
 var requireEnv = require("require-environment-variables");
-//requireEnv(['npm_package_scripts_GIT_CLIENT_ID', 'npm_package_scripts_GIT_CLIENT_SECRET', 'npm_package_scripts_ZENHUB_TOKEN']);
 
 // Setup debug log
 const log = debug('watsonwork-scrumbot');
 
 var message;
 var content;
-
-app.use(express.static(__dirname + '/view'));
-//Store all HTML files in view folder.
-app.use(express.static(__dirname + '/script'));
-//Store all JS and CSS in Scripts folder.
+var gsecret;
 
 //to show in browser
 //set route for homepage 
@@ -37,9 +31,6 @@ const gitConnect = () => {
       'User-Agent': 'simple_rest_app',
     },
     qs: {
-      //q: id,
-      //client_id: env.GIT_CLIENT_ID,
-      //client_secret : env.GIT_CLIENT_SECRET
       client_id: process.env.GIT_CLIENT_ID,
       client_secret: process.env.GIT_CLIENT_SECRET
     },
@@ -104,35 +95,41 @@ export const scrumbot = (appId, token) => (req, res) => {
   };
 };
 
-export const getRepo = (appId, token) => (req, res) => {
+
+
+
+
+
+export const getRepo = (repoName) => {
   // Respond to the Webhook right away, as the response message will
   // be sent asynchronously
   res.status(201).end();
+  rp({
+    uri: 'https://api.github.com/user/repos',
 
-  // Only handle message-created Webhook events, and ignore the app's
-  // own messages
-  if (req.body.type !== 'message-created' || req.body.userId === appId) {
-    console.log('error %o', req.body);
-    return;
+    headers: {
+      'User-Agent': 'simple_rest_app',
+    },
+    qs: {
+    
+      client_id: process.env.GIT_CLIENT_ID,
+      client_secret: process.env.GIT_CLIENT_SECRET
+    },
+    json: true
+  })
+    .then((data) => {
+      message = data;
+      log(data)
 
-  }
-  if (res.statusCode !== 201) {
-    log(res);
-    return;
-  }
-
-  log('Got a message %o', req.body);
-  
-  //send to space
-  send(req.body.spaceId,
-    util.format(
-      'Hey %s, result is: %s',
-      req.body.userName, message.issues_url),
-    token(),
-    (err, res) => {
-      if (!err)
-        log('Sent message to space %s', req.body.spaceId);
+      //response.send(data)
     })
+    .catch((err) => {
+      console.log(err)
+      //response.send('error : '+err)
+    })
+
+
+  
 };
 
 app.get('/r/:repo/:issue', function (request, response) {
@@ -302,8 +299,64 @@ const main = (argv, env, cb) => {
       if (env.PORT) {
         log('HTTP server listening on port %d', env.PORT);
 
-        //        http.createServer(app).listen(env.PORT, cb);
+        http.createServer(app).listen(env.PORT, cb);
 
+       //default page
+        app.get('/', function (request, response) {
+          rp({
+            uri: 'https://api.github.com/user/repos',
+        
+            headers: {
+              'User-Agent': 'simple_rest_app',
+
+            },
+            qs: {
+              client_id: process.env.GIT_CLIENT_ID,
+              client_secret: process.env.GIT_CLIENT_SECRET
+            },
+            json: true
+          })
+            .then((data) => {
+              message = data;
+              log(data)
+        
+              response.send(data)
+            })
+            .catch((err) => {
+              console.log(err)
+              response.send('error : '+err)
+            })
+        });
+
+        app.get('/callback/', function (req, res) {
+            console.log(req.query); 
+            gsecret = req.query.code;
+            res.send("Hi"+gsecret);
+
+        });
+
+        app.post(
+          'https://github.com/login/oauth/access_token', {
+            
+            json: true,
+            // An App message can specify a color, a title, markdown text and
+            // an 'actor' useful to show where the message is coming from
+            body: {
+              client_id: process.env.GIT_CLIENT_ID,
+              client_secret: process.env.GIT_CLIENT_SECRET,
+              code: gsecret
+            }
+          }, (err, res) => {
+            if (err || res.statusCode !== 201) {
+              log('staus: ', res.statusCode);
+              cb(err || new Error(res.statusCode));
+              return;
+            }
+            log('Send result %d, %o', res.statusCode, res.body);
+            cb(null, res.body);
+          });
+
+        
       }
 
       else
@@ -331,12 +384,4 @@ if (require.main === module) {
     log('App started');
   });
 
-}
-
-//set listening port
-http.createServer(app).listen(process.env.PORT || 9000);
-if (process.env.PORT) {
-  log('HTTP server listening on port %d', process.env.PORT);
-} else {
-  log('running on port 9000...');
 }

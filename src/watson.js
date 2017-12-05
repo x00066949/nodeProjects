@@ -1,23 +1,12 @@
 import * as request from 'request';
 import * as jsonwebtoken from 'jsonwebtoken';
 import debug from 'debug';
-//var express = require('express');
-//var app = express();
-//var bodyParser = require('body-parser');
-//var jsonwebtoken = require('jsonwebtoken');
-//var debug = requre('debug');
-//const request = require('request');
-//let credentials = require('./keys.json');
+
 
 // Setup debug log
 const log = debug('watsonwork-scrumbot');
 
 export const run = (appId, secret, cb) => {
-/*
-  if (!appId || !secret) {
-    log("Please provide the app id and app secret as environment variables.");
-    process.exit(1);
-  }*/
 
   let tok;
   
