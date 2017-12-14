@@ -78,8 +78,9 @@ export const scrumbot = (appId, token) => (req, res) => {
   if (req.body.type === 'message-created' && req.body.userId !== appId) {
     log('Got a message %o', req.body);
     var to_split = req.body.content;
+    message = 'Not Found'
 
-    if(to_split =="/issue"){
+    if(to_split ==='/issue'){
 
       get_issue(71240446,1);
     }
