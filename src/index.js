@@ -77,6 +77,8 @@ export const scrumbot = (appId, token) => (req, res) => {
   //handle new messages and ignore the app's own messages
   if (req.body.type === 'message-created' && req.body.userId !== appId) {
     log('Got a message %o', req.body);
+    var to_split = req.body;
+
 
     //call gitconnect function
     gitConnect();
@@ -132,25 +134,27 @@ export const getRepo = (repoName) => {
   
 };
 
-app.get('/r/:repo/:issue', function (request, response) {
-  rp({
-    uri: 'https://api.zenhub.io/p1/repositories/' + request.params.repo + '/issues/' + request.params.issue,
+const get_issue = (repid, issueid) =>{
+  app.get(function (request, response) {
+    rp({
+      uri: 'https://api.zenhub.io/p1/repositories/' + repoid + '/issues/' + issueid,
 
-    headers: {
-      'X-Authentication-Token': process.env.ZENHUB_TOKEN
-    },
+      headers: {
+        'X-Authentication-Token': process.env.ZENHUB_TOKEN
+      },
 
-    json: true
-  })
-    .then((data) => {
-      //console.log(data)
-      response.send(data)
+      json: true
     })
-    .catch((err) => {
-      console.log(err)
-      response.render('error')
-    })
-});
+      .then((data) => {
+        //console.log(data)
+        response.send(data)
+      })
+      .catch((err) => {
+        console.log(err)
+        response.render('error')
+      })
+  });
+};
 
 // Send an app message to the conversation in a space
 const send = (spaceId, text, tok, cb) => {
@@ -189,6 +193,7 @@ const send = (spaceId, text, tok, cb) => {
     });
 };
 
+/*
 //dialog
 const dialog = (spaceId, text, tok, cb) => {
   request.post(
@@ -225,7 +230,7 @@ const dialog = (spaceId, text, tok, cb) => {
       cb(null, res.body);
     });
 };
-
+*/
 // Verify Watson Work request signature
 export const verify = (wsecret) => (req, res, buf, encoding) => {
   if (req.get('X-OUTBOUND-TOKEN') !==
@@ -328,7 +333,7 @@ const main = (argv, env, cb) => {
             })
         });
 
-        app.get('/callback/', function (req, res) {
+        /*app.get('/callback/', function (req, res) {
             console.log(req.query); 
             gsecret = req.query.code;
             res.send("Hi"+gsecret);
@@ -354,7 +359,7 @@ const main = (argv, env, cb) => {
             }
             log('Send result %d, %o', res.statusCode, res.body);
             cb(null, res.body);
-          });
+          });*/
 
         
       }
