@@ -77,22 +77,17 @@ export const scrumbot = (appId, token) => (req, res) => {
   //handle new messages and ignore the app's own messages
   if (req.body.type === 'message-created' && req.body.userId !== appId) {
     log('Got a message %o', req.body);
+    log('content : '+req.body.content)
+    
     var to_split = req.body.content;
+    log(to_split);
     //message = 'Not Found'
 
     if(to_split === '/issue'){
+      log('zenhub route');
 
       get_issue(71240446,1);
-    }
-    if(to_split === '/git' ){
-
-      //call gitconnect function
-      gitConnect();
-    }
-    
-    
-
-    //send to space
+      //send to space
     send(req.body.spaceId,
       util.format(
         'Hey %s, result is: %s',
@@ -102,6 +97,27 @@ export const scrumbot = (appId, token) => (req, res) => {
         if (!err)
           log('Sent message to space %s', req.body.spaceId);
     })
+    }
+    if(to_split === '/git' ){
+
+      log('github route');
+      //call gitconnect function
+      gitConnect();
+      //send to space
+    send(req.body.spaceId,
+      util.format(
+        'Hey %s, result is: %s',
+        req.body.userName, message),
+      token(),
+      (err, res) => {
+        if (!err)
+          log('Sent message to space %s', req.body.spaceId);
+    })
+    }
+    
+    
+
+    
   };
 };
 
