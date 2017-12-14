@@ -37,7 +37,7 @@ const gitConnect = () => {
     json: true
   })
     .then((data) => {
-      message = data;
+      message = data.issues_url;
       log(data)
 
       //response.send(data)
@@ -77,23 +77,29 @@ export const scrumbot = (appId, token) => (req, res) => {
   //handle new messages and ignore the app's own messages
   if (req.body.type === 'message-created' && req.body.userId !== appId) {
     log('Got a message %o', req.body);
-    var to_split = req.body;
+    var to_split = req.body.content;
 
+    if(to_split =="/issue"){
 
-    //call gitconnect function
-    gitConnect();
+    }
+    if(to_split === '/git' ){
+
+      //call gitconnect function
+      gitConnect();
+    }
+    
     
 
     //send to space
     send(req.body.spaceId,
       util.format(
         'Hey %s, result is: %s',
-        req.body.userName, message.issues_url),
+        req.body.userName, message),
       token(),
       (err, res) => {
         if (!err)
           log('Sent message to space %s', req.body.spaceId);
-      })
+    })
   };
 };
 
@@ -148,6 +154,7 @@ const get_issue = (repid, issueid) =>{
       .then((data) => {
         //console.log(data)
         response.send(data)
+        message = data.pipeline.name
       })
       .catch((err) => {
         console.log(err)
