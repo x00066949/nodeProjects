@@ -81,6 +81,7 @@ export const scrumbot = (appId, token) => (req, res) => {
 
     if(to_split =="/issue"){
 
+      get_issue(71240446,1);
     }
     if(to_split === '/git' ){
 
