@@ -61,14 +61,14 @@ const get_issue = (repoid, issueid) =>{
     })
       .then((data) => {
         //console.log(data)
-        response.send(data)
+        //response.send(data)
         message = data.pipeline.name
         log(data)
         log('message : '+message)
       })
       .catch((err) => {
         console.log(err)
-        response.render('error')
+        //response.render('error')
       })
   //});
 };
