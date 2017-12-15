@@ -49,7 +49,7 @@ const gitConnect = () => {
 
 };
 const get_issue = (repoid, issueid) =>{
-  app.get(function (request, response) {
+  //app.get(function (request, response) {
     rp({
       uri: 'https://api.zenhub.io/p1/repositories/' + repoid + '/issues/' + issueid,
 
@@ -63,13 +63,14 @@ const get_issue = (repoid, issueid) =>{
         //console.log(data)
         response.send(data)
         message = data.pipeline.name
+        log(data)
         log('message : '+message)
       })
       .catch((err) => {
         console.log(err)
         response.render('error')
       })
-  });
+  //});
 };
 export const scrumbot = (appId, token) => (req, res) => {
   // Respond to the Webhook right away, as the response message will
