@@ -37,7 +37,7 @@ const gitConnect = () => {
     json: true
   })
     .then((data) => {
-      message = data.issues_url;
+      var message = data.issues_url;
       log(data)
 
       //response.send(data)
@@ -86,7 +86,11 @@ export const scrumbot = (appId, token) => (req, res) => {
     if(to_split === '/issue'){
       log('zenhub route');
 
+      log('message b4 zenR: '+message)
+      
       get_issue(71240446,1);
+      log('message after znR: '+message)
+      
       //send to space
     send(req.body.spaceId,
       util.format(
@@ -101,8 +105,13 @@ export const scrumbot = (appId, token) => (req, res) => {
     if(to_split === '/git' ){
 
       log('github route');
+      log('message b4 gitR: '+message)
+      
       //call gitconnect function
       gitConnect();
+
+      log('message after gitR: '+message)
+      
       //send to space
     send(req.body.spaceId,
       util.format(
@@ -172,7 +181,8 @@ const get_issue = (repid, issueid) =>{
       .then((data) => {
         //console.log(data)
         response.send(data)
-        message = data.pipeline.name
+        var message = data.pipeline.name
+        log('message : '+message)
       })
       .catch((err) => {
         console.log(err)
