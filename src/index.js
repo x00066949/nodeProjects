@@ -38,18 +38,14 @@ const gitConnect = () => {
   })
     .then((data) => {
       message = data.issues_url;
-      log(data)
 
-      //response.send(data)
     })
     .catch((err) => {
       console.log(err)
-      //response.send('error : '+err)
     })
 
 };
 const get_issue = (repoid, issueid) =>{
-  //app.get(function (request, response) {
     rp({
       uri: 'https://api.zenhub.io/p1/repositories/' + repoid + '/issues/' + issueid,
 
@@ -60,17 +56,16 @@ const get_issue = (repoid, issueid) =>{
       json: true
     })
       .then((data) => {
-        //console.log(data)
-        //response.send(data)
+        
         message = data.pipeline.name
         log(data)
         log('message : '+message)
       })
       .catch((err) => {
         console.log(err)
-        //response.render('error')
+      
       })
-  //});
+  
 };
 export const scrumbot = (appId, token) => (req, res) => {
   // Respond to the Webhook right away, as the response message will
@@ -111,11 +106,11 @@ export const scrumbot = (appId, token) => (req, res) => {
 
       log('message b4 zenR: '+message)
       
-      get_issue(71240446,1);
+      let get_issue_var = get_issue(71240446,1);
       log('message after znR: '+message)
       
       //send to space
-    send(req.body.spaceId,
+    get_issue_var.then(send(req.body.spaceId,
       util.format(
         'Hey %s, result is: %s',
         req.body.userName, message),
@@ -124,19 +119,19 @@ export const scrumbot = (appId, token) => (req, res) => {
         if (!err)
           log('Sent message to space %s', req.body.spaceId);
     })
-    }
+     ) }
     if(to_split === '/git' ){
 
       log('github route');
       log('message b4 gitR: '+message)
       
       //call gitconnect function
-      gitConnect();
+      let gitConnect_var = gitConnect();
 
       log('message after gitR: '+message)
       
       //send to space
-    send(req.body.spaceId,
+    gitConnect_var.then(send(req.body.spaceId,
       util.format(
         'Hey %s, result is: %s',
         req.body.userName, message),
@@ -144,8 +139,8 @@ export const scrumbot = (appId, token) => (req, res) => {
       (err, res) => {
         if (!err)
           log('Sent message to space %s', req.body.spaceId);
-    })
-    }
+      })
+    )}
     
     
 
