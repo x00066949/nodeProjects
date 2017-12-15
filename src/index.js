@@ -37,7 +37,7 @@ const gitConnect = () => {
     json: true
   })
     .then((data) => {
-      var message = data.issues_url;
+      message = data.issues_url;
       log(data)
 
       //response.send(data)
@@ -48,7 +48,29 @@ const gitConnect = () => {
     })
 
 };
+const get_issue = (repoid, issueid) =>{
+  app.get(function (request, response) {
+    rp({
+      uri: 'https://api.zenhub.io/p1/repositories/' + repoid + '/issues/' + issueid,
 
+      headers: {
+        'X-Authentication-Token': process.env.ZENHUB_TOKEN
+      },
+
+      json: true
+    })
+      .then((data) => {
+        //console.log(data)
+        response.send(data)
+        message = data.pipeline.name
+        log('message : '+message)
+      })
+      .catch((err) => {
+        console.log(err)
+        response.render('error')
+      })
+  });
+};
 export const scrumbot = (appId, token) => (req, res) => {
   // Respond to the Webhook right away, as the response message will
   // be sent asynchronously
@@ -167,29 +189,7 @@ export const getRepo = (repoName) => {
   
 };
 
-const get_issue = (repid, issueid) =>{
-  app.get(function (request, response) {
-    rp({
-      uri: 'https://api.zenhub.io/p1/repositories/' + repoid + '/issues/' + issueid,
 
-      headers: {
-        'X-Authentication-Token': process.env.ZENHUB_TOKEN
-      },
-
-      json: true
-    })
-      .then((data) => {
-        //console.log(data)
-        response.send(data)
-        var message = data.pipeline.name
-        log('message : '+message)
-      })
-      .catch((err) => {
-        console.log(err)
-        response.render('error')
-      })
-  });
-};
 
 // Send an app message to the conversation in a space
 const send = (spaceId, text, tok, cb) => {
