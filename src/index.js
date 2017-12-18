@@ -69,7 +69,7 @@ const get_issue = (repoid, issueid) =>{
 };
 
 function findSlashRepo(element){
-  return element = '/repo'
+  return element = '/repos'
 }
 export const scrumbot = (appId, token) => (req, res) => {
   // Respond to the Webhook right away, as the response message will
