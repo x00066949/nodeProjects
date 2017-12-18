@@ -45,6 +45,7 @@ const gitConnect = () => {
     })
 
 };
+
 const get_issue = (repoid, issueid) =>{
     rp({
       uri: 'https://api.zenhub.io/p1/repositories/' + repoid + '/issues/' + issueid,
@@ -64,9 +65,9 @@ const get_issue = (repoid, issueid) =>{
       .catch((err) => {
         console.log(err)
       
-      })
-  
+      })  
 };
+
 export const scrumbot = (appId, token) => (req, res) => {
   // Respond to the Webhook right away, as the response message will
   // be sent asynchronously
@@ -143,18 +144,9 @@ export const scrumbot = (appId, token) => (req, res) => {
         if (!err)
           log('Sent message to space %s', req.body.spaceId);
       })
-    )}
-    
-    
-
-    
+    )}    
   };
 };
-
-
-
-
-
 
 export const getRepo = (repoName) => {
   // Respond to the Webhook right away, as the response message will
@@ -177,18 +169,11 @@ export const getRepo = (repoName) => {
       message = data;
       log(data)
 
-      //response.send(data)
     })
     .catch((err) => {
       console.log(err)
-      //response.send('error : '+err)
     })
-
-
-  
 };
-
-
 
 // Send an app message to the conversation in a space
 const send = (spaceId, text, tok, cb) => {
@@ -227,44 +212,7 @@ const send = (spaceId, text, tok, cb) => {
     });
 };
 
-/*
-//dialog
-const dialog = (spaceId, text, tok, cb) => {
-  request.post(
-    'https://api.watsonwork.ibm.com/v1/spaces/' + spaceId + '/messages', {
-      headers: {
-        Authorization: 'Bearer ' + tok
-      },
-      json: true,
-      // An App message can specify a color, a title, markdown text and
-      // an 'actor' useful to show where the message is coming from
-      body: {
-        type: 'appMessage',
-        version: 1.0,
-        annotations: [{
-          type: 'generic',
-          version: 1.0,
 
-          color: '#6CB7FB',
-          title: 'github issue tracker',
-          text: text,
-
-          actor: {
-            name: 'github issue app'
-          }
-        }]
-      }
-    }, (err, res) => {
-      if (err || res.statusCode !== 201) {
-        log('Error sending message %o', err || res.statusCode);
-        cb(err || new Error(res.statusCode));
-        return;
-      }
-      log('Send result %d, %o', res.statusCode, res.body);
-      cb(null, res.body);
-    });
-};
-*/
 // Verify Watson Work request signature
 export const verify = (wsecret) => (req, res, buf, encoding) => {
   if (req.get('X-OUTBOUND-TOKEN') !==

@@ -58,7 +58,3 @@ export const run = (appId, secret, cb) => {
     setImmediate(() => refresh(cb));
   
 };
-
-
-
-
