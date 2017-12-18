@@ -68,6 +68,9 @@ const get_issue = (repoid, issueid) =>{
       })  
 };
 
+function findSlashRepo(element){
+  return element = '/repo'
+}
 export const scrumbot = (appId, token) => (req, res) => {
   // Respond to the Webhook right away, as the response message will
   // be sent asynchronously
@@ -101,7 +104,7 @@ export const scrumbot = (appId, token) => (req, res) => {
     var to_split = req.body.content;
     var words = to_split.split();
 
-    log(words.findIndex("/repo"));
+    log(words.findIndex(findSlashRepo));
     log(to_split);
     //message = 'Not Found'
 
