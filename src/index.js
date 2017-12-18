@@ -98,6 +98,9 @@ export const scrumbot = (appId, token) => (req, res) => {
     log('content : '+req.body.content)
     
     var to_split = req.body.content;
+    var words = to_split.split();
+
+    log(words.findIndex("/repo"));
     log(to_split);
     //message = 'Not Found'
 
