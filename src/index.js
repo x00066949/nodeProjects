@@ -103,6 +103,7 @@ export const scrumbot = (appId, token) => (req, res) => {
     
     var to_split = req.body.content;
     var words = to_split.split();
+    log('array : '+words)
 
     log(words.findIndex(findSlashRepo));
     log(to_split);
