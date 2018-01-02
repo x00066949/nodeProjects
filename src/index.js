@@ -7,6 +7,7 @@ import { createHmac } from 'crypto';
 import * as http from 'http';
 import * as https from 'https';
 import * as oauth from './watson';
+import * as board from './scrum_board';
 
 import debug from 'debug';
 var bodyParser = require('body-parser');
@@ -99,9 +100,20 @@ export const scrumbot = (appId, token) => (req, res) => {
   //handle new messages and ignore the app's own messages
   if (req.body.type === 'message-created' && req.body.userId !== appId) {
     log('Got a message %o', req.body);
-    log('content : '+req.body.content)
+    log('content : '+req.body.content);
+
+    var to_post = board.getCommand(req.body.content);
     
-    var to_split = req.body.content;
+    send(req.body.spaceId,
+      util.format(
+        'Hey %s, result is: %s',
+        req.body.userName, to_post),
+      token(),
+      (err, res) => {
+        if (!err)
+          log('Sent message to space %s', req.body.spaceId);
+    })
+    /*var to_split = req.body.content;
     var words = to_split.split();
     log('array length : '+words.length)
 
@@ -110,12 +122,9 @@ export const scrumbot = (appId, token) => (req, res) => {
     //message = 'Not Found'
 
     if(to_split === '/issue'){
-      log('zenhub route');
-
-      log('message b4 zenR: '+message)
       
-      let get_issue_var = get_issue(71240446,1);
-      log('message after znR: '+message)
+      //let get_issue_var = get_issue(71240446,1);
+      
       
       //send to space
     get_issue_var.then(send(req.body.spaceId,
@@ -148,7 +157,7 @@ export const scrumbot = (appId, token) => (req, res) => {
         if (!err)
           log('Sent message to space %s', req.body.spaceId);
       })
-    )}    
+    )}  */  
   };
 };
 
