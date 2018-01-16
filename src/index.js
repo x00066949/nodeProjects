@@ -102,7 +102,9 @@ export const scrumbot = (appId, token) => (req, res) => {
     log('Got a message %o', req.body);
     log('content : '+req.body.content);
 
-    var to_post = board.getScrumData(req.body.content);
+    var message1 = req.body.content;
+
+    var to_post = board.getScrumData({request:req, response:res, message1});
     
     send(req.body.spaceId,
       util.format(
