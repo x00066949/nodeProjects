@@ -144,7 +144,7 @@ module.exports = {
         var IsEpic = Data.is_epic;
         var Pipelines = Data.pipeline;
         console.log('User has Pipelines=' + JSON.stringify(Pipelines));
-        return res.json(Data);
+        return Data;
       })
       .catch(function (err) {
         var Error = err;
