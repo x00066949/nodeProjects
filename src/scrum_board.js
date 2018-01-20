@@ -50,6 +50,7 @@ module.exports = {
 
     var CommandValue = this.getCommand(UserCommand);
 
+    log("command val : "+CommandValue);
 
     if (CommandValue === '' || CommandValue === null || typeof CommandValue === 'undefined') {
        FinalMessage = {
@@ -60,7 +61,12 @@ module.exports = {
     }
 
 
-    var RepositoryId = req.session.RepositoryId;
+    //get repo id
+    var CommandArr = CommandValue.split(' ');
+    var RepoName = CommandArr[1];
+    var RepoId = CommandArr[2];
+
+    var RepositoryId = RepoId;
 
     if (RepositoryId === null || RepositoryId === '' || typeof RepositoryId === 'undefined') {
       var RepoRegex = new RegExp(/^\/repo*\s[A-Za-z0-9]*\s[0-9]*/);
@@ -73,9 +79,9 @@ module.exports = {
         return res.json(FinalMessage);
       }
 
-      var CommandArr = CommandValue.split(' ');
+      /*var CommandArr = CommandValue.split(' ');
       var RepoName = CommandArr[1];
-      var RepoId = CommandArr[2];
+      var RepoId = CommandArr[2];*/
 
       if (typeof RepoId !== 'undefined' && RepoId !== '' && RepoId !== null) {
         req.session.RepositoryId = RepoId;
