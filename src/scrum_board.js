@@ -47,7 +47,7 @@ module.exports = {
       };
 
       //return res.json(FinalMessage);
-      return FinalMessage;
+      return FinalMessage.Message;
     }
 
     var CommandValue = this.getCommand(UserCommand);
@@ -59,7 +59,7 @@ module.exports = {
         Type: 'Error',
         Message: 'Invalid Input'
       };
-      return res.json(FinalMessage);
+      return FinalMessage.Message;
     }
 
 
@@ -99,7 +99,7 @@ module.exports = {
             RespositoryId: RepoId
           }
         };
-        return res.json(FinalMessage);
+        return FinalMessage.Message;
       }
 
       return this.getRespositoryId({
@@ -123,7 +123,7 @@ module.exports = {
         Type: 'Error',
         Message: 'Invalid Commands'
       };
-      return res.json(FinalMessage);
+      return FinalMessage.Message;
     }
 
 
