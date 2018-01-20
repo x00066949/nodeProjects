@@ -41,7 +41,8 @@ module.exports = {
         Message: 'Invalid Input'
       };
 
-      return res.json(FinalMessage);
+      //return res.json(FinalMessage);
+      return res;
     }
 
     var CommandValue = this.getCommand(UserCommand);
