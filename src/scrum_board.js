@@ -6,6 +6,8 @@ var Regex = require('regex');
 import debug from 'debug';
 const log = debug('watsonwork-scrumbot');
 
+var repo_id;
+
 module.exports = {
 
 
@@ -66,6 +68,7 @@ module.exports = {
     var RepoName = CommandArr[1];
     var RepoId = CommandArr[2];
 
+
     var RepositoryId = RepoId;
 
     if (RepositoryId === null || RepositoryId === '' || typeof RepositoryId === 'undefined') {
@@ -85,8 +88,11 @@ module.exports = {
       var RepoId = CommandArr[2];*/
 
       if (typeof RepoId !== 'undefined' && RepoId !== '' && RepoId !== null) {
-        log("repo id valid. id: "+RepoId);
+        log("repo found id: "+RepoId);
         req.session.RepositoryId = RepoId;
+
+        repo_id = RepoId;
+        
          FinalMessage = {
           Message: 'Success',
           Options: {
@@ -217,7 +223,8 @@ module.exports = {
     if (RepoRegex.test(UserCommand))
       return UrlObject = this.getRepoUrl(UserCommand, CommandArr);
 
-    var RepoId = req.session.RepositoryId;
+    var RepoId = repo_id;
+    //var RepoId = req.session.RepositoryId;
 
     if (BlockedRegex.test(UserCommand))
       return UrlObject = this.getBlockUrl(UserCommand, CommandArr, RepoId);
