@@ -2,6 +2,8 @@ var _ = require('lodash');
 var rp = require('request-promise');
 var Regex = require('regex');
 
+// Setup debug log
+const log = debug('watsonwork-scrumbot');
 
 module.exports = {
 
@@ -160,6 +162,7 @@ module.exports = {
     var OriginalsCommandArr = CommandArr;
     CommandArr.splice(0,1);
     var FinalCommand = CommandArr.join(' ');
+
     log("Final Command : "+FinalCommand);
 
     return ValidBit = true;
