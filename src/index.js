@@ -114,7 +114,7 @@ export const scrumbot = (appId, token) => (req, res) => {
     send(req.body.spaceId,
       util.format(
         'Hey %s, result is: %s',
-        req.body.userName, to_post.Message),
+        req.body.userName, to_post),
       token(),
       (err, res) => {
         if (!err)
