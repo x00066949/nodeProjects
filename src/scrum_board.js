@@ -69,6 +69,7 @@ module.exports = {
     var RepositoryId = RepoId;
 
     if (RepositoryId === null || RepositoryId === '' || typeof RepositoryId === 'undefined') {
+      log("trying to get repo id");
       var RepoRegex = new RegExp(/^\/repo*\s[A-Za-z0-9]*\s[0-9]*/);
 
       if (!RepoRegex.test(CommandValue)) {
@@ -76,7 +77,7 @@ module.exports = {
           Type: 'Error',
           Message: 'Repository Id Not Specified'
         };
-        return res.json(FinalMessage);
+        return FinalMessage.Message;
       }
 
       /*var CommandArr = CommandValue.split(' ');
@@ -84,6 +85,7 @@ module.exports = {
       var RepoId = CommandArr[2];*/
 
       if (typeof RepoId !== 'undefined' && RepoId !== '' && RepoId !== null) {
+        log("repo id valid. id: "+RepoId);
         req.session.RepositoryId = RepoId;
          FinalMessage = {
           Message: 'Success',
