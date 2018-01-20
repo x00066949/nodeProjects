@@ -142,6 +142,8 @@ module.exports = {
     var res = options.response;
     var ValidBit = false;
     var UserCommand = options.UCommand;
+    console.log("user command : "+UserCommand);
+    
     var ValidCommands = ['@scrumbot', '/repo', '/issue', '/epic', '/blocked'];
 
     if (UserCommand === null || UserCommand === '' || UserCommand === 'undefined') {
@@ -153,7 +155,7 @@ module.exports = {
 
 
     if (!ValidCommadRegex.test(UserCommand)){
-      log("Error not starting with regex")
+      log("Error not starting with @scrumbot")
       return ValidBit;
     }
 
