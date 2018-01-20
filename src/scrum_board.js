@@ -3,6 +3,7 @@ var rp = require('request-promise');
 var Regex = require('regex');
 
 // Setup debug log
+import debug from 'debug';
 const log = debug('watsonwork-scrumbot');
 
 module.exports = {
