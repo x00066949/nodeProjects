@@ -123,7 +123,7 @@ module.exports = {
     var Token = process.env.ZENHUB_TOKEN;
     var MainUrl = 'https://api.zenhub.io/';
     var AccessToken = 'access_token=' + Token;
-    var UserUrl = 'p1/repositories/117124053/issues/'+IssueNum;
+    var UserUrl = 'p1/repositories/117124053/issues/'+Issue;
 
 
 
@@ -144,7 +144,7 @@ module.exports = {
         var IsEpic = Data.is_epic;
         var Pipelines = Data.pipeline;
         console.log('User has Pipelines=' + JSON.stringify(Pipelines));
-        return Data;
+        return res.json(Data);
       })
       .catch(function (err) {
         var Error = err;
