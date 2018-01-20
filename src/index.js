@@ -109,7 +109,7 @@ export const scrumbot = (appId, token) => (req, res) => {
     //console.dir(to_post, {depth:null});
 
     var to_post = board2.makeRequest({response:res, issue:message1})
-    
+    log("result : "+to_post);
     
     send(req.body.spaceId,
       util.format(
