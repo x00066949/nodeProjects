@@ -42,7 +42,7 @@ module.exports = {
       };
 
       //return res.json(FinalMessage);
-      return res;
+      return FinalMessage;
     }
 
     var CommandValue = this.getCommand(UserCommand);
