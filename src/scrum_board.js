@@ -146,16 +146,21 @@ module.exports = {
     }
 
     var ValidCommadRegex = new RegExp(/^(@scrumbot)\s[\/A-Za-z]*/);
-    console.log(UserCommand);
+    console.log("processing message : "+UserCommand);
 
 
-    if (!ValidCommadRegex.test(UserCommand))
+    if (!ValidCommadRegex.test(UserCommand)){
+      log("Error not starting with regex")
       return ValidBit;
+    }
+
+      
 
     var CommandArr = UserCommand.split(' ');
     var OriginalsCommandArr = CommandArr;
     CommandArr.splice(0,1);
     var FinalCommand = CommandArr.join(' ');
+    log("Final Command : "+FinalCommand);
 
     return ValidBit = true;
   },
