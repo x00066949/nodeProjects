@@ -275,7 +275,7 @@ module.exports = {
       .then(function (successdata) {
         var Data = successdata;
         console.log('Following Data =' + JSON.stringify(Data));
-        return Data;
+        return JSON.stringify(Data);
       })
       .catch(function (err) {
         var Error = err;
