@@ -67,6 +67,7 @@ module.exports = {
     var CommandArr = CommandValue.split(' ');
     var RepoName = CommandArr[1];
     var RepoId = CommandArr[2];
+    repo_id = RepoId;
     var RepositoryId = RepoId;
 
     if (RepositoryId === null || RepositoryId === '' || typeof RepositoryId === 'undefined') {
@@ -187,6 +188,7 @@ module.exports = {
   },
 
   getCommand: function (UCommand) {
+    log("getCommand");
     var ValidBit = '';
     var UserCommand = UCommand;
 
@@ -203,6 +205,8 @@ module.exports = {
   },
 
   validateCommands: function (options) {
+
+    log("validateCommands");
     var req = options.request;
     var res = options.response;
 
@@ -242,6 +246,7 @@ module.exports = {
 
   },
   makeRequest: function (options) {
+    log("makeRequest");
     var res = options.response;
     var Token = process.env.ZENHUB_TOKEN;
     var MainUrl = 'https://api.zenhub.io/';
@@ -285,6 +290,7 @@ module.exports = {
 
   // To Get Repository Id
   getRespositoryId: function (Options) {
+    log("getRepositoryId");
     var res = Options.response;
     var req = Options.request;
     var RepositoryName = Options.repoName;
@@ -324,6 +330,7 @@ module.exports = {
   // To Get Repo Url
   getRepoUrl: function (UserCommand, CommandArr) {
 
+    log("getRepoUrl");
     var RepositoryName = CommandArr[1];
     var GitOwnerName = 'x00066949';
     var RepositoryId = 'repos/' + GitOwnerName + '/' + RepositoryName;
@@ -341,6 +348,7 @@ module.exports = {
 
   //To Get Issue related Url
   getIssueUrl: function (UserCommand, CommandArr, RepoId) {
+    log("getIssueUrl");
       var RespositroyId = RepoId;
 
       var UrlObject = {
@@ -500,6 +508,7 @@ module.exports = {
     ,
   //To Get Blocked Issues Url
   getBlockUrl: function (UserCommand, CommandArr, RepoId) {
+    log("getBlockUrl");
 
     var RespositroyId = RepoId;
 
@@ -518,6 +527,7 @@ module.exports = {
 
   //To Get Blocked Issues Url
   getEpicUrl: function (UserCommand, CommandArr, RepoId) {
+    log("getEpicUrl");
 
     var RespositroyId = RepoId;
     var EpicUrl = 'p1/repositories/' + RespositroyId + '/epics';
