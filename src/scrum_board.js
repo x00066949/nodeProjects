@@ -68,6 +68,9 @@ module.exports = {
     var RepoName = CommandArr[1];
     var RepoId = CommandArr[2];
     repo_id = RepoId;
+
+    log("repo id 1 : "+repo_id);
+
     var RepositoryId = RepoId;
 
     if (RepositoryId === null || RepositoryId === '' || typeof RepositoryId === 'undefined') {
@@ -152,6 +155,38 @@ module.exports = {
 
   },
 
+  getPipelineId(PipelineName){
+    //var PipelineName = options.pipelineName;
+
+    rp({
+      uri: 'https://api.zenhub.io/p1/repositories/' + repo_id + '/board',
+
+      headers: {
+        'X-Authentication-Token': process.env.ZENHUB_TOKEN
+      },
+
+      json: true
+    })
+      .then((data) => {
+        
+        log(data)
+        for (var i =0; i<data['pipelines'].length; i++){
+          if (data['pipelines'][i].name === PipelineName){
+            return data['pipelines'][i].id;
+          }
+        }
+
+        log("did not find id corresponding to pipe name");
+        //return data;
+      })
+      .catch((err) => {
+        console.log("error = "+err)
+        
+      
+      }) 
+
+  },
+
 
   checkValidInput: function (options) {
     var req = options.request;
@@ -179,7 +214,8 @@ module.exports = {
 
     var CommandArr = UserCommand.split(' ');
     var OriginalsCommandArr = CommandArr;
-    CommandArr.splice(0,1);
+
+    CommandArr.splice(0,2);
     var FinalCommand = CommandArr.join(' ');
 
     log("Final Command : "+FinalCommand);
@@ -198,7 +234,12 @@ module.exports = {
 
     var CommandArr = UserCommand.split(' ');
     var OriginalsCommandArr = CommandArr;
-    CommandArr.splice(0,1);
+
+    repo_id = CommandArr[1];
+    
+    log ("firstly initialisiing repo_id as "+repo_id +" from message "+CommandArr[1]);
+
+    CommandArr.splice(0,2);
     var FinalCommand = CommandArr.join(' ');
 
     return FinalCommand;
@@ -387,8 +428,9 @@ module.exports = {
 
       if (PipelineMoveRegex.test(UserCommand)) {
 
+        //if moving pipeline, 3rd arg is issue num,  4th = -p, 5th = pipeline, 6t position
         var IssueNo = CommandArr[1];
-        var PipeLineId = CommandArr[3];
+        var PipeLineId = getPipelineId(CommandArr[3]);
         var PosNo = CommandArr[4];
 
         var MoveIssuePipeLine = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves';
