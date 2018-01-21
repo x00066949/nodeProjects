@@ -270,7 +270,7 @@ module.exports = {
       .then(function (successdata) {
         var Data = successdata;
         console.log('Following Data =' + JSON.stringify(Data));
-        return res.json(Data);
+        return Data;
       })
       .catch(function (err) {
         var Error = err;
@@ -306,13 +306,16 @@ module.exports = {
 
     return rp(UrlOptions)
       .then(function (successdata) {
+        log("using repoid: "+repo_id);
         var RepoId = successdata.id;
-        req.session.RepositoryId = RepoId;
-        console.log('Repository Id=' + RepoId);
+        log("Repo Id "+RepoId);
+        repo_id = RepoId;
+        console.log('Repository Id =' + RepoId);
       })
       .catch(function (err) {
         var Error = err;
         // API call failed...
+        log("API call failed...");
         console.log('User has %d repos', err);
       });
 
