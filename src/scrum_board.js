@@ -67,8 +67,6 @@ module.exports = {
     var CommandArr = CommandValue.split(' ');
     var RepoName = CommandArr[1];
     var RepoId = CommandArr[2];
-
-
     var RepositoryId = RepoId;
 
     if (RepositoryId === null || RepositoryId === '' || typeof RepositoryId === 'undefined') {
@@ -105,7 +103,9 @@ module.exports = {
       return this.getRespositoryId({
         request: req,
         response: res,
-        repoName: RepoName
+        repoName: RepoName,
+        GitOwnerName:'x00066949'
+        
       });
 
     }
@@ -134,7 +134,8 @@ module.exports = {
       return this.getRespositoryId({
         request: req,
         response: res,
-        repoName: GitRepoName
+        repoName: GitRepoName,
+        GitOwnerName:'x00066949'
       });
 
     } else {
@@ -242,10 +243,8 @@ module.exports = {
   },
   makeRequest: function (options) {
     var res = options.response;
-    var SailsConfig = sails.config.constants;
-
-    var Token = SailsConfig.Token;
-    var MainUrl = SailsConfig.ZenHubUrl;
+    var Token = process.env.ZENHUB_TOKEN;
+    var MainUrl = 'https://api.zenhub.io/p1/repositories/';
 
     var UserUrl = options.UUrl;
     var UrlBody = options.UBody;
@@ -289,10 +288,10 @@ module.exports = {
     var res = Options.response;
     var req = Options.request;
     var RepositoryName = Options.repoName;
-    var Ownername = sails.config.constants.GitOwnerName;
+    var Ownername = Options.GitOwnerName;
 
     var RepositoryUrl = 'repos/' + Ownername + '/' + RepositoryName;
-    var MainUrl = sails.config.constants.GitHuburl;
+    var MainUrl = 'https://api.github.com/';
 
     var UrlOptions = {
       uri: MainUrl + RepositoryUrl,
@@ -323,7 +322,8 @@ module.exports = {
   getRepoUrl: function (UserCommand, CommandArr) {
 
     var RepositoryName = CommandArr[1];
-    var RepositoryId = 'repos/' + sails.config.constants.GitOwnerName + '/' + RepositoryName;
+    var GitOwnerName = 'x00066949';
+    var RepositoryId = 'repos/' + GitOwnerName + '/' + RepositoryName;
 
     var UrlObject = {
       IsValid: true,
@@ -528,8 +528,5 @@ module.exports = {
 
     return UrlObject;
   }
-
-
-
 
 };
