@@ -67,7 +67,7 @@ module.exports = {
     var CommandArr = CommandValue.split(' ');
     var RepoName = CommandArr[1];
     var RepoId = CommandArr[2];
-    repo_id = RepoId;
+    //repo_id = RepoId;
 
     log("repo id 1 : "+repo_id);
 
@@ -91,9 +91,10 @@ module.exports = {
 
       if (typeof RepoId !== 'undefined' && RepoId !== '' && RepoId !== null) {
         log("repo found id: "+RepoId);
-        req.session.RepositoryId = RepoId;
+        //req.session.RepositoryId = RepoId;
 
-        repo_id = RepoId;
+        RepoId = repo_id;
+        //repo_id = RepoId;
         
          FinalMessage = {
           Message: 'Success',
@@ -356,7 +357,7 @@ module.exports = {
       .then(function (successdata) {
         log("using repoid: "+repo_id);
         var RepoId = successdata.id;
-        log("Repo Id "+RepoId);
+        log("Repo Id 2"+RepoId);
         repo_id = RepoId;
         console.log('Repository Id =' + RepoId);
       })
