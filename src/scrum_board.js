@@ -444,6 +444,8 @@ module.exports = {
         
         rp(PipeLineId)
           .then(function(pipeid){
+            log("Pipeline got 2 : " + PipeLineId);
+            
 
             var PosNo = CommandArr[4];
             
