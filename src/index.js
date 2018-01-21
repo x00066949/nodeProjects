@@ -8,7 +8,6 @@ import * as http from 'http';
 import * as https from 'https';
 import * as oauth from './watson';
 import * as board from './scrum_board';
-import * as board2 from './board_copy';
 
 import debug from 'debug';
 var bodyParser = require('body-parser');
@@ -70,9 +69,6 @@ const get_issue = (repoid, issueid) =>{
       })  
 };
 
-function findSlashRepo(element){
-  return element = '/repos'
-}
 export const scrumbot = (appId, token) => (req, res) => {
   // Respond to the Webhook right away, as the response message will
   // be sent asynchronously
@@ -90,14 +86,6 @@ export const scrumbot = (appId, token) => (req, res) => {
     return;
   }
 
-  if (req.body.type === 'message-annotation-added' && req.body.annotationType === 'actionSelected') {
-    const annotationPayload = req.body.annotationPayload;
-    //if (annotationPayload.actionId ===  ''){
-    log(req.body);
-    //}
-
-  }
-
   //handle new messages and ignore the app's own messages
   if (req.body.type === 'message-created' && req.body.userId !== appId) {
     log('Got a message %o', req.body);
@@ -108,8 +96,7 @@ export const scrumbot = (appId, token) => (req, res) => {
     var to_post = board.getScrumData({request:req, response:res, UserInput:message1});
     //console.dir(to_post, {depth:null});
 
-    //var to_post = board2.makeRequest({response:res, issue:message1})
-    //console.dir(to_post, {depth:null});
+
     
     send(req.body.spaceId,
       util.format(
@@ -120,51 +107,7 @@ export const scrumbot = (appId, token) => (req, res) => {
         if (!err)
           log('Sent message to space %s', req.body.spaceId);
     })
-    /*var to_split = req.body.content;
-    var words = to_split.split();
-    log('array length : '+words.length)
-
-    log(words.findIndex(findSlashRepo));
-    log(to_split);
-    //message = 'Not Found'
-
-    if(to_split === '/issue'){
-      
-      //let get_issue_var = get_issue(71240446,1);
-      
-      
-      //send to space
-    get_issue_var.then(send(req.body.spaceId,
-      util.format(
-        'Hey %s, result is: %s',
-        req.body.userName, message),
-      token(),
-      (err, res) => {
-        if (!err)
-          log('Sent message to space %s', req.body.spaceId);
-    })
-     ) }
-    if(to_split === '/git' ){
-
-      log('github route');
-      log('message b4 gitR: '+message)
-      
-      //call gitconnect function
-      let gitConnect_var = gitConnect();
-
-      log('message after gitR: '+message)
-      
-      //send to space
-    gitConnect_var.then(send(req.body.spaceId,
-      util.format(
-        'Hey %s, result is: %s',
-        req.body.userName, message),
-      token(),
-      (err, res) => {
-        if (!err)
-          log('Sent message to space %s', req.body.spaceId);
-      })
-    )}  */  
+    
   };
 };
 
@@ -335,34 +278,7 @@ const main = (argv, env, cb) => {
             })
         });
 
-        /*app.get('/callback/', function (req, res) {
-            console.log(req.query); 
-            gsecret = req.query.code;
-            res.send("Hi"+gsecret);
-
-        });
-
-        app.post(
-          'https://github.com/login/oauth/access_token', {
-            
-            json: true,
-            // An App message can specify a color, a title, markdown text and
-            // an 'actor' useful to show where the message is coming from
-            body: {
-              client_id: process.env.GIT_CLIENT_ID,
-              client_secret: process.env.GIT_CLIENT_SECRET,
-              code: gsecret
-            }
-          }, (err, res) => {
-            if (err || res.statusCode !== 201) {
-              log('staus: ', res.statusCode);
-              cb(err || new Error(res.statusCode));
-              return;
-            }
-            log('Send result %d, %o', res.statusCode, res.body);
-            cb(null, res.body);
-          });*/
-
+        
         
       }
 
