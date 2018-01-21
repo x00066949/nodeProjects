@@ -244,7 +244,7 @@ module.exports = {
   makeRequest: function (options) {
     var res = options.response;
     var Token = process.env.ZENHUB_TOKEN;
-    var MainUrl = 'https://api.zenhub.io/p1/repositories/';
+    var MainUrl = 'https://api.zenhub.io/';
 
     var UserUrl = options.UUrl;
     var UrlBody = options.UBody;
@@ -276,7 +276,7 @@ module.exports = {
         var Error = err;
         // API call failed...
         console.log('User has following error =' + err);
-        res.json(err);
+        err;
       });
 
 
