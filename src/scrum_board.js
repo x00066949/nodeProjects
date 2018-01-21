@@ -281,7 +281,7 @@ module.exports = {
         var Error = err;
         // API call failed...
         console.log('User has following error =' + err);
-        err;
+        return err;
       });
 
 
