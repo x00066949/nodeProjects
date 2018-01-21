@@ -174,6 +174,7 @@ module.exports = {
         log(data)
         for (var i =0; i<data['pipelines'].length; i++){
           if (data['pipelines'][i].name === PipelineName){
+            log("found pipeline id : "+data['pipelines'][i].id);
             return data['pipelines'][i].id;
           }
         }
