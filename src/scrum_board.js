@@ -411,6 +411,9 @@ module.exports = {
       if (PipelineRegex.test(UserCommand)) {
 
         var IssueNo = CommandArr[1];
+
+        log("issue Num in getISsueUrl : "+IssueNo);
+
         var PipeLineurl = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo;
 
         var UrlObject = {
@@ -433,6 +436,8 @@ module.exports = {
         //if moving pipeline, 3rd arg is issue num,  4th = -p, 5th = pipeline, 6t position
         var IssueNo = CommandArr[1];
         var PipeLineId = this.getPipelineId(CommandArr[3]);
+
+        log("Pipeline got : "+ PipeLineId);
         var PosNo = CommandArr[4];
 
         var MoveIssuePipeLine = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves';
