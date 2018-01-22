@@ -66,12 +66,12 @@ module.exports = {
     //get repo id
     var CommandArr = CommandValue.split(' ');
     var RepoName = CommandArr[1];
-    var RepoId = CommandArr[2];
+    var RepoId = repo_id;
     //repo_id = RepoId;
 
     log("repo id 1 : "+repo_id);
 
-    var RepositoryId = RepoId;
+    var RepositoryId = repo_id;
 
     if (RepositoryId === null || RepositoryId === '' || typeof RepositoryId === 'undefined') {
       log("trying to get repo id");
@@ -608,7 +608,7 @@ module.exports = {
     return UrlObject;
   },
 
-  //To Get Blocked Issues Url
+  //To Get epics Url
   getEpicUrl: function (UserCommand, CommandArr, RepoId) {
     log("getEpicUrl");
 
