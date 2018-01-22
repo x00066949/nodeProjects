@@ -356,9 +356,9 @@ module.exports = {
           for (var i =0; i<successdata.length; i++){
 
             if(successdata[i].type === 'transferIssue'){
-              log("pipeline move event"+JSON.stringify(successdata[i].userid)+successdata[i]+JSON.stringify(successdata[i]).userid);
+              log("pipeline move event"+JSON.stringify(successdata[i].user_id)+successdata[i]+JSON.stringify(successdata[i]).type);
               console.dir(successdata[i], {depth:null}); 
-              Data = "User " +successdata[i].userid+ " moved issue from "+successdata[i].frompipeline.name+" to "+successdata[i].topipeline.name;
+              Data = "User " +successdata[i].user_id+ " moved issue from "+successdata[i].frompipeline.name+" to "+successdata[i].topipeline.name;
   
             }
             if(successdata[i].type === 'estimateIssue'){
