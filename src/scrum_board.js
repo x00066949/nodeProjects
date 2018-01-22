@@ -154,7 +154,8 @@ module.exports = {
         response: res,
         UUrl: ValidUrlObject.Url,
         UBody: ValidUrlObject.Body,
-        UMethod: ValidUrlObject.Method
+        UMethod: ValidUrlObject.Method,
+        UType:ValidUrlObject.UrlType
       });
     }
 
@@ -322,6 +323,7 @@ module.exports = {
     var UserUrl = options.UUrl;
     var UrlBody = options.UBody;
     var UMethod = options.UMethod;
+    var UrlType = options.UType;
 
     var UrlOptions = {
       method: UMethod,
@@ -342,7 +344,38 @@ module.exports = {
     return rp(UrlOptions)
       .then(function (successdata) {
         var Data = successdata;
+        //var message
         console.log('Following Data =' + JSON.stringify(Data));
+
+        //Parse JSON according to obj returned
+        if(UrlType === 'IssueEvents'){
+          //var EventUser = successdata.userid;
+          //var EventType = successdata.type;
+          log("Events for issue");
+
+          for (var i =0; i<successdata.length; i++){
+
+            if(successdata[i].type === 'transferIssue'){
+              log("pipeline move event");
+              Data = "User " +successdata[i].userid+ " moved issue from "+successdata[i].frompipeline.name+" to "+successdata[i].topipeline.name;
+  
+            }
+            if(successdata[i].type === 'estimateIssue'){
+              log("estimate change event");
+              Data = "User " +successdata[i].userid+ " changed estimate on issue to  "+successdata[i].to_estimate.value+"on date : "+successdata[i].createdat;
+  
+            }else {
+              log("do not recogise event type");
+            }
+
+          }
+
+          
+
+          
+        }
+
+
         return JSON.stringify(Data);
       })
       .catch(function (err) {
@@ -480,7 +513,8 @@ module.exports = {
             Url: MoveIssuePipeLine,
             Method: 'POST',
             Body: MoveBody,
-            IsGit: false
+            IsGit: false,
+            UrlType:'IssueToPipelines'
           };
 
           log("url built.");
@@ -507,7 +541,8 @@ module.exports = {
           Url: EventsUrl,
           Method: 'GET',
           Body: null,
-          IsGit: false
+          IsGit: false,
+          UrlType:'IssueEvents'
         };
 
         return UrlObject;
@@ -515,7 +550,7 @@ module.exports = {
 
 
 
-      // Get the estimate for the issue.
+      // Set the estimate for the issue.
       var EstimateAddRegex = new RegExp(/^\/issue*\s[0-9]*\s-e\s[0-9]*/);
 
       if (EstimateAddRegex.test(UserCommand)) {
@@ -536,7 +571,8 @@ module.exports = {
           Url: MoveIssuePipeLine,
           Method: 'POST',
           Body: MoveBody,
-          IsGit: false
+          IsGit: false,
+          UrlType:'IssueEstimate'
         };
 
         return UrlObject;
@@ -558,14 +594,15 @@ module.exports = {
           Url: BugUrl,
           Method: 'GET',
           Body: null,
-          IsGit: false
+          IsGit: false,
+          UrlType:'BugIssues'
         };
 
         return UrlObject;
       }
 
 
-      //To Get User Issue by user
+      //To Get User Issue by user, userIssue
       var UserRegex = new RegExp(/^\/issue*\s[0-9]*\s-u\s[A-Za-z0-9]*/);
 
       if (UserRegex.test(UserCommand)) {
@@ -577,7 +614,8 @@ module.exports = {
           Url: UserUrl,
           Method: 'GET',
           Body: null,
-          IsGit: false
+          IsGit: false,
+          UrlType:'UserIssues'
         };
 
         return UrlObject;
@@ -602,7 +640,8 @@ module.exports = {
       Url: Blockurl,
       Method: 'GET',
       Body: null,
-      IsGit: false
+      IsGit: false,
+      UrlType:'BlockedIssues'
     };
 
     return UrlObject;
@@ -619,7 +658,8 @@ module.exports = {
       Url: EpicUrl,
       Method: 'GET',
       Body: null,
-      IsGit: false
+      IsGit: false,
+      UrlType:'EpicIssues'
     };
 
     return UrlObject;
