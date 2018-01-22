@@ -87,7 +87,7 @@ module.exports = {
 
       /*var CommandArr = CommandValue.split(' ');
       var RepoName = CommandArr[1];
-      var RepoId = CommandArr[2];*/
+      var RepoId = CommandArr[2];*/se
 
       if (typeof RepoId !== 'undefined' && RepoId !== '' && RepoId !== null) {
         log("repo found id: "+RepoId);
@@ -367,6 +367,7 @@ module.exports = {
         log("Repo Id 2"+RepoId);
         repo_id = RepoId;
         console.log('Repository Id =' + RepoId);
+        return JSON.stringify(successdata);
       })
       .catch(function (err) {
         var Error = err;
