@@ -352,19 +352,20 @@ module.exports = {
           //var EventUser = successdata.userid;
           //var EventType = successdata.type;
           log("Events for issue");
+          Data = " ";
 
           for (var i =0; i<successdata.length; i++){
 
             if(successdata[i].type === 'transferIssue'){
               log("pipeline move event"+JSON.stringify(successdata[i].to_pipeline)+successdata[i].from_pipeline);
               console.dir(successdata[i], {depth:null}); 
-              Data += "\nUser " +successdata[i].user_id+ " moved issue from "+successdata[i].from_pipeline.name+" to "+successdata[i].to_pipeline.name;
+              Data += "\r\nUser " +successdata[i].user_id+ " moved issue from "+successdata[i].from_pipeline.name+" to "+successdata[i].to_pipeline.name;
   
             }
             if(successdata[i].type === 'estimateIssue'){
               log("estimate change event "+i);
               console.dir(successdata[i], {depth:null}); 
-              Data += "\nUser " +successdata[i].user_id+ " changed estimate on issue to  "+successdata[i].to_estimate.value+"on date : "+successdata[i].created_at;
+              Data += "\r\nUser " +successdata[i].user_id+ " changed estimate on issue to  "+successdata[i].to_estimate.value+" on date : "+successdata[i].created_at;
   
             }else {
               log("do not recogise event type");
