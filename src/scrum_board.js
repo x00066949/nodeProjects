@@ -220,9 +220,17 @@ module.exports = {
     var CommandArr = UserCommand.split(' ');
     var OriginalsCommandArr = CommandArr;
 
-    CommandArr.splice(0,1);
+    //if /repo comes after @scrumbot, no repo id provided else take whatever comes after @scrumbot as repo_id
+    if (CommandArr[1] === ValidCommands[1]){
+      CommandArr.splice(0,1);
+    }
+    else{
+      repo_id = CommandArr[1];
+      CommandArr.splice(0,2);
+    }
     
-    //CommandArr.splice(0,2);
+
+
     var FinalCommand = CommandArr.join(' ');
 
     log("Final Command : "+FinalCommand);
@@ -243,7 +251,7 @@ module.exports = {
     var OriginalsCommandArr = CommandArr;
 
     //** */
-    repo_id = CommandArr[3];
+    repo_id = CommandArr[0];
     log("repo id 2 : "+repo_id);
 
     log ("firstly initialisiing repo_id as "+repo_id +" from message "+CommandArr[2]);
@@ -294,6 +302,7 @@ module.exports = {
       return UrlObject = this.getEpicUrl(UserCommand, CommandArr, RepoId);
 
 
+      log("UrlObject = "+UrlObject);
     return UrlObject;
 
   },
