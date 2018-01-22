@@ -93,7 +93,6 @@ export const scrumbot = (appId, token) => (req, res) => {
 
     var message1 = req.body.content; // this message1 contains the text to be processed 
 
-    //var to_post = board.getScrumData({request:req, response:res, UserInput:message1}); //here i send it to your code. 
 
     board.getScrumData({request:req, response:res, UserInput:message1}).then((to_post)=>{
 
@@ -115,19 +114,6 @@ export const scrumbot = (appId, token) => (req, res) => {
 
     //console.dir(to_post, {depth:null}); 
 
-
-
-
-    /* 
-    send(req.body.spaceId,
-      util.format(
-        'Hey %s, result is: %s',
-        req.body.userName, to_post),
-      token(),
-      (err, res) => {
-        if (!err)
-          log('Sent message to space %s', req.body.spaceId);
-    })*/
     
   };
 };

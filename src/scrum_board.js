@@ -46,7 +46,6 @@ module.exports = {
         Message: 'Invalid Input'
       };
 
-      //return res.json(FinalMessage);
       return FinalMessage.Message;
     }
 
@@ -67,7 +66,6 @@ module.exports = {
     var CommandArr = CommandValue.split(' ');
     var RepoName = CommandArr[1];
     var RepoId = repo_id;
-    //repo_id = RepoId;
 
     log("repo id 1 : "+repo_id);
 
@@ -85,16 +83,10 @@ module.exports = {
         return FinalMessage.Message;
       }
 
-      /*var CommandArr = CommandValue.split(' ');
-      var RepoName = CommandArr[1];
-      var RepoId = CommandArr[2];*/se
-
       if (typeof RepoId !== 'undefined' && RepoId !== '' && RepoId !== null) {
         log("repo found id: "+RepoId);
-        //req.session.RepositoryId = RepoId;
 
         RepoId = repo_id;
-        //repo_id = RepoId;
         
          FinalMessage = {
           Message: 'Success',
@@ -162,7 +154,7 @@ module.exports = {
 
   },
 
-  //the method
+  //given, pipeline name, return pipeline id
   getPipelineId(PipelineName){
     var PipelineId;
 
@@ -297,7 +289,6 @@ module.exports = {
       return UrlObject = this.getRepoUrl(UserCommand, CommandArr);
 
     var RepoId = repo_id;
-    //var RepoId = req.session.RepositoryId;
 
     if (BlockedRegex.test(UserCommand))
       return UrlObject = this.getBlockUrl(UserCommand, CommandArr, RepoId);
@@ -344,13 +335,10 @@ module.exports = {
     return rp(UrlOptions)
       .then(function (successdata) {
         var Data = successdata;
-        //var message
         console.log('Following Data =' + JSON.stringify(Data));
 
         //Parse JSON according to obj returned
         if(UrlType === 'IssueEvents'){
-          //var EventUser = successdata.userid;
-          //var EventType = successdata.type;
           log("Events for issue");
           Data = " ";
 
@@ -416,9 +404,8 @@ module.exports = {
 
     return rp(UrlOptions)
       .then(function (successdata) {
-        //log("using repoid: "+repo_id);
         var RepoId = successdata.id;
-        log("Repo Id 2"+RepoId);
+
         repo_id = RepoId;
         console.log('Repository Id =' + RepoId);
         return "The Repository Id for "+RepositoryName+" is "+JSON.stringify(successdata.id);
@@ -524,7 +511,7 @@ module.exports = {
   
           return UrlObject;
 
-        }); //this is where i try to call the method that gets the pipeline id from name
+        }); 
 
         
       }
