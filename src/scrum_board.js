@@ -441,38 +441,24 @@ module.exports = {
         var PipeLineId = this.getPipelineId(CommandArr[3]);
 
         log("Pipeline got : "+ PipeLineId);
-        
-        rp(PipeLineId)
-          .then(function(pipeid){
-            log("Pipeline got 2 : " + PipeLineId);
-            
+        var PosNo = CommandArr[4];
 
-            var PosNo = CommandArr[4];
-            
-            var MoveIssuePipeLine = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves';
-    
-            var MoveBody = {
-              pipeline_id: PipeLineId,
-              position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
-            };
-    
-            var UrlObject = {
-              IsValid: true,
-              Url: MoveIssuePipeLine,
-              Method: 'POST',
-              Body: MoveBody,
-              IsGit: false
-            };
-    
-            return UrlObject;
-        })
-        .catch(function (err) {
-          var Error = err;
-          // API call failed...
-          console.log('User has following error = ' + err);
-          return err;
-        });
-        
+        var MoveIssuePipeLine = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves';
+
+        var MoveBody = {
+          pipeline_id: PipeLineId,
+          position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
+        };
+
+        var UrlObject = {
+          IsValid: true,
+          Url: MoveIssuePipeLine,
+          Method: 'POST',
+          Body: MoveBody,
+          IsGit: false
+        };
+
+        return UrlObject;
       }
 
 

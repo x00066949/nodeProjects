@@ -7,4 +7,4 @@ view
 gitapi.js 
 appCredentials.js
 compiled.js
-node_modules
+.node_modules
