@@ -356,7 +356,7 @@ module.exports = {
           for (var i =0; i<successdata.length; i++){
 
             if(successdata[i].type === 'transferIssue'){
-              log("pipeline move event"+JSON.stringify(successdata[i].user_id)+successdata[i].type+JSON.stringify(successdata[i]).type);
+              log("pipeline move event"+JSON.stringify(successdata[i].topipeline)+successdata[i].frompipeline);
               console.dir(successdata[i], {depth:null}); 
               Data = "User " +successdata[i].user_id+ " moved issue from "+successdata[i].frompipeline.name+" to "+successdata[i].topipeline.name;
   
