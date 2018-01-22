@@ -364,12 +364,12 @@ module.exports = {
 
     return rp(UrlOptions)
       .then(function (successdata) {
-        log("using repoid: "+repo_id);
+        //log("using repoid: "+repo_id);
         var RepoId = successdata.id;
         log("Repo Id 2"+RepoId);
         repo_id = RepoId;
         console.log('Repository Id =' + RepoId);
-        return JSON.stringify(successdata);
+        return "The Repository Id for "+RepositoryName+" is "+JSON.stringify(successdata.id);
       })
       .catch(function (err) {
         var Error = err;
