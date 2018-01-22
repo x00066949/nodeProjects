@@ -116,6 +116,7 @@ module.exports = {
     }
 
 
+    log("get url");
     var ValidUrlObject = this.validateCommands({
       request: req,
       response: res,
@@ -124,6 +125,7 @@ module.exports = {
 
 
     if (ValidUrlObject.IsValid === false) {
+      log("url is not valid");
        FinalMessage = {
         Type: 'Error',
         Message: 'Invalid Commands'
@@ -132,7 +134,9 @@ module.exports = {
     }
 
 
+    log("url is valid")
     if (ValidUrlObject.IsGit) {
+      log("is Git ..")
       var UCommandArr = CommandValue.split(' ');
       var GitRepoName = UCommandArr[1];
 
@@ -145,6 +149,7 @@ module.exports = {
 
     } else {
 
+      log ("not git");
       return this.makeRequest({
         response: res,
         UUrl: ValidUrlObject.Url,
