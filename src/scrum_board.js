@@ -339,7 +339,7 @@ module.exports = {
       }
     };
 
-    rp(UrlOptions)
+    return rp(UrlOptions)
       .then(function (successdata) {
         var Data = successdata;
         console.log('Following Data =' + JSON.stringify(Data));

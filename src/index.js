@@ -109,6 +109,8 @@ export const scrumbot = (appId, token) => (req, res) => {
           if (!err)
             log('Sent message to space %s', req.body.spaceId);
       })
+    }).catch((err)=>{
+      log("nothing returned from getscrumdata" + err);
     })
 
     //console.dir(to_post, {depth:null}); 
