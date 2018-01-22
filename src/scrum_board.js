@@ -251,10 +251,10 @@ module.exports = {
     var OriginalsCommandArr = CommandArr;
 
     //** */
-    repo_id = CommandArr[0];
+    repo_id = CommandArr[1];
     log("repo id 2 : "+repo_id);
 
-    log ("firstly initialisiing repo_id as "+repo_id +" from message "+CommandArr[2]);
+    log ("firstly initialisiing repo_id as "+repo_id +" from message "+CommandArr[1]);
 
     CommandArr.splice(0,1);
     
