@@ -220,7 +220,9 @@ module.exports = {
     var CommandArr = UserCommand.split(' ');
     var OriginalsCommandArr = CommandArr;
 
-    CommandArr.splice(0,2);
+    CommandArr.splice(0,1);
+    
+    //CommandArr.splice(0,2);
     var FinalCommand = CommandArr.join(' ');
 
     log("Final Command : "+FinalCommand);
@@ -244,7 +246,9 @@ module.exports = {
     
     log ("firstly initialisiing repo_id as "+repo_id +" from message "+CommandArr[1]);
 
-    CommandArr.splice(0,2);
+    CommandArr.splice(0,1);
+    
+    //CommandArr.splice(0,2);
     var FinalCommand = CommandArr.join(' ');
 
     return FinalCommand;
