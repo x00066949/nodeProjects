@@ -250,15 +250,17 @@ module.exports = {
     var CommandArr = UserCommand.split(' ');
     var OriginalsCommandArr = CommandArr;
 
-    //** */
-    repo_id = CommandArr[1];
-    log("repo id 2 : "+repo_id);
-
-    log ("firstly initialisiing repo_id as "+repo_id +" from message "+CommandArr[1]);
-
-    CommandArr.splice(0,1);
+    if (CommandArr[1] === '/repo'){
+      CommandArr.splice(0,1);
+    }
+    else{
+      repo_id = CommandArr[1];
+      log ("firstly initialisiing repo_id as "+repo_id +" from message arg at pos 1 = "+CommandArr[1]);
+      CommandArr.splice(0,2);
+    }
     
-    //CommandArr.splice(0,2);
+    log("repo id 2 : "+repo_id);
+    
     var FinalCommand = CommandArr.join(' ');
 
     return FinalCommand;
