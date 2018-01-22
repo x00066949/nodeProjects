@@ -93,8 +93,17 @@ export const scrumbot = (appId, token) => (req, res) => {
 
     var message1 = req.body.content; // this message1 contains the text to be processed 
 
-    var to_post = board.getScrumData({request:req, response:res, UserInput:message1}); //here i send it to your code. 
-    console.dir(to_post, {depth:null}); 
+    //var to_post = board.getScrumData({request:req, response:res, UserInput:message1}); //here i send it to your code. 
+
+    board.getScrumData({request:req, response:res, UserInput:message1}).then((to_post)=>{
+
+
+      log("data got = "+to_post);
+    })
+
+    //console.dir(to_post, {depth:null}); 
+
+
 
 
     
