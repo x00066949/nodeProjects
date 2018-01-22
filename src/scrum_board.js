@@ -460,11 +460,11 @@ module.exports = {
 
           log("Pipeline got (using data): "+ data);
           
-          log("Pipeline got : "+ PipeLineId);
           var PosNo = CommandArr[4];
   
           var MoveIssuePipeLine = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves';
   
+          log("building move pipeline url..")
           var MoveBody = {
             pipeline_id: data,
             position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
@@ -477,6 +477,8 @@ module.exports = {
             Body: MoveBody,
             IsGit: false
           };
+
+          log("url built.");
   
           return UrlObject;
 
