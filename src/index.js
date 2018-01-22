@@ -99,6 +99,16 @@ export const scrumbot = (appId, token) => (req, res) => {
 
 
       log("data got = "+to_post);
+
+      send(req.body.spaceId,
+        util.format(
+          'Hey %s, result is: %s',
+          req.body.userName, to_post),
+        token(),
+        (err, res) => {
+          if (!err)
+            log('Sent message to space %s', req.body.spaceId);
+      })
     })
 
     //console.dir(to_post, {depth:null}); 
@@ -106,7 +116,7 @@ export const scrumbot = (appId, token) => (req, res) => {
 
 
 
-    
+    /* 
     send(req.body.spaceId,
       util.format(
         'Hey %s, result is: %s',
@@ -115,7 +125,7 @@ export const scrumbot = (appId, token) => (req, res) => {
       (err, res) => {
         if (!err)
           log('Sent message to space %s', req.body.spaceId);
-    })
+    })*/
     
   };
 };
