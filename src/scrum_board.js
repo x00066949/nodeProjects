@@ -156,7 +156,7 @@ module.exports = {
 
   },
 
-  
+  //the method
   getPipelineId(PipelineName){
     var PipelineId;
 
@@ -438,27 +438,33 @@ module.exports = {
 
         //if moving pipeline, 3rd arg is issue num,  4th = -p, 5th = pipeline, 6t position
         var IssueNo = CommandArr[1];
-        var PipeLineId = this.getPipelineId(CommandArr[3]);
+        var PipeLineId = this.getPipelineId(CommandArr[3]).then(function (data){
 
-        log("Pipeline got : "+ PipeLineId);
-        var PosNo = CommandArr[4];
+          log("Pipeline got (using data): "+ data);
+          
+          log("Pipeline got : "+ PipeLineId);
+          var PosNo = CommandArr[4];
+  
+          var MoveIssuePipeLine = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves';
+  
+          var MoveBody = {
+            pipeline_id: data,
+            position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
+          };
+  
+          var UrlObject = {
+            IsValid: true,
+            Url: MoveIssuePipeLine,
+            Method: 'POST',
+            Body: MoveBody,
+            IsGit: false
+          };
+  
+          return UrlObject;
 
-        var MoveIssuePipeLine = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves';
+        }); //this is where i try to call the method that gets the pipeline id from name
 
-        var MoveBody = {
-          pipeline_id: PipeLineId,
-          position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
-        };
-
-        var UrlObject = {
-          IsValid: true,
-          Url: MoveIssuePipeLine,
-          Method: 'POST',
-          Body: MoveBody,
-          IsGit: false
-        };
-
-        return UrlObject;
+        
       }
 
 
