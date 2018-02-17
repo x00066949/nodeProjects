@@ -2,6 +2,9 @@ import { expect } from 'chai';
 import * as jsonwebtoken from 'jsonwebtoken';
 import { post } from 'request';
 
+var assert = require('assert');
+var BotService = require('../scrum_board');
+
 //mock request module
 let postspy;
 require.cache[require.resolve('request')].exports = {
@@ -163,10 +166,195 @@ describe('watsonwork-scrumbot', () => {
         });
       });
     });
-
+/*
     it('rejects messages with invalid signature', (done) => {
       
 
     });
+*/
+  });
 
+  
+  describe('BotService Test', function () {
+  
+    describe('testwel Test', function () {
+  
+      it('It Should Return Welcome', function () {
+        assert.equal(BotService.testwel(), 'Welcome');
+      });
+  
+    });
+  
+  
+    describe('Check Valid Input', function () {
+  
+      it('Returns true', function () {
+        var Command = '@scrumbot /repo 1234';
+        var Options = {
+          request: null,
+          response: null,
+          UCommand: Command
+        };
+        var Result = BotService.checkValidInput(Options);
+  
+        assert.equal(Result, true);
+      });
+  
+  
+      it('Returns false', function () {
+        var Command = '@repos /repo 1234';
+        var Options = {
+          request: null,
+          response: null,
+          UCommand: Command
+        };
+        var Result = BotService.checkValidInput(Options);
+  
+        assert.equal(Result, false);
+      });
+  
+  
+    });
+  
+  
+    describe('Get Command', function () {
+  
+      it('Return Valid command', function () {
+        var UCommand = '@scrumbot /repo 1234';
+        var Result = BotService.getCommand(UCommand);
+  
+        assert.equal(Result, '/repo 1234');
+      });
+  
+  
+      it('Returns Blank Input', function () {
+        var UCommand = '';
+        var Result = BotService.getCommand(UCommand);
+  
+        assert.equal(Result, '');
+      });
+  
+  
+    });
+  
+  
+    describe('Validate Commands', function () {
+  
+      it('Return Url Object', function () {
+        var Command = '/repo 1234';
+        var Options = {
+          request: null,
+          response: null,
+          Command: Command
+        };
+  
+        var ResultObj = {
+          IsValid: false,
+          Url: '',
+          Method: 'GET',
+          Body: null
+        };
+  
+        var Result = BotService.validateCommands(Options);
+  
+        assert.deepEqual(Result, ResultObj);
+      });
+  
+    });
+  
+  
+    // describe('Get Repo Url', function () {
+  
+  
+    //   it('Return Repository Url Object', function () {
+    //     var CommandArr = ['/repo', '1234'];
+    //     var UserCommand = '/repo 1234';
+  
+    //     var ResultObj = {
+    //       IsValid: true,
+    //       Url: 'repos/codesciencesol/1234',
+    //       Method: 'GET',
+    //       Body: null,
+    //       IsGit: true
+    //     };
+  
+    //     //var Result = BotService.getRepoUrl(UserCommand,CommandArr);
+  
+    //     //assert.equal(Result, ResultObj);
+    //   });
+  
+  
+    // });
+  
+    describe('GetIssueUrl', function () {
+  
+  
+      it('Return Pipeline Url Object', function () {
+        var CommandArr = ['/issue', '12', 'pipeline'];
+        var UserCommand = '/issue 12 pipeline';
+        var RepoId = '1234';
+  
+        var ResultObj = {
+          IsValid: true,
+          Url: 'p1/repositories/1234/issues/12',
+          Method: 'GET',
+          Body: null,
+          IsGit: false
+        };
+  
+        var Result = BotService.getIssueUrl(UserCommand, CommandArr, RepoId);
+  
+        assert.deepEqual(Result, ResultObj);
+      });
+  
+  
+      it('Position number different than passed', function () {
+        var CommandArr = ['/issue', '12', '-p', '456', '16'];
+        var UserCommand = '/issue 12 -p 456 1';
+        var RepoId = '1234';
+  
+        var ResultObj = {
+          IsValid: true,
+          Url: 'p1/repositories/1234/issues/12/moves',
+          Method: 'POST',
+          Body: {
+            pipeline_id: '456',
+            position: '1'
+          },
+          IsGit: false
+        };
+  
+        var Result = BotService.getIssueUrl(UserCommand, CommandArr, RepoId);
+  
+        assert.notDeepEqual(Result, ResultObj);
+      });
+  
+  
+    });
+  
+  
+    describe('GetEpicUrl', function () {
+  
+  
+      it('Returns  when not equal repository id', function () {
+        var CommandArr = ['/epic1'];
+        var UserCommand = '/epic1';
+        var RepoId = '123411';
+  
+        var ResultObj = {
+          IsValid: true,
+          Url: 'p1/repositories/1234/epics',
+          Method: 'GET',
+          Body: null,
+          IsGit: false
+        };
+  
+        var Result = BotService.getEpicUrl(UserCommand, CommandArr, RepoId);
+  
+        assert.notDeepEqual(Result, ResultObj);
+      });
+  
+    });
+  
+  
   });

@@ -1,4 +1,3 @@
-
 # ScrumMaster-bot
 
 [![Build Status]
