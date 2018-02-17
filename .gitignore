@@ -1,6 +1,7 @@
 .env
 .vscode
 .idea
+node_modules
 .node_modules
 npm-debug.log
 .directory
@@ -8,4 +9,3 @@ view
 gitapi.js 
 appCredentials.js
 compiled.js
-node_modules
