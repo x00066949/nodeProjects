@@ -18,56 +18,16 @@ var requireEnv = require("require-environment-variables");
 // Setup debug log
 const log = debug('watsonwork-scrumbot');
 
-var message;
-var content;
-var gsecret;
+export const slash_commands = (req) =>{
 
-//to show in browser
-//set route for homepage 
-const gitConnect = () => {
-  rp({
-    uri: 'https://api.github.com/',
+  log("Processing slash command");
 
-    headers: {
-      'User-Agent': 'simple_rest_app',
-    },
-    qs: {
-      client_id: process.env.GIT_CLIENT_ID,
-      client_secret: process.env.GIT_CLIENT_SECRET
-    },
-    json: true
-  })
-    .then((data) => {
-      message = data.issues_url;
+  if(!req)
+    throw new Error('no request provided');
 
-    })
-    .catch((err) => {
-      console.log(err)
-    })
+  
 
-};
-
-const get_issue = (repoid, issueid) =>{
-    rp({
-      uri: 'https://api.zenhub.io/p1/repositories/' + repoid + '/issues/' + issueid,
-
-      headers: {
-        'X-Authentication-Token': process.env.ZENHUB_TOKEN
-      },
-
-      json: true
-    })
-      .then((data) => {
-        
-        message = data.pipeline.name
-        log(data)
-        log('message : '+message)
-      })
-      .catch((err) => {
-        console.log(err)
-      
-      })  
-};
+}
 
 export const scrumbot = (appId, token) => (req, res) => {
   // Respond to the Webhook right away, as the response message will
@@ -91,10 +51,7 @@ export const scrumbot = (appId, token) => (req, res) => {
     log('Got a message %o', req.body);
     log('content : '+req.body.content);
 
-    var message1 = req.body.content; // this message1 contains the text to be processed 
-
-
-    board.getScrumData({request:req, response:res, UserInput:message1}).then((to_post)=>{
+    board.getScrumData({request:req, response:res, UserInput:req.body.content}).then((to_post)=>{
 
 
       log("data got = "+to_post);
@@ -116,33 +73,6 @@ export const scrumbot = (appId, token) => (req, res) => {
 
     
   };
-};
-
-export const getRepo = (repoName) => {
-  // Respond to the Webhook right away, as the response message will
-  // be sent asynchronously
-  res.status(201).end();
-  rp({
-    uri: 'https://api.github.com/user/repos',
-
-    headers: {
-      'User-Agent': 'simple_rest_app',
-    },
-    qs: {
-    
-      client_id: process.env.GIT_CLIENT_ID,
-      client_secret: process.env.GIT_CLIENT_SECRET
-    },
-    json: true
-  })
-    .then((data) => {
-      message = data;
-      log(data)
-
-    })
-    .catch((err) => {
-      console.log(err)
-    })
 };
 
 // Send an app message to the conversation in a space
