@@ -23,13 +23,25 @@ export const slash_commands = (appId, token) => (req, res) =>{
   // Respond to the Webhook right away, as the response message will
   // be sent asynchronously
   res.status(201).end();
-  
+
+   // Only handle message-created Webhook events, and ignore the app's
+  // own messages
+  if (req.body.userId === appId) {
+    console.log('error %o', req.body);
+    return;
+
+  }
+  if (res.statusCode !== 201) {
+    log(res);
+    return;
+  }
+
   log("Processing slash command");
 
   if(!req)
     throw new Error('no request provided');
 
-  
+  log(req.body);
 
 }
 
@@ -168,7 +180,11 @@ export const webapp = (appId, secret, wsecret, cb) => {
       challenge(wsecret),
 
       // Handle Watson Work messages
-      scrumbot(appId, token)));
+      //scrumbot(appId, token)));
+
+      //handle slash commands
+      slash_commands(appId, token)
+    ));
   });
 };
 
