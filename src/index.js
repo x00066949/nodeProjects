@@ -43,7 +43,7 @@ export const slash_commands = (appId, token) => (req, res) =>{
 
   log(req.body);
 
-  let command = JSON.parse(req.body.annotationPayload).actionId.replace('/repo', '')
+  let command = JSON.parse(req.body.annotationPayload.actionId).replace('/repo', '')
   .match(/(?:[^\s"]+|"[^"]*")+/g);
 
   if (!command)
