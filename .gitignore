@@ -10,5 +10,5 @@ gitapi.js
 appCredentials.js
 compiled.js
 lib/**
-.lib
+lib
 node_modules/**
