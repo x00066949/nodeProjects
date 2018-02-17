@@ -43,13 +43,15 @@ export const slash_commands = (appId, token) => (req, res) =>{
 
   log(req.body);
 
-  let command = JSON.parse(req.body.annotationPayload.actionId).replace('/repo', '')
-  .match(/(?:[^\s"]+|"[^"]*")+/g);
+  let command = req.body.annotationPayload.actionId;
+  
+  //JSON.parse(req.body.annotationPayload.actionId).replace('/repo', '')
+  //.match(/(?:[^\s"]+|"[^"]*")+/g);
 
   if (!command)
     log("no command to process");
   
-  let repo_name = '@scrumbot /repo '+command[0] +' 7';
+  let repo_name = '@scrumbot '+command +' 7';
 
   board.getScrumData({request:req, response:res, UserInput:repo_name}).then((to_post)=>{
     
