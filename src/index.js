@@ -18,8 +18,12 @@ var requireEnv = require("require-environment-variables");
 // Setup debug log
 const log = debug('watsonwork-scrumbot');
 
-export const slash_commands = (req) =>{
+export const slash_commands = (appId, token) => (req, res) =>{
 
+  // Respond to the Webhook right away, as the response message will
+  // be sent asynchronously
+  res.status(201).end();
+  
   log("Processing slash command");
 
   if(!req)
