@@ -43,10 +43,13 @@ export const slash_commands = (appId, token) => (req, res) =>{
 
   log(req.body);
 
-  let command = req.body.annotationPayload.actionId;
-  log("payload"+req.body.annotationPayload);
-  log("action id"+req.body.annotationPayload.actionId);
-  log("command"+command);
+  //let payLoad = req.body.annotationPayload;
+  //log("payload"+payLoad);
+
+
+  let command = JSON.parse(req.body.annotationPayload).actionId;
+  //log("action id "+req.body.annotationPayload.actionId);
+  log("command "+command);
   
   
 
