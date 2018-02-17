@@ -1,4 +1,4 @@
-# ScrumMaster-bot
+
 # ScrumMaster-bot
 
 [![Build Status]
