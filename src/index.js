@@ -43,6 +43,33 @@ export const slash_commands = (appId, token) => (req, res) =>{
 
   log(req.body);
 
+  let command = JSON.parse(req.body.annotationPayload).actionId.replace('/repo', '')
+  .match(/(?:[^\s"]+|"[^"]*")+/g);
+
+  if (!command)
+    log("no command to process");
+  
+  let repo_name = '@scrumbot /repo '+command[0] +' 7';
+
+  board.getScrumData({request:req, response:res, UserInput:repo_name}).then((to_post)=>{
+    
+    
+          log("data got = "+to_post);
+    
+          send(req.body.spaceId,
+            util.format(
+              'Hey %s, result is: %s',
+              req.body.userName, to_post),
+            token(),
+            (err, res) => {
+              if (!err)
+                log('Sent message to space %s', req.body.spaceId);
+          })
+        }).catch((err)=>{
+          log("nothing returned from getscrumdata" + err);
+        })
+  
+
 }
 
 export const scrumbot = (appId, token) => (req, res) => {
