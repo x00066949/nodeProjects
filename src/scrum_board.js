@@ -320,6 +320,7 @@ module.exports = {
     var UMethod = options.UMethod;
     var UrlType = options.UType;
 
+    log("Body : "+UrlBody)
     var UrlOptions = {
       method: UMethod,
       uri: MainUrl + UserUrl,
