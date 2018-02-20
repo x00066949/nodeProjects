@@ -574,7 +574,7 @@ module.exports = {
         var SetEstimate = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/estimate';
 
         var MoveBody = {
-          "estimate": 13
+          "estimate": EstimateVal
           //position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
         };
 
