@@ -559,20 +559,20 @@ module.exports = {
       if (EstimateAddRegex.test(UserCommand)) {
 
         var IssueNo = CommandArr[2];
-        var PipeLineId = CommandArr[3];
-        var PosNo = CommandArr[4];
+        var EstimateVal = CommandArr[4];
+        //var PosNo = CommandArr[4];
 
-        var MoveIssuePipeLine = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves';
+        var SetEstimate = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/estimate';
 
         var MoveBody = {
-          pipeline_id: PipeLineId,
-          position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
+          estimate: EstimateVal,
+          //position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
         };
 
         var UrlObject = {
           IsValid: true,
-          Url: MoveIssuePipeLine,
-          Method: 'POST',
+          Url: SetEstimate,
+          Method: 'PUT',
           Body: MoveBody,
           IsGit: false,
           UrlType:'IssueEstimate'
