@@ -560,6 +560,7 @@ module.exports = {
 
         var IssueNo = CommandArr[2];
         var EstimateVal = CommandArr[4];
+        log("EstimateVal : "+EstimateVal)
         //var PosNo = CommandArr[4];
 
         var SetEstimate = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/estimate';
