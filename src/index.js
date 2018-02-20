@@ -59,7 +59,7 @@ export const slash_commands = (appId, token) => (req, res) =>{
   if (!command)
     log("no command to process");
   
-  let repo_name = '@scrumbot '+command +' 7';
+  let repo_name = '@scrumbot '+command;
 
   board.getScrumData({request:req, response:res, UserInput:repo_name}).then((to_post)=>{
     

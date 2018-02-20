@@ -73,8 +73,10 @@ module.exports = {
 
     if (RepositoryId === null || RepositoryId === '' || typeof RepositoryId === 'undefined') {
       log("trying to get repo id");
-      var RepoRegex = new RegExp(/^\/repo*\s[A-Za-z0-9]*\s[0-9]*/);
+      //var RepoRegex = new RegExp(/^\/repo*\s[A-Za-z0-9]*\s[0-9]*/);
 
+    var RepoRegex = new RegExp(/^\/repo*\s[A-Za-z0-9]/);
+    
       if (!RepoRegex.test(CommandValue)) {
          FinalMessage = {
           Type: 'Error',
