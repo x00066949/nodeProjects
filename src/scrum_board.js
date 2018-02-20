@@ -321,7 +321,7 @@ module.exports = {
     var UrlType = options.UType;
 
     log("Body : "+JSON.stringify(UrlBody));
-    console.dir(options.request, {depth:null});
+    //console.dir(options.request, {depth:null});
 
     var UrlOptions = {
       method: UMethod,
@@ -339,6 +339,8 @@ module.exports = {
       }
     };
 
+    console.dir(UrlOptions, {depth:null});
+    
     return rp(UrlOptions)
       .then(function (successdata) {
         var Data = successdata;
