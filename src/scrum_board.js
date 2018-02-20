@@ -369,6 +369,11 @@ module.exports = {
 
           
         }
+        if(UrlType === 'GetPipeline'){
+
+          Data = " ";
+          Data += "That issue is currently in "+successdata.pipeline.name+" pipeline.";
+        }
 
 
         return JSON.stringify(Data);
