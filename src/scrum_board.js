@@ -319,6 +319,11 @@ module.exports = {
     var UrlBody = options.UBody;
     var UMethod = options.UMethod;
     var UrlType = options.UType;
+    var bod = {
+      body:{
+        UrlBody
+      }
+    };
 
     log("Body : "+JSON.stringify(UrlBody));
     //console.dir(options.request, {depth:null});
@@ -334,9 +339,11 @@ module.exports = {
       },
       json: true // Automatically parses the JSON string in the response
         ,
-      body: {
-        UrlBody
-      }
+        bod
+      //body: {
+      //  UrlBody
+      
+      //}
     };
 
     console.dir(UrlOptions, {depth:null});
