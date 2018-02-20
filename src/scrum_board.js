@@ -223,8 +223,9 @@ module.exports = {
       CommandArr.splice(0,1);
     }
     else{
-      repo_id = CommandArr[1];
-      CommandArr.splice(0,2);
+      //--
+      repo_id = CommandArr[2];
+      CommandArr.splice(0,1);
     }
     
 
@@ -252,9 +253,10 @@ module.exports = {
       CommandArr.splice(0,1);
     }
     else{
-      repo_id = CommandArr[1];
+      //--
+      repo_id = CommandArr[2];
       log ("firstly initialisiing repo_id as "+repo_id +" from message arg at pos 1 = "+CommandArr[1]);
-      CommandArr.splice(0,2);
+      CommandArr.splice(0,1);
     }
     
     log("repo id 2 : "+repo_id);
@@ -517,12 +519,12 @@ module.exports = {
       }
 
 
-      // Get events for the Issue
-      var EventsRegex = new RegExp(/^\/issue*\s[0-9]*\sevents/);
+      // Get events for the Issue 
+      var EventsRegex = new RegExp(/^\/issue*\s[0-9]*\s[0-9]*\sevents/);
 
       if (EventsRegex.test(UserCommand)) {
 
-        var IssueNo = CommandArr[1];
+        var IssueNo = CommandArr[2];
 
         var EventsUrl = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/events';
 
@@ -541,11 +543,11 @@ module.exports = {
 
 
       // Set the estimate for the issue.
-      var EstimateAddRegex = new RegExp(/^\/issue*\s[0-9]*\s-e\s[0-9]*/);
+      var EstimateAddRegex = new RegExp(/^\/issue*\s[0-9]*\s[0-9]*\s-e\s[0-9]*/);
 
       if (EstimateAddRegex.test(UserCommand)) {
 
-        var IssueNo = CommandArr[1];
+        var IssueNo = CommandArr[2];
         var PipeLineId = CommandArr[3];
         var PosNo = CommandArr[4];
 
@@ -575,7 +577,7 @@ module.exports = {
 
       if (BugRegex.test(UserCommand)) {
 
-        var IssueNo = CommandArr[1];
+        var IssueNo = CommandArr[2];
 
         var BugUrl = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo;
 

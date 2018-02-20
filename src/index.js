@@ -18,56 +18,69 @@ var requireEnv = require("require-environment-variables");
 // Setup debug log
 const log = debug('watsonwork-scrumbot');
 
-var message;
-var content;
-var gsecret;
+export const slash_commands = (appId, token) => (req, res) =>{
 
-//to show in browser
-//set route for homepage 
-const gitConnect = () => {
-  rp({
-    uri: 'https://api.github.com/',
+  // Respond to the Webhook right away, as the response message will
+  // be sent asynchronously
+  res.status(201).end();
 
-    headers: {
-      'User-Agent': 'simple_rest_app',
-    },
-    qs: {
-      client_id: process.env.GIT_CLIENT_ID,
-      client_secret: process.env.GIT_CLIENT_SECRET
-    },
-    json: true
-  })
-    .then((data) => {
-      message = data.issues_url;
+   // Only handle message-created Webhook events, and ignore the app's
+  // own messages
+  if (req.body.userId === appId) {
+    console.log('error %o', req.body);
+    return;
 
-    })
-    .catch((err) => {
-      console.log(err)
-    })
+  }
+  if (res.statusCode !== 201) {
+    log(res);
+    return;
+  }
 
-};
+  log("Processing slash command");
 
-const get_issue = (repoid, issueid) =>{
-    rp({
-      uri: 'https://api.zenhub.io/p1/repositories/' + repoid + '/issues/' + issueid,
+  if(!req)
+    throw new Error('no request provided');
 
-      headers: {
-        'X-Authentication-Token': process.env.ZENHUB_TOKEN
-      },
+  log(req.body);
 
-      json: true
-    })
-      .then((data) => {
-        
-        message = data.pipeline.name
-        log(data)
-        log('message : '+message)
-      })
-      .catch((err) => {
-        console.log(err)
-      
-      })  
-};
+  //let payLoad = req.body.annotationPayload;
+  //log("payload"+payLoad);
+
+
+  let command = JSON.parse(req.body.annotationPayload).actionId;
+  //log("action id "+req.body.annotationPayload.actionId);
+  log("command "+command);
+  
+  
+
+  //JSON.parse(req.body.annotationPayload.actionId).replace('/repo', '')
+  //.match(/(?:[^\s"]+|"[^"]*")+/g);
+
+  if (!command)
+    log("no command to process");
+  
+  let repo_name = '@scrumbot '+command +' 7';
+
+  board.getScrumData({request:req, response:res, UserInput:repo_name}).then((to_post)=>{
+    
+    
+          log("data got = "+to_post);
+    
+          send(req.body.spaceId,
+            util.format(
+              'Hey %s, result is: %s',
+              req.body.userName, to_post),
+            token(),
+            (err, res) => {
+              if (!err)
+                log('Sent message to space %s', req.body.spaceId);
+          })
+        }).catch((err)=>{
+          log("nothing returned from getscrumdata" + err);
+        })
+  
+
+}
 
 export const scrumbot = (appId, token) => (req, res) => {
   // Respond to the Webhook right away, as the response message will
@@ -91,10 +104,7 @@ export const scrumbot = (appId, token) => (req, res) => {
     log('Got a message %o', req.body);
     log('content : '+req.body.content);
 
-    var message1 = req.body.content; // this message1 contains the text to be processed 
-
-
-    board.getScrumData({request:req, response:res, UserInput:message1}).then((to_post)=>{
+    board.getScrumData({request:req, response:res, UserInput:req.body.content}).then((to_post)=>{
 
 
       log("data got = "+to_post);
@@ -116,33 +126,6 @@ export const scrumbot = (appId, token) => (req, res) => {
 
     
   };
-};
-
-export const getRepo = (repoName) => {
-  // Respond to the Webhook right away, as the response message will
-  // be sent asynchronously
-  res.status(201).end();
-  rp({
-    uri: 'https://api.github.com/user/repos',
-
-    headers: {
-      'User-Agent': 'simple_rest_app',
-    },
-    qs: {
-    
-      client_id: process.env.GIT_CLIENT_ID,
-      client_secret: process.env.GIT_CLIENT_SECRET
-    },
-    json: true
-  })
-    .then((data) => {
-      message = data;
-      log(data)
-
-    })
-    .catch((err) => {
-      console.log(err)
-    })
 };
 
 // Send an app message to the conversation in a space
@@ -234,7 +217,11 @@ export const webapp = (appId, secret, wsecret, cb) => {
       challenge(wsecret),
 
       // Handle Watson Work messages
-      scrumbot(appId, token)));
+      //scrumbot(appId, token)));
+
+      //handle slash commands
+      slash_commands(appId, token)
+    ));
   });
 };
 
