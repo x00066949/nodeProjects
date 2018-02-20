@@ -316,7 +316,7 @@ module.exports = {
     var MainUrl = 'https://api.zenhub.io/';
 
     var UserUrl = options.UUrl;
-    var UrlBody = options.UBody;
+    var UrlBody = options.UBody.estimate;
     var UMethod = options.UMethod;
     var UrlType = options.UType;
     
@@ -337,7 +337,7 @@ module.exports = {
         ,
         
       body: {
-        UrlBody
+        estimate: UrlBody
       
       }
     };
@@ -383,6 +383,10 @@ module.exports = {
           Data += "That issue is currently in "+successdata.pipeline.name+" pipeline.";
         }
 
+        if(UrlType === 'IssueEstimate'){
+          Data = " ";
+          Data += "Your Issue's estimate has been updated to "+successdata.estimate;
+        }
 
         return JSON.stringify(Data);
       })
@@ -573,9 +577,10 @@ module.exports = {
 
         var SetEstimate = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/estimate';
 
-        var MoveBody =  "estimate: "+EstimateVal;
+        var MoveBody = {
+          "estimate": EstimateVal
           //position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
-        
+        };
 
         var UrlObject = {
           IsValid: true,
