@@ -316,14 +316,10 @@ module.exports = {
     var MainUrl = 'https://api.zenhub.io/';
 
     var UserUrl = options.UUrl;
-    var UrlBody = options.UBody;
+    var UrlBody = options.UBody.estimate;
     var UMethod = options.UMethod;
     var UrlType = options.UType;
-    var bod = {
-      body:{
-        UrlBody
-      }
-    };
+    
 
     log("Body : "+JSON.stringify(UrlBody));
     //console.dir(options.request, {depth:null});
@@ -341,7 +337,7 @@ module.exports = {
         ,
         
       body: {
-        estimate: 3
+        estimate: UrlBody
       
       }
     };
