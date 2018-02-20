@@ -284,7 +284,7 @@ module.exports = {
     };
 
     var RepoRegex = new RegExp(/^\/repo*\s[A-Za-z0-9]*\s[0-9]*/);
-    var IssueRegex = new RegExp(/^[\/issue]*\s[0-9]*\s(-u|bug|pipeline|-p|events|-e)/);
+    var IssueRegex = new RegExp(/^[\/issue]*\s[0-9]*\s[0-9]*\s(-u|bug|pipeline|-p|events|-e)/);
     var EpicRegex = new RegExp(/^[\/epic]*\s[A-Za-z0-9]*/);
     var BlockedRegex = new RegExp(/^\/blocked/);
 
@@ -459,11 +459,11 @@ module.exports = {
 
 
       //To Get State of Pipeline
-      var PipelineRegex = new RegExp(/^\/issue*\s[0-9]*\spipeline/);
+      var PipelineRegex = new RegExp(/^\/issue*\s[0-9]*\s[0-9]*\spipeline/);
 
       if (PipelineRegex.test(UserCommand)) {
 
-        var IssueNo = CommandArr[1];
+        var IssueNo = CommandArr[2];
 
         log("issue Num in getISsueUrl : "+IssueNo);
 
@@ -482,12 +482,12 @@ module.exports = {
 
 
       // Move Pipeline
-      var PipelineMoveRegex = new RegExp(/^\/issue*\s[0-9]*\s-p\s[A-Za-z0-9]*/);
+      var PipelineMoveRegex = new RegExp(/^\/issue*\s[0-9]*\s[0-9]*\s-p\s[A-Za-z0-9]*/);
 
       if (PipelineMoveRegex.test(UserCommand)) {
 
         //if moving pipeline, 3rd arg is issue num,  4th = -p, 5th = pipeline, 6t position
-        var IssueNo = CommandArr[1];
+        var IssueNo = CommandArr[2];
         var PipeLineId = this.getPipelineId(CommandArr[3]).then(function (data){
 
           log("Pipeline got (using data): "+ data);
@@ -528,6 +528,8 @@ module.exports = {
 
         var IssueNo = CommandArr[2];
 
+        log("issue no eventsregex "+IssueNo);
+        
         var EventsUrl = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/events';
 
         var UrlObject = {
