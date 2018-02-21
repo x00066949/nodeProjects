@@ -176,7 +176,7 @@ describe('watsonwork-scrumbot', () => {
 
   
   describe('BotService Test', function () {
-  
+  /*
     describe('testwel Test', function () {
   
       it('It Should Return Welcome', function () {
@@ -184,7 +184,7 @@ describe('watsonwork-scrumbot', () => {
       });
   
     });
-  
+  */
   
     describe('Check Valid Input', function () {
   
@@ -261,30 +261,6 @@ describe('watsonwork-scrumbot', () => {
       });
   
     });
-  
-  
-    // describe('Get Repo Url', function () {
-  
-  
-    //   it('Return Repository Url Object', function () {
-    //     var CommandArr = ['/repo', '1234'];
-    //     var UserCommand = '/repo 1234';
-  
-    //     var ResultObj = {
-    //       IsValid: true,
-    //       Url: 'repos/codesciencesol/1234',
-    //       Method: 'GET',
-    //       Body: null,
-    //       IsGit: true
-    //     };
-  
-    //     //var Result = BotService.getRepoUrl(UserCommand,CommandArr);
-  
-    //     //assert.equal(Result, ResultObj);
-    //   });
-  
-  
-    // });
   
     describe('GetIssueUrl', function () {
   

@@ -46,3 +46,10 @@ DEBUG=watsonwork.*
 SCRUMBOT_APPID={your app id from watson work services}
 SCRUMBOT_SECRET={ypur app secret from watson work services}
 ```
+#### Build the App
+Run the following command to build the app, run tests and start app
+
+```
+npm run build
+npm start
+```
