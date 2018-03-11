@@ -266,8 +266,8 @@ describe('watsonwork-scrumbot', () => {
   
   
       it('Return Pipeline Url Object', function () {
-        var CommandArr = ['/issue', '12', 'pipeline'];
-        var UserCommand = '/issue 12 pipeline';
+        var CommandArr = ['/issue', '1234','12', 'pipeline'];
+        var UserCommand = '/issue 1234 12 pipeline';
         var RepoId = '1234';
   
         var ResultObj = {
@@ -275,7 +275,8 @@ describe('watsonwork-scrumbot', () => {
           Url: 'p1/repositories/1234/issues/12',
           Method: 'GET',
           Body: null,
-          IsGit: false
+          IsGit: false,
+          UrlType: "GetPipeline"
         };
   
         var Result = BotService.getIssueUrl(UserCommand, CommandArr, RepoId);
@@ -322,7 +323,8 @@ describe('watsonwork-scrumbot', () => {
           Url: 'p1/repositories/1234/epics',
           Method: 'GET',
           Body: null,
-          IsGit: false
+          IsGit: false,
+          UrlType:'EpicIssues'
         };
   
         var Result = BotService.getEpicUrl(UserCommand, CommandArr, RepoId);
