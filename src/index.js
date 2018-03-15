@@ -45,7 +45,7 @@ export const slash_commands = (appId, token) => (req, res) =>{
 
   //let payLoad = req.body.annotationPayload;
   //log("payload"+payLoad);
-  toscana-aip-nlc-consumer-client-id
+
   if (req.body.type === 'message-annotation-added' && req.body.userId !== 'toscana-aip-nlc-consumer-client-id') {
     let command = JSON.parse(req.body.annotationPayload).actionId;
     //log("action id "+req.body.annotationPayload.actionId);
