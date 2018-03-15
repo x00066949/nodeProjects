@@ -131,6 +131,7 @@ export const scrumbot = (appId, token) => (req, res) => {
 
 // Send an app message to the conversation in a space
 const send = (spaceId, text, tok, cb) => {
+  
   request.post(
     'https://api.watsonwork.ibm.com/v1/spaces/' + spaceId + '/messages', {
       headers: {

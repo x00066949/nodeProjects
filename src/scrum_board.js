@@ -383,14 +383,11 @@ module.exports = {
 
           }
 
-          
-
-          
         }
         if(UrlType === 'GetPipeline'){
 
           Data = " ";
-          Data += "[link](That issue is currently in "+successdata.pipeline.name+" pipeline.)";
+          Data += "[link](www.hello.com) That issue is currently in "+successdata.pipeline.name+" pipeline.";
         }
 
         if(UrlType === 'IssueEstimate'){
