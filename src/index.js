@@ -45,41 +45,35 @@ export const slash_commands = (appId, token) => (req, res) =>{
 
   //let payLoad = req.body.annotationPayload;
   //log("payload"+payLoad);
+  toscana-aip-nlc-consumer-client-id
+  if (req.body.type === 'message-annotation-added' && req.body.userId !== 'toscana-aip-nlc-consumer-client-id') {
+    let command = JSON.parse(req.body.annotationPayload).actionId;
+    //log("action id "+req.body.annotationPayload.actionId);
+    log("command "+command);
 
-
-  let command = JSON.parse(req.body.annotationPayload).actionId;
-  //log("action id "+req.body.annotationPayload.actionId);
-  log("command "+command);
-  
-  
-
-  //JSON.parse(req.body.annotationPayload.actionId).replace('/repo', '')
-  //.match(/(?:[^\s"]+|"[^"]*")+/g);
-
-  if (!command)
-    log("no command to process");
-  
-  // message represents the message coming in from WW to be processed by the App
-  let message = '@scrumbot '+command;
-
-  board.getScrumData({request:req, response:res, UserInput:message}).then((to_post)=>{
+    if (!command)
+      log("no command to process");
     
-    
-          log("data got = "+to_post);
-    
-          send(req.body.spaceId,
-            util.format(
-              'Hey %s, result is: %s',
-              req.body.userName, to_post),
-            token(),
-            (err, res) => {
-              if (!err)
-                log('Sent message to space %s', req.body.spaceId);
-          })
-        }).catch((err)=>{
-          log("nothing returned from getscrumdata" + err);
-        })
-  
+    // message represents the message coming in from WW to be processed by the App
+    let message = '@scrumbot '+command;
+
+    board.getScrumData({request:req, response:res, UserInput:message}).then((to_post)=>{
+      
+      log("data got = "+to_post);
+
+      send(req.body.spaceId,
+        util.format(
+          'Hey %s, result is: %s',
+          req.body.userName, to_post),
+        token(),
+        (err, res) => {
+          if (!err)
+            log('Sent message to space %s', req.body.spaceId);
+      })
+    }).catch((err)=>{
+      log("nothing returned from getscrumdata" + err);
+    })
+  };
 
 }
 

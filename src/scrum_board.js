@@ -362,20 +362,20 @@ module.exports = {
         //Parse JSON according to obj returned
         if(UrlType === 'IssueEvents'){
           log("Events for issue");
-          Data = " ";
+          Data = "*Here are the most recent events regarding your issue:* ";
 
           for (var i =0; i<successdata.length; i++){
 
             if(successdata[i].type === 'transferIssue'){
               log("pipeline move event"+JSON.stringify(successdata[i].to_pipeline)+successdata[i].from_pipeline);
               console.dir(successdata[i], {depth:null}); 
-              Data += "   User " +successdata[i].user_id+ " moved issue from "+successdata[i].from_pipeline.name+" to "+successdata[i].to_pipeline.name;
+              Data += "   *User " +successdata[i].user_id+ "* _moved_ this issue from "+successdata[i].from_pipeline.name+" to "+successdata[i].to_pipeline.name;
   
             }
             if(successdata[i].type === 'estimateIssue'){
               log("estimate change event "+i);
               console.dir(successdata[i], {depth:null}); 
-              Data += "   User " +successdata[i].user_id+ " changed estimate on issue to  "+successdata[i].to_estimate.value+" on date : "+successdata[i].created_at;
+              Data += "   *User " +successdata[i].user_id+ "* _changed estimate_ on this issue to  "+successdata[i].to_estimate.value+" on date : "+successdata[i].created_at;
   
             }else {
               log("do not recogise event type");
@@ -436,7 +436,7 @@ module.exports = {
 
         repo_id = RepoId;
         console.log('Repository Id =' + RepoId);
-        return "The Repository Id for "+RepositoryName+" is "+JSON.stringify(successdata.id);
+        return "The *Repository Id* for _"+RepositoryName+"_ is "+JSON.stringify(successdata.id);
       })
       .catch(function (err) {
         var Error = err;
