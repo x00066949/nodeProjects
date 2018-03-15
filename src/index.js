@@ -59,7 +59,8 @@ export const slash_commands = (appId, token) => (req, res) =>{
   if (!command)
     log("no command to process");
   
-  let to_process = '@scrumbot '+command;
+  // message represents the message coming in from WW to be processed by the App
+  let message = '@scrumbot '+command;
 
   board.getScrumData({request:req, response:res, UserInput:to_process}).then((to_post)=>{
     
