@@ -319,10 +319,12 @@ module.exports = {
     var UserUrl = options.UUrl;
     var UrlBody = options.UBody;
     var UrlBody;
-    if(options.UBody.estimate){
-      UrlBody = options.UBody.estimate;      
-    }else{
+    if(options.UBody == null){
       UrlBody = options.UBody;
+      
+    }else{
+      UrlBody = options.UBody.estimate;            
+
     }
     var UMethod = options.UMethod;
     var UrlType = options.UType;
