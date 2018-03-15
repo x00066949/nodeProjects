@@ -380,7 +380,7 @@ module.exports = {
         if(UrlType === 'GetPipeline'){
 
           Data = " ";
-          Data += "That issue is currently in "+successdata.pipeline.name+" pipeline.";
+          Data += "[link](That issue is currently in "+successdata.pipeline.name+" pipeline.)";
         }
 
         if(UrlType === 'IssueEstimate'){
