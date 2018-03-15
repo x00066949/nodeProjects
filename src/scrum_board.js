@@ -311,6 +311,7 @@ module.exports = {
   },
   makeRequest: function (options) {
     log("makeRequest");
+    log(options.UBody)
     var res = options.response;
     var Token = process.env.ZENHUB_TOKEN;
     var MainUrl = 'https://api.zenhub.io/';
