@@ -62,7 +62,7 @@ export const slash_commands = (appId, token) => (req, res) =>{
   // message represents the message coming in from WW to be processed by the App
   let message = '@scrumbot '+command;
 
-  board.getScrumData({request:req, response:res, UserInput:to_process}).then((to_post)=>{
+  board.getScrumData({request:req, response:res, UserInput:message}).then((to_post)=>{
     
     
           log("data got = "+to_post);
@@ -131,7 +131,7 @@ export const scrumbot = (appId, token) => (req, res) => {
 
 // Send an app message to the conversation in a space
 const send = (spaceId, text, tok, cb) => {
-  
+
   request.post(
     'https://api.watsonwork.ibm.com/v1/spaces/' + spaceId + '/messages', {
       headers: {
