@@ -368,14 +368,14 @@ module.exports = {
 
             if(successdata[i].type === 'transferIssue'){
               log("pipeline move event"+JSON.stringify(successdata[i].to_pipeline)+successdata[i].from_pipeline);
-              console.dir(successdata[i], {depth:null}); 
-              Data += "\n*User " +successdata[i].user_id+ "* _moved_ this issue from "+successdata[i].from_pipeline.name+" to "+successdata[i].to_pipeline.name+"\n";
+              Data += "\
+              *User " +successdata[i].user_id+ "* _moved_ this issue from "+successdata[i].from_pipeline.name+" to "+successdata[i].to_pipeline.name+"\n";
   
             }
             if(successdata[i].type === 'estimateIssue'){
               log("estimate change event "+i);
-              console.dir(successdata[i], {depth:null}); 
-              Data += "\n*User " +successdata[i].user_id+ "* _changed estimate_ on this issue to  "+successdata[i].to_estimate.value+" on date : "+successdata[i].created_at+"\n";
+              Data += "\
+              *User " +successdata[i].user_id+ "* _changed estimate_ on this issue to  "+successdata[i].to_estimate.value+" on date : "+successdata[i].created_at+"\n";
   
             }else {
               log("do not recogise event type");
@@ -402,7 +402,7 @@ module.exports = {
           Data = "The following Epics are in your scrumboard: ";
           for (var i =0; i<successdata.epic_issues.length; i++){
             Data += "  \
-            *"+i+"* Epic ID: "+successdata.epic_issues[i].issue_number+" Url : "+successdata.epic_issues[i].issue_url;
+            *"+(i+1)+"* Epic ID: "+successdata.epic_issues[i].issue_number+" Url : "+successdata.epic_issues[i].issue_url;
 
           }
         }
