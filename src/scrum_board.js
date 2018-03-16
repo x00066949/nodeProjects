@@ -362,28 +362,30 @@ module.exports = {
         //Parse JSON according to obj returned
         if(UrlType === 'IssueEvents'){
           log("Events for issue");
-          Data = "*Here are the most recent events regarding your issue:* ";
+          Data = "*Here are the most recent events regarding your issue:* ```";
 
           for (var i =0; i<successdata.length; i++){
 
             if(successdata[i].type === 'transferIssue'){
               log("pipeline move event"+JSON.stringify(successdata[i].to_pipeline)+successdata[i].from_pipeline);
               console.dir(successdata[i], {depth:null}); 
-              Data += "   *User " +successdata[i].user_id+ "* _moved_ this issue from "+successdata[i].from_pipeline.name+" to "+successdata[i].to_pipeline.name;
+              Data += "\n*User " +successdata[i].user_id+ "* _moved_ this issue from "+successdata[i].from_pipeline.name+" to "+successdata[i].to_pipeline.name+"\n";
   
             }
             if(successdata[i].type === 'estimateIssue'){
               log("estimate change event "+i);
               console.dir(successdata[i], {depth:null}); 
-              Data += "   *User " +successdata[i].user_id+ "* _changed estimate_ on this issue to  "+successdata[i].to_estimate.value+" on date : "+successdata[i].created_at;
+              Data += "\n*User " +successdata[i].user_id+ "* _changed estimate_ on this issue to  "+successdata[i].to_estimate.value+" on date : "+successdata[i].created_at+"\n";
   
             }else {
               log("do not recogise event type");
             }
+            Data += "```";
 
           }
 
         }
+
         if(UrlType === 'GetPipeline'){
 
           Data = " ";
@@ -393,6 +395,15 @@ module.exports = {
         if(UrlType === 'IssueEstimate'){
           Data = " ";
           Data += "Your Issue's estimate has been updated to "+successdata.estimate;
+        }
+
+        if(UrlType === 'EpicIssues'){
+          
+          Data = "The following Epics are in your scrumboard: ";
+          for (var i =0; i<successdata.length; i++){
+            Data += "*"+i+"* Epic ID: "+successdata.issuenumber+" Url : "+successdata.issueurl;
+
+          }
         }
 
         return JSON.stringify(Data);
