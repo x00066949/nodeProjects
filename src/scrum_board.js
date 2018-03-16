@@ -2,7 +2,7 @@ var _ = require('lodash');
 var rp = require('request-promise');
 var Regex = require('regex');
 var dateFormat = require('dateformat');
-
+var os = require("os");
 
 // Setup debug log
 import debug from 'debug';
@@ -364,7 +364,7 @@ module.exports = {
         //Parse JSON according to obj returned
         if(UrlType === 'IssueEvents'){
           log("Events for issue");
-          Data = "*Here are the most recent events regarding your issue:* ```";
+          Data = "*Here are the most recent events regarding your issue:* \n ```";
 
           for (var i =0; i<successdata.length; i++){
 
@@ -384,7 +384,7 @@ module.exports = {
             }
             
           }
-          Data += "```";
+          Data += " \n ```";
         }
 
         if(UrlType === 'GetPipeline'){
@@ -403,7 +403,7 @@ module.exports = {
           Data = "The following Epics are in your scrumboard: ";
           for (var i =0; i<successdata.epic_issues.length; i++){
             Data += "  \
-            *"+(i+1)+"* Epic ID: "+successdata.epic_issues[i].issue_number+" Url : "+successdata.epic_issues[i].issue_url;
+            *"+(i+1)+"* Epic ID: "+successdata.epic_issues[i].issue_number+" Url : "+successdata.epic_issues[i].issue_url+os.EOL;
 
           }
         }
