@@ -364,7 +364,7 @@ module.exports = {
         //Parse JSON according to obj returned
         if(UrlType === 'IssueEvents'){
           log("Events for issue");
-          Data = "*Here are the most recent events regarding your issue:* \n ```";
+          Data = "*Here are the most recent events regarding your issue:* ```";
 
           for (var i =0; i<successdata.length; i++){
 
@@ -384,13 +384,13 @@ module.exports = {
             }
             
           }
-          Data += " \n ```";
+          Data += " ```";
         }
 
         if(UrlType === 'GetPipeline'){
 
           Data = " ";
-          Data += "That <br/>issue is currently in "+successdata.pipeline.name+" pipeline.";
+          Data += "That issue is currently in "+successdata.pipeline.name+" pipeline.";
         }
 
         if(UrlType === 'IssueEstimate'){
@@ -448,7 +448,7 @@ module.exports = {
         var RepoId = successdata.id;
 
         repo_id = RepoId;
-        console.log('Repository Id =' + RepoId);
+        console.log(successdata);
         return "The *Repository Id* for _"+RepositoryName+"_ is "+JSON.stringify(successdata.id);
       })
       .catch(function (err) {
