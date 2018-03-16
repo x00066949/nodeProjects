@@ -449,7 +449,7 @@ module.exports = {
 
         repo_id = RepoId;
         console.log(successdata);
-        return "The *Repository Id* for _"+RepositoryName+"_ is "+JSON.stringify(successdata.id);
+        return "The *Repository Id* for _"+RepositoryName+"_ is "+JSON.stringify(successdata.id)+" View repo at : "+successdata.html_url;
       })
       .catch(function (err) {
         var Error = err;
