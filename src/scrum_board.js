@@ -371,23 +371,20 @@ module.exports = {
             if(successdata[i].type === 'transferIssue'){
               log("pipeline move event"+JSON.stringify(successdata[i].to_pipeline)+successdata[i].from_pipeline);
               Data += "\
-              *User " +successdata[i].user_id+ "* _moved_ this issue from "+successdata[i].from_pipeline.name+" to "+successdata[i].to_pipeline.name;
+              *User " +successdata[i].user_id+ "* _moved_ this issue from "+successdata[i].from_pipeline.name+" to "+successdata[i].to_pipeline.name+" on date : "+dateFormat(successdata[i].created_at, "dddd, mmmm dS, yyyy");
   
             }
             if(successdata[i].type === 'estimateIssue'){
               log("estimate change event "+i);
-              var eventDate = successdata[i].created_at;
-
               Data += "\
-              *User " +successdata[i].user_id+ "* _changed estimate_ on this issue to  "+successdata[i].to_estimate.value+" on date : "+dateFormat(eventDate, "dddd, mmmm dS, yyyy");
+              *User " +successdata[i].user_id+ "* _changed estimate_ on this issue to  "+successdata[i].to_estimate.value+" on date : "+dateFormat(successdata[i].created_at, "dddd, mmmm dS, yyyy");
   
             }else {
               log("do not recogise event type");
             }
-            Data += "```";
-
+            
           }
-
+          Data += "```";
         }
 
         if(UrlType === 'GetPipeline'){
