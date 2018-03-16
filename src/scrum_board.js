@@ -401,7 +401,7 @@ module.exports = {
           
           Data = "The following Epics are in your scrumboard: ";
           for (var i =0; i<successdata.epic_issues.length; i++){
-            Data += "*"+i+"* Epic ID: "+successdata.issue_number+" Url : "+successdata.issue_url;
+            Data += "*"+i+"* Epic ID: "+successdata.epic_issues[i].issue_number+" Url : "+successdata.issue_url;
 
           }
         }
