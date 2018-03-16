@@ -283,7 +283,7 @@ module.exports = {
       Body: null
     };
 
-    var RepoRegex = new RegExp(/^\/repo*\s[A-Za-z0-9]*\s[0-9]*/);
+    var RepoRegex = new RegExp(/^\/repo*\s[A-Za-z0-9]*/);
     var IssueRegex = new RegExp(/^[\/issue]*\s[0-9]*\s[0-9]*\s(-u|bug|pipeline|-p|events|-e)/);
     var EpicRegex = new RegExp(/^[\/epic]*\s[A-Za-z0-9]*/);
     var BlockedRegex = new RegExp(/^\/blocked/);
@@ -311,12 +311,21 @@ module.exports = {
   },
   makeRequest: function (options) {
     log("makeRequest");
+    log(options.UBody)
     var res = options.response;
     var Token = process.env.ZENHUB_TOKEN;
     var MainUrl = 'https://api.zenhub.io/';
 
     var UserUrl = options.UUrl;
-    var UrlBody = options.UBody.estimate;
+    var UrlBody = options.UBody;
+    var UrlBody;
+    if(options.UBody == null){
+      UrlBody = options.UBody;
+      
+    }else{
+      UrlBody = options.UBody.estimate;            
+
+    }
     var UMethod = options.UMethod;
     var UrlType = options.UType;
     
@@ -338,7 +347,8 @@ module.exports = {
         
       body: {
         estimate: UrlBody
-      
+        //UrlBody
+
       }
     };
 
@@ -380,7 +390,7 @@ module.exports = {
         if(UrlType === 'GetPipeline'){
 
           Data = " ";
-          Data += "That issue is currently in "+successdata.pipeline.name+" pipeline.";
+          Data += "[link](That issue is currently in "+successdata.pipeline.name+" pipeline.)";
         }
 
         if(UrlType === 'IssueEstimate'){
@@ -664,6 +674,7 @@ module.exports = {
   },
 
   //To Get epics Url
+
   getEpicUrl: function (UserCommand, CommandArr, RepoId) {
     log("getEpicUrl");
 
@@ -671,6 +682,7 @@ module.exports = {
     var EpicUrl = 'p1/repositories/' + RespositroyId + '/epics';
 
     var UrlObject = {
+      IsValid : true,
       Url: EpicUrl,
       Method: 'GET',
       Body: null,

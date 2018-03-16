@@ -12,7 +12,7 @@
     "start": "node lib/index.js",
     "lint": "eslint src",
     "clean": "rm -rf lib node_modules",
-    "build": "npm install && npm run babel && npm test",
+    "build": "npm install && npm run babel && npm test && npm start",
     "rebuild": "npm run clean && npm run build",
     "cibuild": "npm run build",
     "GIT_CLIENT_ID": "echo $GIT_CLIENT_ID",

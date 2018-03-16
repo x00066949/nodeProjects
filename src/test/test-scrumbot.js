@@ -187,7 +187,11 @@ describe('watsonwork-scrumbot', () => {
   */
   
     describe('Check Valid Input', function () {
-  
+      /* 
+      Given: valid command
+      WHEN: command = @scrumbot /repo 1234
+      THEN: Result = '/repo 1234'
+      */   
       it('Returns true', function () {
         var Command = '@scrumbot /repo 1234';
         var Options = {
@@ -200,9 +204,13 @@ describe('watsonwork-scrumbot', () => {
         assert.equal(Result, true);
       });
   
-  
+      /* 
+      Given: valid command
+      WHEN: command = @scrumbot /repo 1234
+      THEN: Result = '/repo 1234'
+      */   
       it('Returns false', function () {
-        var Command = '@repos /repo 1234';
+        var Command = '@repos /repo helloworld';
         var Options = {
           request: null,
           response: null,
@@ -218,7 +226,12 @@ describe('watsonwork-scrumbot', () => {
   
   
     describe('Get Command', function () {
-  
+
+      /* 
+      Given: valid command
+      WHEN: command = @scrumbot /repo 1234
+      THEN: Result = '/repo 1234'
+      */  
       it('Return Valid command', function () {
         var UCommand = '@scrumbot /repo 1234';
         var Result = BotService.getCommand(UCommand);
@@ -226,9 +239,37 @@ describe('watsonwork-scrumbot', () => {
         assert.equal(Result, '/repo 1234');
       });
   
-  
-      it('Returns Blank Input', function () {
+      /* 
+      Given: invalid command
+      WHEN: command = ''
+      THEN: Result = ''
+      */  
+      it('Returns Blank Input for blank command', function () {
         var UCommand = '';
+        var Result = BotService.getCommand(UCommand);
+  
+        assert.equal(Result, '');
+      });
+
+      /* 
+      Given: invalid command
+      WHEN: command = undefined
+      THEN: Result = ''
+      */
+      it('Returns Blank Input for undefined', function () {
+        var UCommand = 'undefined';
+        var Result = BotService.getCommand(UCommand);
+  
+        assert.equal(Result, '');
+      });
+
+      /* 
+      Given: invalid command
+      WHEN: command = null
+      THEN: Result = ''
+      */
+      it('Returns Blank Input for null', function () {
+        var UCommand = null;
         var Result = BotService.getCommand(UCommand);
   
         assert.equal(Result, '');
@@ -240,8 +281,13 @@ describe('watsonwork-scrumbot', () => {
   
     describe('Validate Commands', function () {
   
+      /* 
+        Given: valid command
+        WHEN: correct syntax = /repo hello
+        THEN: Isgit = true, IsValid = true
+      */
       it('Return Url Object', function () {
-        var Command = '/repo 1234';
+        var Command = '/repo hello';
         var Options = {
           request: null,
           response: null,
@@ -249,10 +295,11 @@ describe('watsonwork-scrumbot', () => {
         };
   
         var ResultObj = {
-          IsValid: false,
-          Url: '',
+          IsValid: true,
+          Url: 'repos/x00066949/hello',
           Method: 'GET',
-          Body: null
+          Body: null,
+          IsGit: true
         };
   
         var Result = BotService.validateCommands(Options);
@@ -260,19 +307,77 @@ describe('watsonwork-scrumbot', () => {
         assert.deepEqual(Result, ResultObj);
       });
   
+    //});
+
+    /* 
+      Given: invalid command
+      WHEN: wron repo syntax
+      THEN: ResutObj.IsValid = false
+    */
+      it('Test wrong repo syntax', function () {
+        var Command = '/rrr hello';
+        var Options = {
+          request: null,
+          response: null,
+          Command: Command
+        };
+
+        var ResultObj = {
+          IsValid: false,
+          Url: '',
+          Method: 'GET',
+          Body: null,
+          
+        };
+
+        var Result = BotService.validateCommands(Options);
+
+        assert.deepEqual(Result, ResultObj);
+      });
+
     });
-  
+
     describe('GetIssueUrl', function () {
   
+
+    /* 
+      Given: valid command
+      WHEN: /issue 1234 12 pipeline
+      THEN: UrlType = GetPipeline
+    */
   
       it('Return Pipeline Url Object', function () {
-        var CommandArr = ['/issue', '12', 'pipeline'];
-        var UserCommand = '/issue 12 pipeline';
+        var CommandArr = ['/issue', '1234','12', 'pipeline'];
+        var UserCommand = '/issue 1234 12 pipeline';
         var RepoId = '1234';
   
         var ResultObj = {
           IsValid: true,
           Url: 'p1/repositories/1234/issues/12',
+          Method: 'GET',
+          Body: null,
+          IsGit: false,
+          UrlType: "GetPipeline"
+        };
+  
+        var Result = BotService.getIssueUrl(UserCommand, CommandArr, RepoId);
+  
+        assert.deepEqual(Result, ResultObj);
+      });
+    
+      /* 
+        Given: invalid command
+        WHEN: /issue 1234 12 pipe
+        THEN: UrlType = "", IsValid = false
+      */
+      it('Return Pipeline Url Object', function () {
+        var CommandArr = ['/issue', '1234','12', 'pipe'];
+        var UserCommand = '/issue 1234 12 pipe';
+        var RepoId = '1234';
+  
+        var ResultObj = {
+          IsValid: false,
+          Url: '',
           Method: 'GET',
           Body: null,
           IsGit: false
@@ -282,8 +387,12 @@ describe('watsonwork-scrumbot', () => {
   
         assert.deepEqual(Result, ResultObj);
       });
-  
-  
+
+      /* 
+        Given: valid command
+        WHEN: /issue + move pipeline 
+        THEN: UrlType = "", IsValid = true
+      */
       it('Position number different than passed', function () {
         var CommandArr = ['/issue', '12', '-p', '456', '16'];
         var UserCommand = '/issue 12 -p 456 1';
@@ -311,10 +420,14 @@ describe('watsonwork-scrumbot', () => {
   
     describe('GetEpicUrl', function () {
   
-  
-      it('Returns  when not equal repository id', function () {
-        var CommandArr = ['/epic1'];
-        var UserCommand = '/epic1';
+       /* 
+        Given: valid command
+        WHEN: repo id do not match
+        THEN: UrlType != "EpicIssues", IsValid != true
+      */
+      it('Returns non matching results when not repository id dont match', function () {
+        var CommandArr = ['/epic','1'];
+        var UserCommand = '/epic 1';
         var RepoId = '123411';
   
         var ResultObj = {
@@ -322,7 +435,8 @@ describe('watsonwork-scrumbot', () => {
           Url: 'p1/repositories/1234/epics',
           Method: 'GET',
           Body: null,
-          IsGit: false
+          IsGit: false,
+          UrlType:'EpicIssues'
         };
   
         var Result = BotService.getEpicUrl(UserCommand, CommandArr, RepoId);
@@ -330,6 +444,31 @@ describe('watsonwork-scrumbot', () => {
         assert.notDeepEqual(Result, ResultObj);
       });
   
+      /* 
+        Given: valid command
+        WHEN: /epic 1
+        THEN: UrlType = "EpicIssues", IsValid = true
+      */
+
+      it('Works if epic request matches', function () {
+        var CommandArr = ['/epic','1'];
+        var UserCommand = '/epic 1';
+        var RepoId = '1234';
+  
+        var ResultObj = {
+          IsValid: true,
+          Url: 'p1/repositories/1234/epics',
+          Method: 'GET',
+          Body: null,
+          IsGit: false,
+          UrlType:'EpicIssues'
+        };
+  
+        var Result = BotService.getEpicUrl(UserCommand, CommandArr, RepoId);
+  
+        assert.deepEqual(Result, ResultObj);
+      });
+
     });
   
   
