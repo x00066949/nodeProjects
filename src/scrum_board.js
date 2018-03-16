@@ -333,7 +333,6 @@ module.exports = {
     
 
     log("Body : "+JSON.stringify(UrlBody));
-    //console.dir(options.request, {depth:null});
 
     var UrlOptions = {
       method: UMethod,
@@ -435,7 +434,6 @@ module.exports = {
     var UrlOptions = {
       uri: MainUrl + RepositoryUrl,
       qs: {
-        //access_token: Token // -> uri + '?access_token=xxxxx%20xxxxx'
       },
       headers: {
         'User-Agent': 'Request-Promise'
@@ -492,9 +490,6 @@ module.exports = {
         IsGit: false
       };
 
-
-
-
       //To Get State of Pipeline
       var PipelineRegex = new RegExp(/^\/issue*\s[0-9]*\s[0-9]*\spipeline/);
 
@@ -518,7 +513,6 @@ module.exports = {
 
         return UrlObject;
       }
-
 
       // Move Pipeline
       var PipelineMoveRegex = new RegExp(/^\/issue*\s[0-9]*\s[0-9]*\s-p\s[A-Za-z0-9]*/);
@@ -559,7 +553,6 @@ module.exports = {
         
       }
 
-
       // Get events for the Issue 
       var EventsRegex = new RegExp(/^\/issue*\s[0-9]*\s[0-9]*\sevents/);
 
@@ -583,8 +576,6 @@ module.exports = {
         return UrlObject;
       }
 
-
-
       // Set the estimate for the issue.
       var EstimateAddRegex = new RegExp(/^\/issue*\s[0-9]*\s[0-9]*\s-e\s[0-9]*/);
 
@@ -593,13 +584,10 @@ module.exports = {
         var IssueNo = CommandArr[2];
         var EstimateVal = CommandArr[4];
         log("EstimateVal : "+EstimateVal)
-        //var PosNo = CommandArr[4];
-
         var SetEstimate = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/estimate';
 
         var MoveBody = {
           "estimate": EstimateVal
-          //position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
         };
 
         var UrlObject = {
@@ -613,8 +601,6 @@ module.exports = {
 
         return UrlObject;
       }
-
-
 
       // Get Bugs by the user
       var BugRegex = new RegExp(/^\/issue*\s[0-9]*\sbug/);
@@ -660,9 +646,8 @@ module.exports = {
 
       return UrlObject;
 
-    }
+    },
 
-    ,
   //To Get Blocked Issues Url
   getBlockUrl: function (UserCommand, CommandArr, RepoId) {
     log("getBlockUrl");
