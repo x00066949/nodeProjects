@@ -1,6 +1,8 @@
 var _ = require('lodash');
 var rp = require('request-promise');
 var Regex = require('regex');
+var dateFormat = require('dateformat');
+
 
 // Setup debug log
 import debug from 'debug';
@@ -374,7 +376,6 @@ module.exports = {
             }
             if(successdata[i].type === 'estimateIssue'){
               log("estimate change event "+i);
-              var dateFormat = require('dateformat');
               var eventDate = successdata[i].created_at;
 
               Data += "\
