@@ -1,6 +1,8 @@
 var _ = require('lodash');
 var rp = require('request-promise');
 var Regex = require('regex');
+var dateFormat = require('dateformat');
+var os = require("os");
 
 // Setup debug log
 import debug from 'debug';
@@ -73,8 +75,10 @@ module.exports = {
 
     if (RepositoryId === null || RepositoryId === '' || typeof RepositoryId === 'undefined') {
       log("trying to get repo id");
-      var RepoRegex = new RegExp(/^\/repo*\s[A-Za-z0-9]*\s[0-9]*/);
+      //var RepoRegex = new RegExp(/^\/repo*\s[A-Za-z0-9]*\s[0-9]*/);
 
+    var RepoRegex = new RegExp(/^\/repo*\s[A-Za-z0-9]/);
+    
       if (!RepoRegex.test(CommandValue)) {
          FinalMessage = {
           Type: 'Error',
@@ -281,8 +285,8 @@ module.exports = {
       Body: null
     };
 
-    var RepoRegex = new RegExp(/^\/repo*\s[A-Za-z0-9]*\s[0-9]*/);
-    var IssueRegex = new RegExp(/^[\/issue]*\s[0-9]*\s(-u|bug|pipeline|-p|events|-e)/);
+    var RepoRegex = new RegExp(/^\/repo*\s[A-Za-z0-9]*/);
+    var IssueRegex = new RegExp(/^[\/issue]*\s[0-9]*\s[0-9]*\s(-u|bug|pipeline|-p|events|-e)/);
     var EpicRegex = new RegExp(/^[\/epic]*\s[A-Za-z0-9]*/);
     var BlockedRegex = new RegExp(/^\/blocked/);
 
@@ -309,14 +313,27 @@ module.exports = {
   },
   makeRequest: function (options) {
     log("makeRequest");
+    log(options.UBody)
     var res = options.response;
     var Token = process.env.ZENHUB_TOKEN;
     var MainUrl = 'https://api.zenhub.io/';
 
     var UserUrl = options.UUrl;
     var UrlBody = options.UBody;
+    var UrlBody;
+    if(options.UBody == null){
+      UrlBody = options.UBody;
+      
+    }else{
+      UrlBody = options.UBody.estimate;            
+
+    }
     var UMethod = options.UMethod;
     var UrlType = options.UType;
+    
+
+    log("Body : "+JSON.stringify(UrlBody));
+    //console.dir(options.request, {depth:null});
 
     var UrlOptions = {
       method: UMethod,
@@ -329,11 +346,16 @@ module.exports = {
       },
       json: true // Automatically parses the JSON string in the response
         ,
+        
       body: {
-        UrlBody
+        estimate: UrlBody
+        //UrlBody
+
       }
     };
 
+    console.dir(UrlOptions, {depth:null});
+    
     return rp(UrlOptions)
       .then(function (successdata) {
         var Data = successdata;
@@ -342,32 +364,49 @@ module.exports = {
         //Parse JSON according to obj returned
         if(UrlType === 'IssueEvents'){
           log("Events for issue");
-          Data = " ";
+          Data = "*Here are the most recent events regarding your issue:* ```";
 
           for (var i =0; i<successdata.length; i++){
 
             if(successdata[i].type === 'transferIssue'){
               log("pipeline move event"+JSON.stringify(successdata[i].to_pipeline)+successdata[i].from_pipeline);
-              console.dir(successdata[i], {depth:null}); 
-              Data += "\r\nUser " +successdata[i].user_id+ " moved issue from "+successdata[i].from_pipeline.name+" to "+successdata[i].to_pipeline.name;
+              Data += "\
+              *User " +successdata[i].user_id+ "* _moved_ this issue from "+successdata[i].from_pipeline.name+" to "+successdata[i].to_pipeline.name+" on date : "+dateFormat(successdata[i].created_at, "dddd, mmmm dS, yyyy");
   
             }
             if(successdata[i].type === 'estimateIssue'){
               log("estimate change event "+i);
-              console.dir(successdata[i], {depth:null}); 
-              Data += "\r\nUser " +successdata[i].user_id+ " changed estimate on issue to  "+successdata[i].to_estimate.value+" on date : "+successdata[i].created_at;
+              Data += "\
+              *User " +successdata[i].user_id+ "* _changed estimate_ on this issue to  "+successdata[i].to_estimate.value+" on date : "+dateFormat(successdata[i].created_at, "dddd, mmmm dS, yyyy");
   
             }else {
               log("do not recogise event type");
             }
-
+            
           }
-
-          
-
-          
+          Data += " ```";
         }
 
+        if(UrlType === 'GetPipeline'){
+
+          Data = " ";
+          Data += "That issue is currently in "+successdata.pipeline.name+" pipeline.";
+        }
+
+        if(UrlType === 'IssueEstimate'){
+          Data = " ";
+          Data += "Your Issue's estimate has been updated to "+successdata.estimate;
+        }
+
+        if(UrlType === 'EpicIssues'){
+          
+          Data = "The following Epics are in your scrumboard: ";
+          for (var i =0; i<successdata.epic_issues.length; i++){
+            Data += "  \
+            *"+(i+1)+"* Epic ID: "+successdata.epic_issues[i].issue_number+" Url : "+successdata.epic_issues[i].issue_url+" "+os.EOL;
+
+          }
+        }
 
         return JSON.stringify(Data);
       })
@@ -409,8 +448,8 @@ module.exports = {
         var RepoId = successdata.id;
 
         repo_id = RepoId;
-        console.log('Repository Id =' + RepoId);
-        return "The Repository Id for "+RepositoryName+" is "+JSON.stringify(successdata.id);
+        console.log(successdata);
+        return "The *Repository Id* for _"+RepositoryName+"_ is "+JSON.stringify(successdata.id)+" View repo at : "+successdata.html_url;
       })
       .catch(function (err) {
         var Error = err;
@@ -457,11 +496,11 @@ module.exports = {
 
 
       //To Get State of Pipeline
-      var PipelineRegex = new RegExp(/^\/issue*\s[0-9]*\spipeline/);
+      var PipelineRegex = new RegExp(/^\/issue*\s[0-9]*\s[0-9]*\spipeline/);
 
       if (PipelineRegex.test(UserCommand)) {
 
-        var IssueNo = CommandArr[1];
+        var IssueNo = CommandArr[2];
 
         log("issue Num in getISsueUrl : "+IssueNo);
 
@@ -472,7 +511,9 @@ module.exports = {
           Url: PipeLineurl,
           Method: 'GET',
           Body: null,
-          IsGit: false
+          IsGit: false,
+          UrlType:'GetPipeline'
+          
         };
 
         return UrlObject;
@@ -480,12 +521,12 @@ module.exports = {
 
 
       // Move Pipeline
-      var PipelineMoveRegex = new RegExp(/^\/issue*\s[0-9]*\s-p\s[A-Za-z0-9]*/);
+      var PipelineMoveRegex = new RegExp(/^\/issue*\s[0-9]*\s[0-9]*\s-p\s[A-Za-z0-9]*/);
 
       if (PipelineMoveRegex.test(UserCommand)) {
 
         //if moving pipeline, 3rd arg is issue num,  4th = -p, 5th = pipeline, 6t position
-        var IssueNo = CommandArr[1];
+        var IssueNo = CommandArr[2];
         var PipeLineId = this.getPipelineId(CommandArr[3]).then(function (data){
 
           log("Pipeline got (using data): "+ data);
@@ -526,6 +567,8 @@ module.exports = {
 
         var IssueNo = CommandArr[2];
 
+        log("issue no eventsregex "+IssueNo);
+        
         var EventsUrl = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/events';
 
         var UrlObject = {
@@ -548,20 +591,21 @@ module.exports = {
       if (EstimateAddRegex.test(UserCommand)) {
 
         var IssueNo = CommandArr[2];
-        var PipeLineId = CommandArr[3];
-        var PosNo = CommandArr[4];
+        var EstimateVal = CommandArr[4];
+        log("EstimateVal : "+EstimateVal)
+        //var PosNo = CommandArr[4];
 
-        var MoveIssuePipeLine = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves';
+        var SetEstimate = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/estimate';
 
         var MoveBody = {
-          pipeline_id: PipeLineId,
-          position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
+          "estimate": EstimateVal
+          //position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
         };
 
         var UrlObject = {
           IsValid: true,
-          Url: MoveIssuePipeLine,
-          Method: 'POST',
+          Url: SetEstimate,
+          Method: 'PUT',
           Body: MoveBody,
           IsGit: false,
           UrlType:'IssueEstimate'
@@ -640,6 +684,7 @@ module.exports = {
   },
 
   //To Get epics Url
+
   getEpicUrl: function (UserCommand, CommandArr, RepoId) {
     log("getEpicUrl");
 
@@ -647,6 +692,7 @@ module.exports = {
     var EpicUrl = 'p1/repositories/' + RespositroyId + '/epics';
 
     var UrlObject = {
+      IsValid : true,
       Url: EpicUrl,
       Method: 'GET',
       Body: null,
