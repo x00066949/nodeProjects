@@ -388,7 +388,7 @@ module.exports = {
           
           Data = "The following Epics are in your scrumboard: ";
           for (var i =0; i<successdata.epic_issues.length; i++){
-            Data += `Epic ID:  ${successdata.epic_issues[i].issue_number} Url : ${successdata.epic_issues[i].issue_url} `
+            Data += `\n Epic ID:  ${successdata.epic_issues[i].issue_number} Url : ${successdata.epic_issues[i].issue_url} `
             //" *"+(i+1)+"* Epic ID: "+successdata.epic_issues[i].issue_number+" Url : "+successdata.epic_issues[i].issue_url+" "+os.EOL;
             
           }
