@@ -380,8 +380,8 @@ module.exports = {
         }
 
         if(UrlType === 'IssueEstimate'){
-          Data = " ";
-          Data += "Your Issue's estimate has been updated to "+successdata.estimate;
+          Data = '';
+          Data += 'Your Issue\'s estimate \n has been updated to '+successdata.estimate;
         }
 
         if(UrlType === 'EpicIssues'){
