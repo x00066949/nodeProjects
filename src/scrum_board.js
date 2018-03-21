@@ -145,6 +145,8 @@ module.exports = {
     } else {
 
       log ("not git");
+      log("view obj"+ValidUrlObject)
+      console.dir(ValidUrlObject,{depth:null})
       return this.makeRequest({
         response: res,
         UUrl: ValidUrlObject.Url,
