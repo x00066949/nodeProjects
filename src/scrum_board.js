@@ -320,7 +320,7 @@ module.exports = {
     var UMethod = options.UMethod;
     var UrlType = options.UType;
     
-    log("Body : "+JSON.stringify(UrlBody));
+    log("Body : "+UrlBody);
 
     var UrlOptions = {
       method: UMethod,
@@ -339,6 +339,8 @@ module.exports = {
 
       }
     };
+
+    log("UrlOpt : "+UrlOptions);
     
     return rp(UrlOptions)
       .then(function (successdata) {
