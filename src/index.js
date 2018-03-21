@@ -143,8 +143,9 @@ const send = (spaceId, text, tok, cb) => {
 
           color: '#6CB7FB',
           title: 'github issue tracker',
-          text: text,
+          //text: text,
 
+          text : 'Hello \n World ',
           actor: {
             name: 'github issue app'
           }
