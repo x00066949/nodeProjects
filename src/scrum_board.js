@@ -160,6 +160,7 @@ module.exports = {
 
   //given, pipeline name, return pipeline id
   getPipelineId(PipelineName){
+    log(PipelineName)
     var PipelineId;
 
     var pipelineIdRequest = {
