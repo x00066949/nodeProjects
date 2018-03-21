@@ -537,8 +537,8 @@ module.exports = {
         }); 
 
         log(pipeMove)
-        console.dir(pipeMove, {depth:null})
-        return pipeMove;
+        //console.dir(pipeMove, {depth:null})
+        //return pipeMove;
       }
 
      
