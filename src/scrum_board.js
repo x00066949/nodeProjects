@@ -306,7 +306,7 @@ module.exports = {
     var MainUrl = 'https://api.zenhub.io/';
 
     var UserUrl = options.UUrl;
-    var body = options.UBody;
+    var body = options.UBody | {key:value};
     //var UrlBody;
   
     /*if(options.UBody == null){
