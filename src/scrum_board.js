@@ -536,6 +536,7 @@ module.exports = {
           console.log('User has %d repos', err);
         }); 
 
+        log(pipeMove)
         console.dir(pipeMove, {depth:null})
         return pipeMove;
       }
