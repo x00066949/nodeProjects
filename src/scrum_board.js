@@ -162,7 +162,6 @@ module.exports = {
   getPipelineId(PipelineName){
     log("entered name : "+PipelineName)
     var PipelineId;
-
     var pipelineIdRequest = {
       uri: 'https://api.zenhub.io/p1/repositories/' + repo_id + '/board',
 
@@ -172,7 +171,7 @@ module.exports = {
 
       json: true
     };
-    return rp(pipelineIdRequest)
+    rp(pipelineIdRequest)
     .then(function (data){
       
       log(data)
