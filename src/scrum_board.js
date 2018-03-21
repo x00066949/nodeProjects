@@ -504,7 +504,8 @@ module.exports = {
       var IssueNo = CommandArr[2];
       log("name used "+ CommandArr[4])
       //this.getPipelineId(CommandArr[4]).then(function (data){
-      return rp(this.getPipelineId(CommandArr[4])).then(function (data){
+      //return rp(
+      var pipeMove = this.getPipelineId(CommandArr[4]).then(function (data){
           
         log("Pipeline got (using data): "+ data);
         var PosNo = CommandArr[5]|0;
@@ -534,6 +535,9 @@ module.exports = {
           log("failed...");
           console.log('User has %d repos', err);
         }); 
+
+        console.dir(pipeMove, {depth:null})
+        return pipeMove;
       }
 
      
