@@ -504,13 +504,13 @@ module.exports = {
     if (PipelineMoveRegex.test(UserCommand)) {
 
       //if moving pipeline, 3rd arg is issue num,  4th = -p, 5th = pipeline, 6t position
-      var IssueNo = CommandArr[3];
+      var IssueNo = CommandArr[2];
       log("name used "+ CommandArr[4])
       var PipeLineId = this.getPipelineId(CommandArr[4])
         .then(function (data){
 
           log("Pipeline got (using data): "+ data);
-          var PosNo = CommandArr[6]|0;
+          var PosNo = CommandArr[5]|0;
           log("position: "+PosNo)
           var MoveIssuePipeLine = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves';
           log("building move pipeline url..")
