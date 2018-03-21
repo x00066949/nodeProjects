@@ -172,8 +172,7 @@ module.exports = {
 
       json: true
     };
-    //return 
-    rp(pipelineIdRequest)
+    return rp(pipelineIdRequest)
     .then(function (data){
       
       log(data)
@@ -507,31 +506,30 @@ module.exports = {
       //if moving pipeline, 3rd arg is issue num,  4th = -p, 5th = pipeline, 6t position
       var IssueNo = CommandArr[2];
       log("name used "+ CommandArr[4])
-      var PipeLineId = this.getPipelineId(CommandArr[4])
-        .then(function (data){
+      var PipeLineId = getPipelineId(CommandArr[4]).then(function (data){
 
-          log("Pipeline got (using data): "+ data);
-          var PosNo = CommandArr[5]|0;
-          log("position: "+PosNo)
-          var MoveIssuePipeLine = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves';
-          log("building move pipeline url..")
+        log("Pipeline got (using data): "+ data);
+        var PosNo = CommandArr[5]|0;
+        log("position: "+PosNo)
+        var MoveIssuePipeLine = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves';
+        log("building move pipeline url..")
 
-          var MoveBody = {
-            pipeline_id: data,
-            position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
-          };
+        var MoveBody = {
+          pipeline_id: data,
+          position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
+        };
 
-          var UrlObject = {
-            IsValid: true,
-            Url: MoveIssuePipeLine,
-            Method: 'POST',
-            Body: MoveBody,
-            IsGit: false,
-            UrlType:'IssueToPipelines'
-          };
+        var UrlObject = {
+          IsValid: true,
+          Url: MoveIssuePipeLine,
+          Method: 'POST',
+          Body: MoveBody,
+          IsGit: false,
+          UrlType:'IssueToPipelines'
+        };
 
-          log("url built.");
-          return UrlObject;
+        log("url built.");
+        return UrlObject;
 
         }); 
       }
