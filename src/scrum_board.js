@@ -504,7 +504,7 @@ module.exports = {
       var IssueNo = CommandArr[2];
       log("name used "+ CommandArr[4])
       //this.getPipelineId(CommandArr[4]).then(function (data){
-        return rp(this.getPipelineId(CommandArr[4])).then(function (data){
+        rp(this.getPipelineId(CommandArr[4])).then(function (data){
           
 
         log("Pipeline got (using data): "+ data);
