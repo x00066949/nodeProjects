@@ -340,7 +340,7 @@ module.exports = {
       }
     };
 
-    console.dir('UrlOptions: '+UrlOptions,{depth:null});
+    console.dir(UrlOptions,{depth:null});
     
     return rp(UrlOptions)
       .then(function (successdata) {
