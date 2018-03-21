@@ -503,8 +503,9 @@ module.exports = {
       //if moving pipeline, 3rd arg is issue num,  4th = -p, 5th = pipeline, 6t position
       var IssueNo = CommandArr[2];
       log("name used "+ CommandArr[4])
-      this.getPipelineId(CommandArr[4]).then(function (data){
-      //return rp(this.getPipelineId(CommandArr[4])).then(function (data){
+      //this.getPipelineId(CommandArr[4]).then(function (data){
+      //return 
+      rp(this.getPipelineId(CommandArr[4])).then(function (data){
           
 
         log("Pipeline got (using data): "+ data);
@@ -532,8 +533,7 @@ module.exports = {
 
         }).catch(function (err) {
           var Error = err;
-          // API call failed...
-          log("API call failed...");
+          log("failed...");
           console.log('User has %d repos', err);
         }); 
       }
