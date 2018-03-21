@@ -64,7 +64,7 @@ export const slash_commands = (appId, token) => (req, res) =>{
       send(req.body.spaceId,
         util.format(
           'Hey %s, result is: %s',
-          req.body.userName, to_post),
+          req.body.userName, 'hello \n World'),
         token(),
         (err, res) => {
           if (!err)
@@ -143,9 +143,9 @@ const send = (spaceId, text, tok, cb) => {
 
           color: '#6CB7FB',
           title: 'github issue tracker',
-          //text: text,
+          text: text,
 
-          text : 'Hello \n World ',
+          //text : 'Hello \n World ',
           actor: {
             name: 'github issue app'
           }
