@@ -388,13 +388,14 @@ module.exports = {
           
           Data = "The following Epics are in your scrumboard: ";
           for (var i =0; i<successdata.epic_issues.length; i++){
-            Data += '  \
-            *'+(i+1)+'* Epic ID: '+successdata.epic_issues[i].issue_number+' U \n rl : '+successdata.epic_issues[i].issue_url;
+            Data += `Epic ID:  ${successdata.epic_issues[i].issue_number} Url : ${successdata.epic_issues[i].issue_url} `
+            //" *"+(i+1)+"* Epic ID: "+successdata.epic_issues[i].issue_number+" Url : "+successdata.epic_issues[i].issue_url+" "+os.EOL;
+            
           }
         }
 
         //return JSON.stringify(Data);
-        return "Hello \n World"
+        return Data;
       })
       .catch(function (err) {
         var Error = err;
