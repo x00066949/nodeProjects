@@ -306,7 +306,7 @@ module.exports = {
     var MainUrl = 'https://api.zenhub.io/';
 
     var UserUrl = options.UUrl;
-    var UrlBody = options.UBody;
+    var body = options.UBody;
     //var UrlBody;
   
     /*if(options.UBody == null){
@@ -320,7 +320,7 @@ module.exports = {
     var UMethod = options.UMethod;
     var UrlType = options.UType;
     
-    console.dir('Urlbody: '+UrlBody, {depth:null});
+    console.dir('Urlbody: '+body, {depth:null});
 
     var UrlOptions = {
       method: UMethod,
@@ -334,10 +334,10 @@ module.exports = {
       json: true // Automatically parses the JSON string in the response
         ,
         
-      body: {
-        UrlBody
+      //body: {
+        body
 
-      }
+      //}
     };
 
     console.dir(UrlOptions,{depth:null});
