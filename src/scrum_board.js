@@ -393,7 +393,8 @@ module.exports = {
           }
         }
 
-        return JSON.stringify(Data);
+        //return JSON.stringify(Data);
+        return 'Hello \n World'
       })
       .catch(function (err) {
         var Error = err;

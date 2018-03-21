@@ -64,7 +64,7 @@ export const slash_commands = (appId, token) => (req, res) =>{
       send(req.body.spaceId,
         util.format(
           'Hey %s, result is: %s',
-          req.body.userName, 'hello \n World'),
+          req.body.userName, to_post),
         token(),
         (err, res) => {
           if (!err)
