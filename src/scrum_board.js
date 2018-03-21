@@ -505,7 +505,7 @@ module.exports = {
       log("name used "+ CommandArr[4])
       //this.getPipelineId(CommandArr[4]).then(function (data){
       //return rp(
-      var pipeMove = this.getPipelineId(CommandArr[4]).then(function (data){
+      var pipeMove = this.getPipelineId(CommandArr[4]).then((data)=>{
           
         log("Pipeline got (using data): "+ data);
         var PosNo = CommandArr[5]|0;
