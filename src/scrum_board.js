@@ -160,7 +160,7 @@ module.exports = {
   //given, pipeline name, return pipeline id
   getPipelineId(PipelineName){
     log("entered name : "+PipelineName)
-    var PipelineId;
+    //var PipelineId;
     var pipelineIdRequest = {
       uri: 'https://api.zenhub.io/p1/repositories/' + repo_id + '/board',
 
@@ -170,7 +170,7 @@ module.exports = {
 
       json: true
     };
-    rp(pipelineIdRequest)
+    return rp(pipelineIdRequest)
     .then(function (data){
       
       log(data)
@@ -504,7 +504,7 @@ module.exports = {
       var IssueNo = CommandArr[2];
       log("name used "+ CommandArr[4])
       //this.getPipelineId(CommandArr[4]).then(function (data){
-        rp(this.getPipelineId(CommandArr[4])).then(function (data){
+        return rp(this.getPipelineId(CommandArr[4])).then(function (data){
           
 
         log("Pipeline got (using data): "+ data);
@@ -530,6 +530,11 @@ module.exports = {
         log("url built.");
         return UrlObject;
 
+        }).catch(function (err) {
+          var Error = err;
+          // API call failed...
+          log("API call failed...");
+          console.log('User has %d repos', err);
         }); 
       }
 
