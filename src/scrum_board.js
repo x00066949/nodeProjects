@@ -320,7 +320,7 @@ module.exports = {
     var UMethod = options.UMethod;
     var UrlType = options.UType;
     
-    console.dir("Body : "+UrlBody, depth=null);
+    console.dir(UrlBody, depth=null);
 
     var UrlOptions = {
       method: UMethod,
@@ -340,7 +340,7 @@ module.exports = {
       }
     };
 
-    console.dir("UrlOpt : "+UrlOptions,depth=null);
+    console.dir(UrlOptions,depth=null);
     
     return rp(UrlOptions)
       .then(function (successdata) {
