@@ -172,7 +172,8 @@ module.exports = {
 
       json: true
     };
-    return rp(pipelineIdRequest)
+    //return 
+    rp(pipelineIdRequest)
     .then(function (data){
       
       log(data)
