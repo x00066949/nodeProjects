@@ -75,7 +75,6 @@ module.exports = {
 
     if (RepositoryId === null || RepositoryId === '' || typeof RepositoryId === 'undefined') {
       log("trying to get repo id");
-      //var RepoRegex = new RegExp(/^\/repo*\s[A-Za-z0-9]*\s[0-9]*/);
 
     var RepoRegex = new RegExp(/^\/repo*\s[A-Za-z0-9]/);
     
@@ -308,15 +307,15 @@ module.exports = {
 
     var UserUrl = options.UUrl;
     var UrlBody = options.UBody;
-    var UrlBody;
+    //var UrlBody;
   
-    if(options.UBody == null){
+    /*if(options.UBody == null){
       UrlBody = options.UBody;
       
     }else{
       UrlBody = options.UBody.estimate;            
 
-    }
+    }*/
   
     var UMethod = options.UMethod;
     var UrlType = options.UType;
@@ -336,8 +335,7 @@ module.exports = {
         ,
         
       body: {
-        estimate: UrlBody
-        //UrlBody
+        UrlBody
 
       }
     };
@@ -350,7 +348,7 @@ module.exports = {
         //Parse JSON according to obj returned
         if(UrlType === 'IssueEvents'){
           log("Events for issue");
-          Data = '\n\t *Here are the most recent events regarding your issue:* ';
+          Data = '\n    *Here are the most recent events regarding your issue:* ';
 
           for (var i =0; i<successdata.length; i++){
 
@@ -565,7 +563,7 @@ module.exports = {
         var SetEstimate = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/estimate';
 
         var MoveBody = {
-          "estimate": EstimateVal
+          estimate : EstimateVal
         };
 
         var UrlObject = {
