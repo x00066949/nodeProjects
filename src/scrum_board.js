@@ -350,20 +350,18 @@ module.exports = {
         //Parse JSON according to obj returned
         if(UrlType === 'IssueEvents'){
           log("Events for issue");
-          Data = "*Here are the most recent events regarding your issue:* ";
+          Data = '*Here are the most recent events regarding your issue:* ';
 
           for (var i =0; i<successdata.length; i++){
 
             if(successdata[i].type === 'transferIssue'){
               log("pipeline move event"+JSON.stringify(successdata[i].to_pipeline)+successdata[i].from_pipeline);
-              Data += "\
-              *User " +successdata[i].user_id+ "* _moved_ this issue from "+successdata[i].from_pipeline.name+" to "+successdata[i].to_pipeline.name+" on date : "+dateFormat(successdata[i].created_at, "dddd, mmmm dS, yyyy");
+              Data += '\n*User ' +successdata[i].user_id+ '* _moved_ this issue from '+successdata[i].from_pipeline.name+' to '+successdata[i].to_pipeline.name+' on date : '+dateFormat(successdata[i].created_at, "dddd, mmmm dS, yyyy");
   
             }
             if(successdata[i].type === 'estimateIssue'){
               log("estimate change event "+i);
-              Data += "\
-              *User " +successdata[i].user_id+ "* _changed estimate_ on this \n issue \\n to  "+successdata[i].to_estimate.value+" on date : "+dateFormat(successdata[i].created_at, "dddd, mmmm dS, yyyy");
+              Data += '\n *User ' +successdata[i].user_id+ '* _changed estimate_ on this issue to  '+successdata[i].to_estimate.value+' on date : '+dateFormat(successdata[i].created_at, "dddd, mmmm dS, yyyy");
   
             }else {
               log("do not recogise event type");
