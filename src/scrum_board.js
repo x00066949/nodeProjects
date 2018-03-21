@@ -350,7 +350,7 @@ module.exports = {
         //Parse JSON according to obj returned
         if(UrlType === 'IssueEvents'){
           log("Events for issue");
-          Data = '*Here are the most recent events regarding your issue:* ';
+          Data = '\n\t *Here are the most recent events regarding your issue:* ';
 
           for (var i =0; i<successdata.length; i++){
 
@@ -379,7 +379,7 @@ module.exports = {
 
         if(UrlType === 'IssueEstimate'){
           Data = '';
-          Data += 'Your Issue\'s estimate \n has been updated to '+successdata.estimate;
+          Data += 'Your Issue\'s estimate has been updated to '+successdata.estimate;
         }
 
         if(UrlType === 'EpicIssues'){
@@ -387,12 +387,10 @@ module.exports = {
           Data = "The following Epics are in your scrumboard: ";
           for (var i =0; i<successdata.epic_issues.length; i++){
             Data += `\n Epic ID:  ${successdata.epic_issues[i].issue_number} Url : ${successdata.epic_issues[i].issue_url} `
-            //" *"+(i+1)+"* Epic ID: "+successdata.epic_issues[i].issue_number+" Url : "+successdata.epic_issues[i].issue_url+" "+os.EOL;
             
           }
         }
 
-        //return JSON.stringify(Data);
         return Data;
       })
       .catch(function (err) {
