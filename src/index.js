@@ -46,7 +46,7 @@ export const slash_commands = (appId, token) => (req, res) =>{
   //let payLoad = req.body.annotationPayload;
   //log("payload"+payLoad);
 
-  if (req.body.type === 'message-annotation-added' && req.body.userId !== 'toscana-aip-nlc-consumer-client-id') {
+  if (req.body.type === 'message-annotation-added' && req.body.annotationPayload.targetAppId === appId) {
     let command = JSON.parse(req.body.annotationPayload).actionId;
     //log("action id "+req.body.annotationPayload.actionId);
     log("command "+command);
@@ -244,8 +244,10 @@ const main = (argv, env, cb) => {
 
        //default page
         app.get('/', function (request, response) {
-          rp({
-            uri: 'https://api.github.com/user/repos',
+          response.redirect('http://workspace.ibm.com');
+          /*rp({
+
+            uri: 'api.github.com'
         
             headers: {
               'User-Agent': 'simple_rest_app',
@@ -258,7 +260,8 @@ const main = (argv, env, cb) => {
             json: true
           })
             .then((data) => {
-              message = data;
+              //message = data;
+              response.send()
               log(data)
         
               response.send(data)
@@ -266,7 +269,7 @@ const main = (argv, env, cb) => {
             .catch((err) => {
               console.log(err)
               response.send('error : '+err)
-            })
+            })*/
         });
 
         

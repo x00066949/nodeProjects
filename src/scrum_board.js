@@ -418,7 +418,6 @@ module.exports = {
     var UrlOptions = {
       uri: MainUrl + RepositoryUrl,
       qs: {
-        //access_token: Token // -> uri + '?access_token=xxxxx%20xxxxx'
       },
       headers: {
         'User-Agent': 'Request-Promise'
@@ -432,7 +431,7 @@ module.exports = {
 
         repo_id = RepoId;
         console.log(successdata);
-        return "The *Repository Id* for _"+RepositoryName+"_ is "+JSON.stringify(successdata.id)+" View repo at : "+successdata.html_url;
+        return "The *Repository Id* for _"+RepositoryName+"_ is "+JSON.stringify(successdata.id)+" *repo link* : "+successdata.html_url;
       })
       .catch(function (err) {
         var Error = err;
@@ -594,7 +593,6 @@ module.exports = {
 
         return UrlObject;
       }
-
 
       // Get Bugs by the user
       var BugRegex = new RegExp(/^\/issue*\s[0-9]*\sbug/);
