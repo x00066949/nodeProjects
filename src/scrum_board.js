@@ -172,8 +172,8 @@ module.exports = {
 
       json: true
     };
-    rp(pipelineIdRequest)
-    .then(function (data){
+    return rp(pipelineIdRequest)
+    .then((data)=>{
       
       log(data)
       for (var i =0; i<data['pipelines'].length; i++){
