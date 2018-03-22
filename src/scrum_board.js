@@ -160,7 +160,7 @@ module.exports = {
   },
 
   //given, pipeline name, return pipeline id
-  getPipelineId(PipelineName){
+  getPipelineId: function (PipelineName){
     log("entered name : "+PipelineName)
     //var PipelineId;
     var pipelineIdRequest = {
@@ -172,7 +172,7 @@ module.exports = {
 
       json: true
     };
-    return rp(pipelineIdRequest)
+    rp(pipelineIdRequest)
     .then(function (data){
       
       log(data)
@@ -502,7 +502,7 @@ module.exports = {
 
     if (PipelineMoveRegex.test(UserCommand)) {
 
-      var data = getPipelineId(CommandArr[4]);
+      var data = this.getPipelineId(CommandArr[4]);
       
       //if moving pipeline, 3rd arg is issue num,  4th = -p, 5th = pipeline, 6t position
       var IssueNo = CommandArr[2];
