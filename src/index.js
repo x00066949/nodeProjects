@@ -46,7 +46,7 @@ export const slash_commands = (appId, token) => (req, res) =>{
   //let payLoad = req.body.annotationPayload;
   //log("payload"+payLoad);
 
-  if (req.body.type === 'message-annotation-added' && req.body.annotationPayload.targetAppId === appId) {
+  if (req.body.type === 'message-annotation-added' /*&& req.body.annotationPayload.targetAppId === appId*/) {
     let command = JSON.parse(req.body.annotationPayload).actionId;
     //log("action id "+req.body.annotationPayload.actionId);
     log("command "+command);
