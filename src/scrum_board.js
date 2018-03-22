@@ -393,6 +393,11 @@ module.exports = {
           }
         }
 
+        if(UrlType === 'IssueToPipelines'){
+
+          Data += 'Sucessfully Moved Issue'
+        }
+
         return Data;
       })
       .catch(function (err) {
