@@ -502,8 +502,9 @@ module.exports = {
 
     if (PipelineMoveRegex.test(UserCommand)) {
 
-      var data = this.getPipelineId(CommandArr[4]);
-      
+      //var data = this.getPipelineId(CommandArr[4])
+      this.getPipelineId(CommandArr[4]).then((data)=>{
+
       //if moving pipeline, 3rd arg is issue num,  4th = -p, 5th = pipeline, 6t position
       var IssueNo = CommandArr[2];
       log("name used "+ CommandArr[4])
@@ -534,11 +535,11 @@ module.exports = {
         log("url built.");
         return UrlObject;
 
-        /*}).catch(function (err) {
+        }).catch(function (err) {
           var Error = err;
           log("failed...");
           console.log('User has %d repos', err);
-        }); */
+        }); 
 
         //log(pipeMove)
         //console.dir(pipeMove, {depth:null})
