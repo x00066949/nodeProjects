@@ -503,7 +503,7 @@ module.exports = {
     if (PipelineMoveRegex.test(UserCommand)) {
 
       //var data = this.getPipelineId(CommandArr[4])
-      this.getPipelineId(CommandArr[4]).then((data)=>{
+      return this.getPipelineId(CommandArr[4]).then((data)=>{
 
       //if moving pipeline, 3rd arg is issue num,  4th = -p, 5th = pipeline, 6t position
       var IssueNo = CommandArr[2];
