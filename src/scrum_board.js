@@ -502,7 +502,7 @@ module.exports = {
     if (PipelineMoveRegex.test(UserCommand)) {
 
       //var data = this.getPipelineId(CommandArr[4])
-      return this.getPipelineId(CommandArr[4]).then((data)=>{
+      var pipe = this.getPipelineId(CommandArr[4]).then((data)=>{
 
       //if moving pipeline, 3rd arg is issue num,  4th = -p, 5th = pipeline, 6t position
       var IssueNo = CommandArr[2];
@@ -542,7 +542,7 @@ module.exports = {
 
         //log(pipeMove)
         //console.dir(pipeMove, {depth:null})
-        //return pipeMove;
+        return pipe;
       }
 
      
