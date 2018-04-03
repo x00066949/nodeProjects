@@ -162,6 +162,58 @@ const send = (spaceId, text, tok, cb) => {
     });
 };
 
+const dialog = (spaceId, tok, userId, dialogId) => {
+
+  var q = `mutation {
+              createTargetedMessage(input: {
+                conversationId:${spaceId} 
+                targetUserId: ${userId}
+                targetDialogId: ${dialogId}
+                annotations: [
+                  {
+                    genericAnnotation: {
+                      title: "Sample Title",
+                      text: "Sample Body"
+                      buttons: [
+                        {
+                          postbackButton: {
+                            title: "Sample Button",
+                            id: "Sample_Button",
+                            style: PRIMARY
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ],
+                attachments: []
+                }) {
+                successful
+              }
+            }
+          }`
+
+  request.post(
+    'https://api.watsonwork.ibm.com/graphql',{
+
+      headers: {
+        'Content-Type': 'application/graphql' ,
+        'x-graphql-view': 'PUBLIC, BETA'
+      },
+      json: true,
+      body: q
+
+    }, (err, res) => {
+      if (err || res.statusCode !== 201) {
+        log('Error creating dialog %o', err || res.statusCode);
+        cb(err || new Error(res.statusCode));
+        return;
+      }
+      log('Send result %d, %o', res.statusCode, res.body);
+      cb(null, res.body);
+    }
+  );
+};
 
 // Verify Watson Work request signature
 export const verify = (wsecret) => (req, res, buf, encoding) => {
