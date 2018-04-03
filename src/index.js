@@ -54,8 +54,25 @@ export const slash_commands = (appId, token) => (req, res) =>{
     if (!command)
       log("no command to process");
     
+
+    if(command === '/issue pipeline'){
+      dialog(req.body.spaceId,
+        token(),
+        req.body.userId,
+        req.body.annotationPayload.targetDialogId,
+        
+        
+        (err, res) => {
+          if (!err)
+            log('sent dialog to %s', req.body.spaceId);
+        }
+
+      )
+    }
+      
     // message represents the message coming in from WW to be processed by the App
     let message = '@scrumbot '+command;
+
 
     board.getScrumData({request:req, response:res, UserInput:message}).then((to_post)=>{
       
@@ -71,7 +88,7 @@ export const slash_commands = (appId, token) => (req, res) =>{
             log('Sent message to space %s', req.body.spaceId);
       })
     }).catch((err)=>{
-      log("nothing returned from getscrumdata" + err);
+      log("unable to send message to space" + err);
     })
   };
 
@@ -98,6 +115,8 @@ export const scrumbot = (appId, token) => (req, res) => {
   if (req.body.type === 'message-created' && req.body.userId !== appId) {
     log('Got a message %o', req.body);
     log('content : '+req.body.content);
+
+    
 
     board.getScrumData({request:req, response:res, UserInput:req.body.content}).then((to_post)=>{
 
