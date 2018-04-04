@@ -56,6 +56,7 @@ export const slash_commands = (appId, token) => (req, res) =>{
     
 
     if(command === '/issue pipeline'){
+      log("using dialog")
       dialog(req.body.spaceId,
         token(),
         req.body.userId,
@@ -183,6 +184,8 @@ const send = (spaceId, text, tok, cb) => {
 
 const dialog = (spaceId, tok, userId, dialogId,cb) => {
 
+  log("trying to build dialog boxes")
+  
   var q = `mutation {
               createTargetedMessage(input: {
                 conversationId:${spaceId} 
