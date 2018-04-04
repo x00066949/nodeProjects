@@ -197,7 +197,7 @@ const dialog = (spaceId, tok, userId, dialogId,cb) => {
         'x-graphql-view': 'PUBLIC, BETA'
       },
       json: true,
-      body: `"mutation createSpace { createSpace(input: { title: \"Space title\",  members: ["+userId+"]}){ space { "+spaceId+"}}"`
+      body: `mutation createSpace { createSpace(input: { title: \"Space title\",  members: [${userId}]}){ space { ${spaceId}}`
 
     }, (err, res) => {
       if (err || res.statusCode !== 201) {
