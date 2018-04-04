@@ -186,13 +186,7 @@ const dialog = (spaceId, tok, userId, dialogId,cb) => {
 
   log("trying to build dialog boxes")
 
-  var q = `mutation createSpace {
-    createSpace(input: { title: "Space title",  members: ["${userId}"]}){
-      space {
-        ${spaceId}
-      }
-    }
-  }`
+  var q = ``
 
   request.post(
     'https://api.watsonwork.ibm.com/graphql',{
@@ -203,7 +197,7 @@ const dialog = (spaceId, tok, userId, dialogId,cb) => {
         'x-graphql-view': 'PUBLIC, BETA'
       },
       json: true,
-      body: q
+      body: 'mutation createSpace { createSpace(input: { title: "Space title",  members: ['+userId+']}){ space { '+spaceId+'}}'
 
     }, (err, res) => {
       if (err || res.statusCode !== 201) {
