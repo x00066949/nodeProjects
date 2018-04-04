@@ -229,7 +229,7 @@ const dialog = (spaceId, tok, userId, dialogId,cb) => {
     }, (err, res) => {
       if (err || res.statusCode !== 201) {
         log('failed err: '+err)
-        console.dir('res: '+res, {depth:null})
+        console.dir(res,{depth:null})
         log('Error creating dialog %o', err || res.statusCode);
         cb(err || new Error(res.statusCode));
         return;
