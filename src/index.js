@@ -224,7 +224,7 @@ const dialog = (spaceId, tok, userId, dialogId,cb) => {
         'x-graphql-view': 'PUBLIC, BETA'
       },
       json: true,
-      body: q
+      body: {q}
 
     }, (err, res) => {
       if (err || res.statusCode !== 201) {
