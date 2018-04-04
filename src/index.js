@@ -181,7 +181,7 @@ const send = (spaceId, text, tok, cb) => {
     });
 };
 
-const dialog = (spaceId, tok, userId, dialogId) => {
+const dialog = (spaceId, tok, userId, dialogId,cb) => {
 
   var q = `mutation {
               createTargetedMessage(input: {
