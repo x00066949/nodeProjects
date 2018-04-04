@@ -18,7 +18,8 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-# replace this with your application's default port
-EXPOSE 5000
+# replace this with your application's default port ...use >9000
+#
+EXPOSE 9005
 
 CMD [ "npm", "run", "rebuild" ]
