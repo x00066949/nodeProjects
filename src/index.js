@@ -185,7 +185,7 @@ const send = (spaceId, text, tok, cb) => {
 const dialog = (spaceId, tok, userId, dialogId,cb) => {
 
   log("trying to build dialog boxes")
-  
+
   var q = `mutation {
               createTargetedMessage(input: {
                 conversationId:${spaceId} 
@@ -213,12 +213,13 @@ const dialog = (spaceId, tok, userId, dialogId,cb) => {
                 successful
               }
             }
-          }`
+          }`;
 
   request.post(
     'https://api.watsonwork.ibm.com/graphql',{
 
       headers: {
+        'jwt':tok,
         'Content-Type': 'application/graphql' ,
         'x-graphql-view': 'PUBLIC, BETA'
       },
@@ -227,6 +228,8 @@ const dialog = (spaceId, tok, userId, dialogId,cb) => {
 
     }, (err, res) => {
       if (err || res.statusCode !== 201) {
+        log('failed err: '+err)
+        log('res: '+res)
         log('Error creating dialog %o', err || res.statusCode);
         cb(err || new Error(res.statusCode));
         return;
