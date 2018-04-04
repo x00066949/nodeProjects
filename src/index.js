@@ -186,34 +186,13 @@ const dialog = (spaceId, tok, userId, dialogId,cb) => {
 
   log("trying to build dialog boxes")
 
-  var q = `mutation {
-              createTargetedMessage(input: {
-                conversationId:${spaceId} 
-                targetUserId: ${userId}
-                targetDialogId: ${dialogId}
-                annotations: [
-                  {
-                    genericAnnotation: {
-                      title: "Sample Title",
-                      text: "Sample Body"
-                      buttons: [
-                        {
-                          postbackButton: {
-                            title: "Sample Button",
-                            id: "Sample_Button",
-                            style: PRIMARY
-                          }
-                        }
-                      ]
-                    }
-                  }
-                ],
-                attachments: []
-                }) {
-                successful
-              }
-            }
-          }`;
+  var q = `mutation createSpace {
+    createSpace(input: { title: "Space title",  members: ["${userId}"]}){
+      space {
+        ${spaceId}
+      }
+    }
+  }`
 
   request.post(
     'https://api.watsonwork.ibm.com/graphql',{
@@ -224,7 +203,7 @@ const dialog = (spaceId, tok, userId, dialogId,cb) => {
         'x-graphql-view': 'PUBLIC, BETA'
       },
       json: true,
-      body: {q}
+      body: q
 
     }, (err, res) => {
       if (err || res.statusCode !== 201) {
