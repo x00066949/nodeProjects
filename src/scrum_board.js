@@ -420,7 +420,7 @@ module.exports = {
     var RepositoryUrl = 'repos/' + Ownername + '/' + RepositoryName;
     var MainUrl = 'https://api.github.com/';
     log(RepositoryName)
-    console.dir(options,{depth:nll})
+    //console.dir(options,{depth:nll})
 
     var UrlOptions = {
       uri: MainUrl + RepositoryUrl,
