@@ -314,31 +314,7 @@ const main = (argv, env, cb) => {
        //default page
         app.get('/', function (request, response) {
           response.redirect('http://workspace.ibm.com');
-          /*rp({
-
-            uri: 'api.github.com'
-        
-            headers: {
-              'User-Agent': 'simple_rest_app',
-
-            },
-            qs: {
-              client_id: process.env.GIT_CLIENT_ID,
-              client_secret: process.env.GIT_CLIENT_SECRET
-            },
-            json: true
-          })
-            .then((data) => {
-              //message = data;
-              response.send()
-              log(data)
-        
-              response.send(data)
-            })
-            .catch((err) => {
-              console.log(err)
-              response.send('error : '+err)
-            })*/
+          
         });
 
         
