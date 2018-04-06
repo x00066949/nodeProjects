@@ -18,96 +18,108 @@ var requireEnv = require("require-environment-variables");
 
 // Setup debug log
 const log = debug('watsonwork-scrumbot');
+var eventType;
 
-export const slash_commands = (appId, token, eventType) => (req, res) =>{
+export const slash_commands = (appId, token) => (req, res) =>{
   log(" 001 : "+eventType)
   
 
-  // Respond to the Webhook right away, as the response message will
-  // be sent asynchronously
-  res.status(201).end();
-
-   // Only handle message-created Webhook events, and ignore the app's
-  // own messages
-  if (req.body.userId === appId) {
-    console.log('error %o', req.body);
-    return;
-
-  }
-  if (res.statusCode !== 201) {
-    log(res);
-    return;
-  }
-
-  log("Processing slash command");
-
-  if(!req)
-    throw new Error('no request provided');
-
-  log(req.body);
-
-  //let payLoad = req.body.annotationPayload;
-  //log("payload"+payLoad);
-
-  if (req.body.type === 'message-annotation-added' /*&& req.body.annotationPayload.targetAppId === appId*/) {
-    let command = JSON.parse(req.body.annotationPayload).actionId;
-    //log("action id "+req.body.annotationPayload.actionId);
-    log("command "+command);
-
-    if (!command)
-      log("no command to process");
+  if (eventType === 'WW'){
+      // Respond to the Webhook right away, as the response message will
+    // be sent asynchronously
+    res.status(201).end();
     
-
-    if(command === '/issue pipeline'){
-      log("using dialog")
-      dialog(req.body.spaceId,
-        token(),
-        req.body.userId,
-        req.body.annotationPayload.targetDialogId,
+      // Only handle message-created Webhook events, and ignore the app's
+      // own messages
+      if (req.body.userId === appId) {
+        console.log('error %o', req.body);
+        return;
+    
+      }
+      if (res.statusCode !== 201) {
+        log(res);
+        return;
+      }
+    
+      log("Processing slash command");
+    
+      if(!req)
+        throw new Error('no request provided');
+    
+      log(req.body);
+    
+      if (req.body.type === 'message-annotation-added' /*&& req.body.annotationPayload.targetAppId === appId*/) {
+        let command = JSON.parse(req.body.annotationPayload).actionId;
+        //log("action id "+req.body.annotationPayload.actionId);
+        log("command "+command);
+    
+        if (!command)
+          log("no command to process");
         
-        
-        (err, res) => {
-          if (!err)
-            log('sent dialog to %s', req.body.spaceId);
+    
+        if(command === '/issue pipeline'){
+          log("using dialog")
+          dialog(req.body.spaceId,
+            token(),
+            req.body.userId,
+            req.body.annotationPayload.targetDialogId,
+            
+            
+            (err, res) => {
+              if (!err)
+                log('sent dialog to %s', req.body.spaceId);
+            }
+    
+          )
         }
+          
+        // message represents the message coming in from WW to be processed by the App
+        let message = '@scrumbot '+command;
+    
+    
+        board.getScrumData({request:req, response:res, UserInput:message}).then((to_post)=>{
+          
+          log("data got = "+to_post);
+    
+          send(req.body.spaceId,
+            util.format(
+              'Hey %s, result is: %s',
+              req.body.userName, to_post),
+            token(),
+            (err, res) => {
+              if (!err)
+                log('Sent message to space %s', req.body.spaceId);
+          })
+        }).catch((err)=>{
+          log("unable to send message to space" + err);
+        })
+      };
 
-      )
-    }
-      
-    // message represents the message coming in from WW to be processed by the App
-    let message = '@scrumbot '+command;
-
-
-    board.getScrumData({request:req, response:res, UserInput:message}).then((to_post)=>{
-      
-      log("data got = "+to_post);
-
-      send(req.body.spaceId,
-        util.format(
-          'Hey %s, result is: %s',
-          req.body.userName, to_post),
-        token(),
-        (err, res) => {
-          if (!err)
-            log('Sent message to space %s', req.body.spaceId);
-      })
-    }).catch((err)=>{
-      log("unable to send message to space" + err);
-    })
-  };
+  }
+  
 
 }
 
 //function for processing issue events
-export const event_listener = (eventType) => (req, res) =>{
+export const event_listener = (token) => (req, res) =>{
   log(" 002 : "+eventType)
   console.dir(req.body,{depth:null})
   
-  if(eventType =='EL'){
+  if(eventType === 'EL'){
     res.status(201).end();
     
+    if (res.statusCode !== 201) {
+      log(res);
+      return;
+    }
+  
+    log("Processing github event");
+  
+    if(!req)
+      throw new Error('no request provided');
+  
+    log(req.body);
     
-    let command = JSON.parse(req.body.annotationPayload).actionId;
   };
   
 
@@ -185,7 +197,7 @@ const dialog = (spaceId, tok, userId, dialogId,cb) => {
 };
 
 // Verify Watson Work request signature
-export const verify = (wsecret, eventType) => (req, res, buf, encoding) => {
+export const verify = (wsecret) => (req, res, buf, encoding) => {
   if (req.get('X-OUTBOUND-TOKEN') ===
     createHmac('sha256', wsecret).update(buf).digest('hex') ) {
       
@@ -248,7 +260,7 @@ export const webapp = (appId, secret, wsecret, cb, eventType) => {
       // Verify Watson Work request signature and parse request body
       bparser.json({
         type: '*/*',
-        verify: verify(wsecret,eventType)
+        verify: verify(wsecret)
       }),
 
       // Handle Watson Work Webhook challenge requests
@@ -261,7 +273,7 @@ export const webapp = (appId, secret, wsecret, cb, eventType) => {
       slash_commands(appId, token,eventType),
 
       //github issue events go here
-      event_listener(eventType)
+      event_listener(token)
     ));
   });
 };
