@@ -20,6 +20,6 @@ COPY . .
 
 # replace this with your application's default port ...use >9000
 #
-EXPOSE 5000
+EXPOSE 9005
 
 CMD [ "npm", "run", "rebuild" ]
