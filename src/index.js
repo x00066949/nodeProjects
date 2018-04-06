@@ -215,21 +215,28 @@ const dialog = (spaceId, tok, userId, dialogId,cb) => {
 
 // Verify Watson Work request signature
 export const verify = (wsecret) => (req, res, buf, encoding) => {
-  if (req.get('X-OUTBOUND-TOKEN') !==
-    createHmac('sha256', wsecret).update(buf).digest('hex') || req.get('X-HUB-SIGNATURE') !==
-    'sha1='+createHmac('sha1', wsecret).update(buf).digest('hex')  ) {
-      console.dir(req,{depth:null})
+  if (req.get('X-OUTBOUND-TOKEN') ===
+    createHmac('sha256', wsecret).update(buf).digest('hex') ) {
+      
+      log("from WW")
+     
+  }
+
+  if (req.get('X-HUB-SIGNATURE') ===
+  "sha1="+createHmac('sha1', wsecret).update(buf).digest('hex')){
+
+    log("github event")
+
+  }else{
+    log("Not event from WW or github")
+    console.dir(req,{depth:null})
     log('Invalid request signature');
-    
-    log('git key : sha1='+createHmac('sha1', wsecret).update(buf).digest('hex') )
-    log("lowercase : "+req.get('x-hub-signature'))
-    log("normalcase : "+req.get('X-Hub-Signature'))
-    log("uppercase : "+req.get('X-HUB-SIGNATURE'))
-    
+
     
     const err = new Error('Invalid request signature');
     err.status = 401;
     throw err;
+
   }
 };
 
