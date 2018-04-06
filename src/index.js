@@ -8,6 +8,7 @@ import * as http from 'http';
 import * as https from 'https';
 import * as oauth from './watson';
 import * as board from './scrum_board';
+import * as events from './issue_events';
 
 import debug from 'debug';
 var bodyParser = require('body-parser');
@@ -18,7 +19,9 @@ var requireEnv = require("require-environment-variables");
 // Setup debug log
 const log = debug('watsonwork-scrumbot');
 
-export const slash_commands = (appId, token) => (req, res) =>{
+export const slash_commands = (appId, token, eventType) => (req, res) =>{
+  log(" 001 : "+eventType)
+  
 
   // Respond to the Webhook right away, as the response message will
   // be sent asynchronously
@@ -95,53 +98,21 @@ export const slash_commands = (appId, token) => (req, res) =>{
 
 }
 
-export const scrumbot = (appId, token) => (req, res) => {
-  // Respond to the Webhook right away, as the response message will
-  // be sent asynchronously
-  res.status(201).end();
-
-  // Only handle message-created Webhook events, and ignore the app's
-  // own messages
-  if (req.body.userId === appId) {
-    console.log('error %o', req.body);
-    return;
-
-  }
-  if (res.statusCode !== 201) {
-    log(res);
-    return;
-  }
-
-  //handle new messages and ignore the app's own messages
-  if (req.body.type === 'message-created' && req.body.userId !== appId) {
-    log('Got a message %o', req.body);
-    log('content : '+req.body.content);
-
+//function for processing issue events
+export const event_listener = (eventType) => (req, res) =>{
+  log(" 002 : "+eventType)
+  console.dir(req.body,{depth:null})
+  
+  if(eventType =='EL'){
+    res.status(201).end();
     
-
-    board.getScrumData({request:req, response:res, UserInput:req.body.content}).then((to_post)=>{
-
-
-      log("data got = "+to_post);
-
-      send(req.body.spaceId,
-        util.format(
-          'Hey %s, result is: %s',
-          req.body.userName, to_post),
-        token(),
-        (err, res) => {
-          if (!err)
-            log('Sent message to space %s', req.body.spaceId);
-      })
-    }).catch((err)=>{
-      log("nothing returned from getscrumdata" + err);
-    })
-
-    //console.dir(to_post, {depth:null}); 
-
     
+    let command = JSON.parse(req.body.annotationPayload).actionId;
   };
-};
+  
+
+
+}
 
 // Send an app message to the conversation in a space
 const send = (spaceId, text, tok, cb) => {
@@ -214,10 +185,11 @@ const dialog = (spaceId, tok, userId, dialogId,cb) => {
 };
 
 // Verify Watson Work request signature
-export const verify = (wsecret) => (req, res, buf, encoding) => {
+export const verify = (wsecret, eventType) => (req, res, buf, encoding) => {
   if (req.get('X-OUTBOUND-TOKEN') ===
     createHmac('sha256', wsecret).update(buf).digest('hex') ) {
       
+      eventType='WW'
       log("from WW")
       return;
      
@@ -226,6 +198,7 @@ export const verify = (wsecret) => (req, res, buf, encoding) => {
   else if (req.get('X-HUB-SIGNATURE') ===
   "sha1="+createHmac('sha1', wsecret).update(buf).digest('hex')){
 
+    eventType='EL'
     log("github event")
     return;
 
@@ -258,7 +231,7 @@ export const challenge = (wsecret) => (req, res, next) => {
 };
 
 // Create Express Web app
-export const webapp = (appId, secret, wsecret, cb) => {
+export const webapp = (appId, secret, wsecret, cb, eventType) => {
   // Authenticate the app and get an OAuth token
   oauth.run(appId, secret, (err, token) => {
     if (err) {
@@ -275,7 +248,7 @@ export const webapp = (appId, secret, wsecret, cb) => {
       // Verify Watson Work request signature and parse request body
       bparser.json({
         type: '*/*',
-        verify: verify(wsecret)
+        verify: verify(wsecret,eventType)
       }),
 
       // Handle Watson Work Webhook challenge requests
@@ -283,10 +256,12 @@ export const webapp = (appId, secret, wsecret, cb) => {
 
       // Handle Watson Work messages
       //scrumbot(appId, token)));
-
     
       //handle slash commands
-      slash_commands(appId, token)
+      slash_commands(appId, token,eventType),
+
+      //github issue events go here
+      event_listener(eventType)
     ));
   });
 };
