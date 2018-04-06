@@ -219,13 +219,15 @@ export const verify = (wsecret) => (req, res, buf, encoding) => {
     createHmac('sha256', wsecret).update(buf).digest('hex') ) {
       
       log("from WW")
+      return;
      
   }
 
-  if (req.get('X-HUB-SIGNATURE') ===
+  else if (req.get('X-HUB-SIGNATURE') ===
   "sha1="+createHmac('sha1', wsecret).update(buf).digest('hex')){
 
     log("github event")
+    return;
 
   }else{
     log("Not event from WW or github")
@@ -282,6 +284,7 @@ export const webapp = (appId, secret, wsecret, cb) => {
       // Handle Watson Work messages
       //scrumbot(appId, token)));
 
+    
       //handle slash commands
       slash_commands(appId, token)
     ));
