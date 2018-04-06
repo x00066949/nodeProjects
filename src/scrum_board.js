@@ -419,6 +419,8 @@ module.exports = {
     var Ownername = Options.GitOwnerName;
     var RepositoryUrl = 'repos/' + Ownername + '/' + RepositoryName;
     var MainUrl = 'https://api.github.com/';
+    log(RepositoryName)
+    console.dir(options,{depth:nll})
 
     var UrlOptions = {
       uri: MainUrl + RepositoryUrl,
@@ -442,6 +444,8 @@ module.exports = {
         var Error = err;
         // API call failed...
         log("API call failed...");
+        console.dir(res,{depth:nll})
+        
         console.log('User has %d repos', err);
       });
 
