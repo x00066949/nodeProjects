@@ -220,6 +220,8 @@ export const verify = (wsecret) => (req, res, buf, encoding) => {
     'sha1='+createHmac('sha1', wsecret).update(buf).digest('hex')  ) {
       console.dir(req,{depth:null})
     log('Invalid request signature');
+    log('git key : sha1='+createHmac('sha1', wsecret).update(buf).digest('hex') )
+    log('try key : sha1='+createHmac('sha1', wsecret) )
     const err = new Error('Invalid request signature');
     err.status = 401;
     throw err;
