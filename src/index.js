@@ -216,7 +216,9 @@ const dialog = (spaceId, tok, userId, dialogId,cb) => {
 // Verify Watson Work request signature
 export const verify = (wsecret) => (req, res, buf, encoding) => {
   if (req.get('X-OUTBOUND-TOKEN') !==
-    createHmac('sha256', wsecret).update(buf).digest('hex')) {
+    createHmac('sha256', wsecret).update(buf).digest('hex') || req.get('X-Hub-Signature') !==
+    'sha1='+createHmac('sha1', wsecret).update(buf).digest('hex')  ) {
+      console.dir(req,{depth:null})
     log('Invalid request signature');
     const err = new Error('Invalid request signature');
     err.status = 401;
