@@ -97,12 +97,15 @@ export const process_requests = (appId, token) => (req, res) =>{
 
   }else if(eventType === 'EL'){
     res.status(201).end();
-    
+
+    /*
     event_listener(token,
       (err, res) => {
         if (err)
           log('ERROR %s', err);
-      });
+      });*/
+
+      return;
     
   }else{
 
@@ -302,10 +305,10 @@ export const webapp = (appId, secret, wsecret, cb, eventType) => {
       //scrumbot(appId, token)));
     
       //handle slash commands
-      process_requests(appId, token)
+      process_requests(appId, token),
 
       //github issue events go here
-      //event_listener(token)
+      event_listener(token)
     ));
   });
 };
