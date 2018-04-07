@@ -139,7 +139,7 @@ export const event_listener = (token,cb) => (req, res) =>{
   
     log(req.body);
 
-    parseResponse({request:req, response:res}).then((to_post)=>{
+    parseResponse({request:req, response:res},cb).then((to_post)=>{
       
       log("data got = "+to_post);
 
@@ -236,14 +236,14 @@ const dialog = (spaceId, tok, userId, dialogId,cb) => {
 };
 
 //get content of notification from github
-export const parseResponse = (options) => {
+export const parseResponse = (options,cb) => {
   log('parseresponse')
   var req = options.request;
   var res = options.response;
 
   var FinalMessage='hello';
 
-  if(req.get('X-Github-Event') === 'issue_comment' ){
+  /*if(req.get('X-Github-Event') === 'issue_comment' ){
 
       log('action: '+req.body.action)
 
@@ -259,8 +259,14 @@ export const parseResponse = (options) => {
   else{
       log('Event type: '+req.get('X-Github-Event'))
       FinalMessage = 'Not a comment on an issue'
-  }
-  return FinalMessage;
+  }*/
+
+  var FinalData = {
+    "UserId": "Map",
+    "Message": FinalMessage
+  };
+
+  return FinalData;
 }
 
 // Verify Watson Work request signature
