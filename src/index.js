@@ -139,7 +139,9 @@ export const event_listener = (token,cb) => (req, res) =>{
   
     log(req.body);
 
-    parseResponse({request:req, response:res},cb).then((to_post)=>{
+    var result = parseResponse(req, res)
+    
+    .then((to_post)=>{
       
       log("data got = "+to_post);
 
@@ -236,10 +238,10 @@ const dialog = (spaceId, tok, userId, dialogId,cb) => {
 };
 
 //get content of notification from github
-export const parseResponse = (options,cb) => {
+export const parseResponse = (req , res) => {
   log('parseresponse')
-  var req = options.request;
-  var res = options.response;
+  //var req = options.request;
+  //var res = options.response;
 
   var FinalMessage='hello';
 
