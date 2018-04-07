@@ -139,7 +139,7 @@ export const event_listener = (token,cb) => (req, res) =>{
   
     log(req.body);
 
-    events.getIssueData({request:req, response:res}).then((to_post)=>{
+    parseResponse({request:req, response:res}).then((to_post)=>{
       
       log("data got = "+to_post);
 
@@ -156,7 +156,9 @@ export const event_listener = (token,cb) => (req, res) =>{
       log("unable to send message to space" + err);
     })
     
-  };
+  }else{
+    return;
+  }
   
 
 
@@ -201,6 +203,7 @@ const send = (spaceId, text, tok, cb) => {
     });
 };
 
+//dialog boxes
 const dialog = (spaceId, tok, userId, dialogId,cb) => {
 
   log("trying to build dialog boxes")
@@ -231,6 +234,34 @@ const dialog = (spaceId, tok, userId, dialogId,cb) => {
     }
   );
 };
+
+//get content of notification from github
+export const parseResponse = (options) => {
+  log('parseresponse')
+  var req = options.request;
+  var res = options.response;
+
+  var FinalMessage='hello';
+
+  if(req.get('X-Github-Event') === 'issue_comment' ){
+
+      log('action: '+req.body.action)
+
+      FinalMessage = 'A Comment has just been '
+
+      if(req.body.action === 'created'){
+          FinalMessage += 'added to issue #'+req.body.issue.id+' in repository ' +req.body.repository.name+' with ID : '+req.body.repository.id+' by user '+req.body.comment.user.login+'\n The comment can be found here : '+req.body.comment.html_url+'. \n The content of the comment is : \n'+req.body.body;
+      }else{
+          FinalMessage += req.body.action+' action not coded yet...coming soon'
+      }
+      
+  }
+  else{
+      log('Event type: '+req.get('X-Github-Event'))
+      FinalMessage = 'Not a comment on an issue'
+  }
+  return FinalMessage;
+}
 
 // Verify Watson Work request signature
 export const verify = (wsecret) => (req, res, buf, encoding) => {
