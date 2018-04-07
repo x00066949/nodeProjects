@@ -96,6 +96,7 @@ export const slash_commands = (appId, token) => (req, res) =>{
       };
 
   }
+  return;
   
 
 }
@@ -119,6 +120,23 @@ export const event_listener = (token) => (req, res) =>{
       throw new Error('no request provided');
   
     log(req.body);
+
+    events.getIssueData({request:req, response:res}).then((to_post)=>{
+      
+      log("data got = "+to_post);
+
+      send(req.body.spaceId,
+        util.format(
+          'Hello Space : %s',
+           to_post),
+        token(),
+        (err, res) => {
+          if (!err)
+            log('Sent message to space ');
+      })
+    }).catch((err)=>{
+      log("unable to send message to space" + err);
+    })
     
   };
   
