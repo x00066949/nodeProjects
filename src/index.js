@@ -154,8 +154,6 @@ export const event_listener = (token,cb) => (req, res) =>{
           if (!err)
             log('Sent message to space ');
       })
-    }).catch((err)=>{
-      log("unable to send message to space" + err);
     })
     
   }else{
