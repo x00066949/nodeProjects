@@ -20,7 +20,7 @@ var requireEnv = require("require-environment-variables");
 const log = debug('watsonwork-scrumbot');
 var eventType;
 
-export const slash_commands = (appId, token) => (req, res) =>{
+export const process_requests = (appId, token) => (req, res) =>{
   log(" 001 : "+eventType)
   
 
@@ -95,11 +95,16 @@ export const slash_commands = (appId, token) => (req, res) =>{
         })
       };
 
+  }else if(eventType === 'EL'){
+    event_listener(token);
+    
   }else{
-    res.status(100);
+
+    res.status(401).end;
+    return;
     
   }
-  return;
+  
   
 
 }
@@ -291,10 +296,10 @@ export const webapp = (appId, secret, wsecret, cb, eventType) => {
       //scrumbot(appId, token)));
     
       //handle slash commands
-      slash_commands(appId, token),
+      process_requests(appId, token)
 
       //github issue events go here
-      event_listener(token)
+      //event_listener(token)
     ));
   });
 };
