@@ -96,7 +96,7 @@ export const slash_commands = (appId, token) => (req, res) =>{
       };
 
   }else{
-    res.status(100).end();
+    res.status(100);
     
   }
   return;
