@@ -8,8 +8,26 @@ import debug from 'debug';
 const log = debug('watsonwork-scrumbot');
 
 module.exports = {
+    allMe: function (options) {
+        var req = options.request;
+        var res = options.response;
+        var test = options.test;
+    
+        var FinalData = {
+          "UserId": "Map",
+          "Check": test
+        };
+    
+        return FinalData;
+      },
 
     getIssueData(options){
+
+        return this.parseResponse({request:options.request,response:options.response});
+       
+    },
+
+    parseResponse : function(options) {
         var req = options.request;
         var res = options.response;
 
@@ -34,4 +52,6 @@ module.exports = {
         }
         return FinalMessage;
     }
-}
+
+
+};
