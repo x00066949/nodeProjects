@@ -13,7 +13,7 @@ module.exports = {
         var req = options.request;
         var res = options.response;
 
-        var FinalMessage=null;
+        var FinalMessage='';
 
         if(req.get('X-Github-Event') === 'issue_comment' ){
 
@@ -21,9 +21,9 @@ module.exports = {
 
             FinalMessage = 'A Comment has just been '
 
-            if(req.body.action === 'created')
+            if(req.body.action === 'created'){
                 FinalMessage += 'added to issue #'+req.body.issue.id+' in repository ' +req.body.repository.name+' with ID : '+req.body.repository.id+' by user '+req.body.comment.user.login+'\n The comment can be found here : '+req.body.comment.html_url+'. \n The content of the comment is : \n'+req.body.body;
-            else{
+            }else{
                 FinalMessage += req.body.action+' action not coded yet...coming soon'
             }
             
