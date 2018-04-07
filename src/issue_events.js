@@ -15,14 +15,21 @@ module.exports = {
 
         var FinalMessage=null;
 
+        log('Event type: '+req.get('X-Github-Event'))
+
         if(req.get('X-Github-Event') === 'issue_comment' ){
 
+            log('action: '+req.body.action)
 
             FinalMessage += 'A Comment has just been '
             if(req.body.action === 'created')
                 FinalMessage += 'added to issue #'+req.body.issue.id+' in repository ' +req.body.repository.name+' with ID : '+req.body.repository.id+' by user '+req.body.comment.user.login+'\n The comment can be found here : '+req.body.comment.html_url+'. \n The content of the comment is : \n'+req.body.body;
             
-            return FinalMessage;
+            
         }
+        else{
+            FinalMessage += 'Not a comment on an issue'
+        }
+        return FinalMessage;
     }
 }
