@@ -96,11 +96,17 @@ export const process_requests = (appId, token) => (req, res) =>{
       };
 
   }else if(eventType === 'EL'){
-    event_listener(token);
+    res.status(201).end();
+    
+    event_listener(token,
+      (err, res) => {
+        if (err)
+          log('ERROR %s', err);
+      });
     
   }else{
 
-    res.status(401).end;
+    res.status(401).end();
     return;
     
   }
@@ -110,12 +116,12 @@ export const process_requests = (appId, token) => (req, res) =>{
 }
 
 //function for processing issue events
-export const event_listener = (token) => (req, res) =>{
+export const event_listener = (token,cb) => (req, res) =>{
   log(" 002 : "+eventType)
   console.dir(req.body,{depth:null})
   
   if(eventType === 'EL'){
-    res.status(201).end();
+    
     
     if (res.statusCode !== 201) {
       log(res);
