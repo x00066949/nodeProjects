@@ -8,7 +8,7 @@ import debug from 'debug';
 const log = debug('watsonwork-scrumbot');
 
 module.exports = {
-    allMe: function (options) {
+    callMe: function (options) {
         var req = options.request;
         var res = options.response;
         var test = options.test;
@@ -23,15 +23,17 @@ module.exports = {
 
     getIssueData(options){
 
+        log('we are here 1')
         return this.parseResponse({request:options.request,response:options.response});
        
     },
 
     parseResponse : function(options) {
+        log('parseresponse')
         var req = options.request;
         var res = options.response;
 
-        var FinalMessage='';
+        var FinalMessage='hello';
 
         if(req.get('X-Github-Event') === 'issue_comment' ){
 
