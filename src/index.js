@@ -95,6 +95,9 @@ export const slash_commands = (appId, token) => (req, res) =>{
         })
       };
 
+  }else{
+    res.status(100).end();
+    
   }
   return;
   
@@ -288,7 +291,7 @@ export const webapp = (appId, secret, wsecret, cb, eventType) => {
       //scrumbot(appId, token)));
     
       //handle slash commands
-      slash_commands(appId, token,eventType),
+      slash_commands(appId, token),
 
       //github issue events go here
       event_listener(token)
