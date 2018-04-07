@@ -121,9 +121,10 @@ export const process_requests = (appId, token) => (req, res) =>{
 //function for processing issue events
 export const event_listener = (token,cb) => (req, res) =>{
   log(" 002 : "+eventType)
-  console.dir(req.body,{depth:null})
+  //console.dir(req.body,{depth:null})
   
   if(eventType === 'EL'){
+    res.status(201).end();
     
     
     if (res.statusCode !== 201) {
@@ -304,11 +305,13 @@ export const webapp = (appId, secret, wsecret, cb, eventType) => {
       // Handle Watson Work messages
       //scrumbot(appId, token)));
     
-      //handle slash commands
-      process_requests(appId, token),
+        //github issue events go here
+        event_listener(token),
 
-      //github issue events go here
-      event_listener(token)
+      //handle slash commands
+      process_requests(appId, token)
+
+    
     ));
   });
 };
