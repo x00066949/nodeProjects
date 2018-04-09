@@ -125,7 +125,7 @@ export const process_requests = (appId, token,cb) => (req, res) =>{
         log("data got = "+to_post);
   
         send(5,
-            'Hello Space : '+
+            
              to_post,
              oauth.oToken(),
           (err, res) => {
@@ -137,12 +137,8 @@ export const process_requests = (appId, token,cb) => (req, res) =>{
     
     
 
-    /*
-    event_listener(token,
-      (err, res) => {
-        if (err)
-          log('ERROR %s', err);
-      });*/
+    
+  
 
       return;
     
@@ -254,13 +250,13 @@ export const parseResponse = (req , res) => {
       FinalMessage = 'Not a comment on an issue'
   }
 
- /* var FinalData = {
+  var FinalData = {
     "UserId": "Map",
     "Message": FinalMessage
-  };*/
+  };
 
   log(FinalMessage)
-  return FinalMessage;
+  return FinalData;
 }
 
 // Verify Watson Work request signature
