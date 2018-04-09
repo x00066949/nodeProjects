@@ -118,7 +118,8 @@ export const process_requests = (appId, token,cb) => (req, res) =>{
     
       log(req.body);
   
-      parseResponse(req, res).then((to_post)=>{
+      var promise = parseResponse(req, res)
+      promise.then((to_post)=>{
         
         log("data got = "+to_post);
   
@@ -217,11 +218,12 @@ const dialog = (spaceId, tok, userId, dialogId,cb) => {
 };
 
 //get content of notification from github
-export const parseResponse = (req , res) => {
+//export const 
+parseResponse(function (req , res) {
   log('parseresponse')
   //var req = options.request;
   //var res = options.response;
-  return rp(options).then(function(){
+  //return rp(options).then(function(){
 
     var FinalMessage='';
     
@@ -250,9 +252,9 @@ export const parseResponse = (req , res) => {
     
       log(FinalMessage)
       return FinalMessage;
-  });
+  //});
 
-}
+});
 
 // Verify Watson Work request signature
 export const verify = (wsecret) => (req, res, buf, encoding) => {
