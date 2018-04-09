@@ -223,7 +223,18 @@ var parseResponse = (function (req , res) {
   log('parseresponse')
   //var req = options.request;
   //var res = options.response;
-  return rp('api.github.com').then(function(){
+
+  var UrlOptions = {
+    uri: MainUrl + RepositoryUrl,
+    qs: {
+    },
+    headers: {
+      'User-Agent': 'Request-Promise'
+    },
+    json: true // Automatically parses the JSON string in the response
+  };
+
+  return rp(UrlOptions).then(function(){
 
     var FinalMessage='';
     
