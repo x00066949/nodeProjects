@@ -120,11 +120,10 @@ export const process_requests = (appId, token,cb) => (req, res) =>{
         
         log("data got = "+to_post);
   
-        send('5a09b234e4b090bcd7fcf3b2',
-          util.format(
-            'Hello Space : %s',
-             to_post),
-          token,
+        send(5,
+            'Hello Space : '+
+             to_post,
+          token(),
           (err, res) => {
             if (!err)
               log('Sent message to space ');
@@ -158,7 +157,7 @@ export const process_requests = (appId, token,cb) => (req, res) =>{
 const send = (spaceId, text, tok, cb) => {
 
   request.post(
-    'https://api.watsonwork.ibm.com/v1/spaces/' + spaceId + '/messages', {
+    'https://api.watsonwork.ibm.com/v1/spaces/' + '5a09b234e4b090bcd7fcf3b2' + '/messages', {
       headers: {
         Authorization: 'Bearer ' + tok
       },
