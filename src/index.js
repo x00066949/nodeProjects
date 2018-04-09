@@ -219,11 +219,11 @@ const dialog = (spaceId, tok, userId, dialogId,cb) => {
 
 //get content of notification from github
 //export const 
-var parseResponse = (function (req , res) {
+parseResponse(function (req , res) {
   log('parseresponse')
   //var req = options.request;
   //var res = options.response;
-  //return rp(options).then(function(){
+  return rp('api.github.com').then(function(){
 
     var FinalMessage='';
     
@@ -252,7 +252,7 @@ var parseResponse = (function (req , res) {
     
       log(FinalMessage)
       return FinalMessage;
-  //});
+  });
 
 });
 
