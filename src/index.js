@@ -100,6 +100,10 @@ export const process_requests = (appId, token,cb) => (req, res) =>{
 
   }else if(eventType === 'EL'){
     res.status(201).end();
+
+    log("EL token : "+oauth.oToken)
+
+    var toks = oauth.oToken;
     log(" 002 : "+eventType)
       
       if (res.statusCode !== 201) {
@@ -123,7 +127,7 @@ export const process_requests = (appId, token,cb) => (req, res) =>{
         send(5,
             'Hello Space : '+
              to_post,
-          token(),
+          toks,
           (err, res) => {
             if (!err)
               log('Sent message to space ');
