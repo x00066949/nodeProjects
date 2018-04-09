@@ -343,10 +343,15 @@ export const webapp = (appId, secret, wsecret, cb, eventType) => {
       //scrumbot(appId, token)));
     
         //github issue events go here
-        event_listener(token),
+        event_listener(token, function(err,data){
+
+
+          process_requests(appId, token);
+
+        })
 
       //handle slash commands
-      process_requests(appId, token)
+      
 
     
     ));
