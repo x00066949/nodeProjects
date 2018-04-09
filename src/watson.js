@@ -6,6 +6,12 @@ import debug from 'debug';
 // Setup debug log
 const log = debug('watsonwork-scrumbot');
 
+var toks;
+oToken = () => {
+  log("toks : "+toks)
+  return toks;
+}
+
 export const run = (appId, secret, cb) => {
 
   let tok;
@@ -43,6 +49,7 @@ export const run = (appId, secret, cb) => {
         // Save the fresh token
         log('Got new token : '+res.body.access_token);
         tok = res.body.access_token;
+        toks = res.body.access_token;
 
   
         // Schedule next refresh a bit before the token expires
