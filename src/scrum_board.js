@@ -436,6 +436,7 @@ module.exports = {
       .then(function (successdata) {
         var RepoId = successdata.id;
 
+        
         repo_id = RepoId;
         console.log(successdata);
         return "The *Repository Id* for _"+RepositoryName+"_ is "+JSON.stringify(successdata.id)+" *repo link* : "+successdata.html_url;
@@ -444,9 +445,9 @@ module.exports = {
         var Error = err;
         // API call failed...
         log("API call failed...");
-        console.dir(res,{depth:nll})
-        
         console.log('User has %d repos', err);
+        return "No repository with name : "+RepositoryName+" exists"        
+        
       });
 
   },
