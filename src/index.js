@@ -22,7 +22,7 @@ var eventType;
 
 export const process_requests = (appId, token,cb) => (req, res) =>{
   log(" 001 : "+eventType)
-  log("token : "+token)
+  //log("token : "+token)
   log("app id "+ appId)
   
 
@@ -315,6 +315,7 @@ export const webapp = (appId, secret, wsecret, cb, eventType) => {
       return;
     }
 
+    log("tok : "+token)
     // Return the Express Web app
     cb(null, express()
 
