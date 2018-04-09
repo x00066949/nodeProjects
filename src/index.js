@@ -79,6 +79,7 @@ export const process_requests = (appId, token,cb) => (req, res) =>{
     
         board.getScrumData({request:req, response:res, UserInput:message}).then((to_post)=>{
           
+          log("space id "+req.body.spaceId)
           log("data got = "+to_post);
     
           send(req.body.spaceId,
@@ -117,7 +118,7 @@ export const process_requests = (appId, token,cb) => (req, res) =>{
         
         log("data got = "+to_post);
   
-        send(req.body.spaceId,
+        send('5a09b234e4b090bcd7fcf3b2',
           util.format(
             'Hello Space : %s',
              to_post),
@@ -148,13 +149,6 @@ export const process_requests = (appId, token,cb) => (req, res) =>{
   }
   
   
-
-}
-
-//function for processing issue events
-export const event_listener = (token,cb) => (req, res) =>{
-  
-
 
 }
 
@@ -235,9 +229,9 @@ export const parseResponse = (req , res) => {
   //var req = options.request;
   //var res = options.response;
 
-  var FinalMessage='hello';
+  var FinalMessage='';
 
-  /*if(req.get('X-Github-Event') === 'issue_comment' ){
+  if(req.get('X-Github-Event') === 'issue_comment' ){
 
       log('action: '+req.body.action)
 
@@ -253,15 +247,15 @@ export const parseResponse = (req , res) => {
   else{
       log('Event type: '+req.get('X-Github-Event'))
       FinalMessage = 'Not a comment on an issue'
-  }*/
+  }
 
-  var FinalData = {
+ /* var FinalData = {
     "UserId": "Map",
     "Message": FinalMessage
-  };
+  };*/
 
-  log(FinalData)
-  return FinalData;
+  log(FinalMessage)
+  return FinalMessage;
 }
 
 // Verify Watson Work request signature
