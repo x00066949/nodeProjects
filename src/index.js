@@ -225,7 +225,7 @@ var parseResponse = (function (req , res) {
   //var res = options.response;
 
   var UrlOptions = {
-    uri: MainUrl + RepositoryUrl,
+    uri: 'https://api.github.com/',
     qs: {
     },
     headers: {
