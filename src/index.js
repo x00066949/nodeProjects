@@ -221,7 +221,7 @@ export const parseResponse = (req , res) => {
   log('parseresponse')
   //var req = options.request;
   //var res = options.response;
-  return rp().then(function(){
+  return rp(options).then(function(){
 
     var FinalMessage='';
     
