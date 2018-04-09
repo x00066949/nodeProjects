@@ -86,7 +86,7 @@ export const process_requests = (appId, token,cb) => (req, res) =>{
     
           send(req.body.spaceId,
             util.format(
-              'Hey %s, result is: %s',
+              'Hey %s, : %s',
               req.body.userName, to_post),
             token(),
             (err, res) => {

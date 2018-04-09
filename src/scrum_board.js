@@ -31,7 +31,7 @@ module.exports = {
     var res = options.response;
     var UserCommand = options.UserInput;
 
-     var FinalMessage=null;
+    var FinalMessage = null;
     //   Message : null,
     //   Options : null
     // };
@@ -43,7 +43,7 @@ module.exports = {
     });
 
     if (!CheckIfValidCommand) {
-        FinalMessage = {
+      FinalMessage = {
         Type: 'Error',
         Message: 'Invalid Input'
       };
@@ -53,10 +53,10 @@ module.exports = {
 
     var CommandValue = this.getCommand(UserCommand);
 
-    log("command val : "+CommandValue);
+    log("command val : " + CommandValue);
 
     if (CommandValue === '' || CommandValue === null || typeof CommandValue === 'undefined') {
-       FinalMessage = {
+      FinalMessage = {
         Type: 'Error',
         Message: 'Invalid Input'
       };
@@ -69,17 +69,17 @@ module.exports = {
     var RepoName = CommandArr[1];
     var RepoId = repo_id;
 
-    log("repo id 1 : "+repo_id);
+    log("repo id 1 : " + repo_id);
 
     var RepositoryId = repo_id;
 
     if (RepositoryId === null || RepositoryId === '' || typeof RepositoryId === 'undefined') {
       log("trying to get repo id");
 
-    var RepoRegex = new RegExp(/^\/repo*\s[A-Za-z0-9]/);
-    
+      var RepoRegex = new RegExp(/^\/repo*\s[A-Za-z0-9]/);
+
       if (!RepoRegex.test(CommandValue)) {
-         FinalMessage = {
+        FinalMessage = {
           Type: 'Error',
           Message: 'Repository Id Not Specified'
         };
@@ -87,11 +87,11 @@ module.exports = {
       }
 
       if (typeof RepoId !== 'undefined' && RepoId !== '' && RepoId !== null) {
-        log("repo found id: "+RepoId);
+        log("repo found id: " + RepoId);
 
         RepoId = repo_id;
-        
-         FinalMessage = {
+
+        FinalMessage = {
           Message: 'Success',
           Options: {
             RespositoryId: RepoId
@@ -104,8 +104,8 @@ module.exports = {
         request: req,
         response: res,
         repoName: RepoName,
-        GitOwnerName:'x00066949'
-        
+        GitOwnerName: 'x00066949'
+
       });
 
     }
@@ -120,8 +120,7 @@ module.exports = {
 
 
     if (ValidUrlObject.IsValid === false) {
-      log("url is not valid");
-       FinalMessage = {
+      FinalMessage = {
         Type: 'Error',
         Message: 'Invalid Commands'
       };
@@ -129,7 +128,6 @@ module.exports = {
     }
 
 
-    log("url is valid")
     if (ValidUrlObject.IsGit) {
       log("is Git ..")
       var UCommandArr = CommandValue.split(' ');
@@ -139,20 +137,20 @@ module.exports = {
         request: req,
         response: res,
         repoName: GitRepoName,
-        GitOwnerName:'x00066949'
+        GitOwnerName: 'x00066949'
       });
 
     } else {
 
-      log ("not git");
-      log("view obj"+ValidUrlObject)
-      console.dir(ValidUrlObject,{depth:null})
+      log("not git");
+      log("view obj" + ValidUrlObject)
+      console.dir(ValidUrlObject, { depth: null })
       return this.makeRequest({
         response: res,
         UUrl: ValidUrlObject.Url,
         UBody: ValidUrlObject.Body,
         UMethod: ValidUrlObject.Method,
-        UType:ValidUrlObject.UrlType
+        UType: ValidUrlObject.UrlType
       });
     }
 
@@ -160,8 +158,8 @@ module.exports = {
   },
 
   //given, pipeline name, return pipeline id
-  getPipelineId: function (PipelineName){
-    log("entered name : "+PipelineName)
+  getPipelineId: function (PipelineName) {
+    log("entered name : " + PipelineName)
     //var PipelineId;
     var pipelineIdRequest = {
       uri: 'https://api.zenhub.io/p1/repositories/' + repo_id + '/board',
@@ -172,24 +170,24 @@ module.exports = {
 
       json: true
     };
-     rp(pipelineIdRequest)
-    .then((data)=>{
-      
-      log(data)
-      for (var i =0; i<data['pipelines'].length; i++){
-        log("checking")
-        if (data['pipelines'][i].name === PipelineName){
-          log("found pipeline id : "+data['pipelines'][i].id);
-          return data['pipelines'][i].id;
-        }
-      }
+    return rp(pipelineIdRequest)
+      .then((data) => {
 
-      log("did not find id corresponding to pipe name");
-    })
-    .catch((err) => {
-      console.log("error = "+err)
-      return err;    
-    }) 
+        log(data)
+        for (var i = 0; i < data['pipelines'].length; i++) {
+          log("checking")
+          if (data['pipelines'][i].name === PipelineName) {
+            log("found pipeline id : " + data['pipelines'][i].id);
+            return data['pipelines'][i].id;
+          }
+        }
+
+        log("did not find id corresponding to pipe name");
+      })
+      .catch((err) => {
+        console.log("error = " + err)
+        return err;
+      })
   },
 
   checkValidInput: function (options) {
@@ -197,8 +195,8 @@ module.exports = {
     var res = options.response;
     var ValidBit = false;
     var UserCommand = options.UCommand;
-    console.log("user command : "+UserCommand);
-    
+    console.log("user command : " + UserCommand);
+
     var ValidCommands = ['@scrumbot', '/repo', '/issue', '/epic', '/blocked'];
 
     if (UserCommand === null || UserCommand === '' || UserCommand === 'undefined') {
@@ -206,30 +204,30 @@ module.exports = {
     }
 
     var ValidCommadRegex = new RegExp(/^(@scrumbot)\s[\/A-Za-z]*/);
-    console.log("processing message : "+UserCommand);
+    console.log("processing message : " + UserCommand);
 
 
-    if (!ValidCommadRegex.test(UserCommand)){
+    if (!ValidCommadRegex.test(UserCommand)) {
       log("Error not starting with @scrumbot")
       return ValidBit;
     }
 
-      
+
 
     var CommandArr = UserCommand.split(' ');
     var OriginalsCommandArr = CommandArr;
 
     //if /repo comes after @scrumbot, no repo id provided else take whatever comes after @scrumbot as repo_id
-    if (CommandArr[1] === ValidCommands[1]){
-      CommandArr.splice(0,1);
+    if (CommandArr[1] === ValidCommands[1]) {
+      CommandArr.splice(0, 1);
     }
-    else{
+    else {
       repo_id = CommandArr[2];
-      CommandArr.splice(0,1);
+      CommandArr.splice(0, 1);
     }
-    
+
     var FinalCommand = CommandArr.join(' ');
-    log("Final Command : "+FinalCommand);
+    log("Final Command : " + FinalCommand);
 
     return ValidBit = true;
   },
@@ -246,16 +244,16 @@ module.exports = {
     var CommandArr = UserCommand.split(' ');
     var OriginalsCommandArr = CommandArr;
 
-    if (CommandArr[1] === '/repo'){
-      CommandArr.splice(0,1);
+    if (CommandArr[1] === '/repo') {
+      CommandArr.splice(0, 1);
     }
-    else{
+    else {
       repo_id = CommandArr[2];
-      log ("firstly initialisiing repo_id as "+repo_id +" from message arg at pos 1 = "+CommandArr[1]);
-      CommandArr.splice(0,1);
+      log("firstly initialisiing repo_id as " + repo_id + " from message arg at pos 1 = " + CommandArr[1]);
+      CommandArr.splice(0, 1);
     }
-    
-    log("repo id 2 : "+repo_id);    
+
+    log("repo id 2 : " + repo_id);
     var FinalCommand = CommandArr.join(' ');
 
     return FinalCommand;
@@ -268,7 +266,7 @@ module.exports = {
     var res = options.response;
     var UserCommand = options.Command;
     var CommandArr = UserCommand.split(' ');
-    
+
     var UrlObject = {
       IsValid: false,
       Url: '',
@@ -295,7 +293,7 @@ module.exports = {
     if (EpicRegex.test(UserCommand))
       return UrlObject = this.getEpicUrl(UserCommand, CommandArr, RepoId);
 
-    log("UrlObject = "+UrlObject);
+    log("UrlObject = " + UrlObject);
     return UrlObject;
 
   },
@@ -308,21 +306,20 @@ module.exports = {
     var MainUrl = 'https://api.zenhub.io/';
 
     var UserUrl = options.UUrl;
-    //var body = options.UBody | {key:'value'};
     var body;
-  
-    if(options.UBody == null){
-      body = {key:'value'};
-      
-    }else{
-      body = options.UBody;            
+
+    if (options.UBody == null) {
+      body = { key: 'value' };
+
+    } else {
+      body = options.UBody;
 
     }
-  
+
     var UMethod = options.UMethod;
     var UrlType = options.UType;
-    
-    console.dir('Urlbody: '+body, {depth:null});
+
+    console.dir('Urlbody: ' + body, { depth: null });
 
     var UrlOptions = {
       method: UMethod,
@@ -334,72 +331,72 @@ module.exports = {
         'User-Agent': 'Request-Promise'
       },
       json: true // Automatically parses the JSON string in the response
-        ,
-        
+      ,
+
       //body: {
-        body
+      body
 
       //}
     };
 
-    console.dir(UrlOptions,{depth:null});
-    
+    console.dir(UrlOptions, { depth: null });
+
     return rp(UrlOptions)
       .then(function (successdata) {
         var Data = successdata;
         console.log('Following Data =' + JSON.stringify(Data));
 
         //Parse JSON according to obj returned
-        if(UrlType === 'IssueEvents'){
+        if (UrlType === 'IssueEvents') {
           log("Events for issue");
           Data = '\n    *Here are the most recent events regarding your issue:* ';
 
-          for (var i =0; i<successdata.length; i++){
+          for (var i = 0; i < successdata.length; i++) {
 
-            if(successdata[i].type === 'transferIssue'){
-              log("pipeline move event"+JSON.stringify(successdata[i].to_pipeline)+successdata[i].from_pipeline);
-              Data += '\n*User ' +successdata[i].user_id+ '* _moved_ this issue from '+successdata[i].from_pipeline.name+' to '+successdata[i].to_pipeline.name+' on date : '+dateFormat(successdata[i].created_at, "dddd, mmmm dS, yyyy");
-  
+            if (successdata[i].type === 'transferIssue') {
+              log("pipeline move event" + JSON.stringify(successdata[i].to_pipeline) + successdata[i].from_pipeline);
+              Data += '\n*User ' + successdata[i].user_id + '* _moved_ this issue from ' + successdata[i].from_pipeline.name + ' to ' + successdata[i].to_pipeline.name + ' on date : ' + dateFormat(successdata[i].created_at, "dddd, mmmm dS, yyyy");
+
             }
-            if(successdata[i].type === 'estimateIssue'){
-              log("estimate change event "+i);
-              Data += '\n *User ' +successdata[i].user_id+ '* _changed estimate_ on this issue to  '+successdata[i].to_estimate.value+' on date : '+dateFormat(successdata[i].created_at, "dddd, mmmm dS, yyyy");
-  
-            }else {
+            if (successdata[i].type === 'estimateIssue') {
+              log("estimate change event " + i);
+              Data += '\n *User ' + successdata[i].user_id + '* _changed estimate_ on this issue to  ' + successdata[i].to_estimate.value + ' on date : ' + dateFormat(successdata[i].created_at, "dddd, mmmm dS, yyyy");
+
+            } else {
               Data += "Do not recognize event type"
               log("do not recogise event type");
             }
-            
+
           }
           Data += " ";
         }
 
-        if(UrlType === 'GetPipeline'){
+        if (UrlType === 'GetPipeline') {
 
           Data = " ";
-          Data += "That issue is currently in "+successdata.pipeline.name+" pipeline.";
+          Data += "That issue is currently in " + successdata.pipeline.name + " pipeline.";
         }
 
-        if(UrlType === 'IssueEstimate'){
+        if (UrlType === 'IssueEstimate') {
           Data = '';
-          Data += 'Your Issue\'s estimate has been updated to '+successdata.estimate;
+          Data += 'Your Issue\'s estimate has been updated to ' + successdata.estimate;
         }
 
-        if(UrlType === 'EpicIssues'){
-          
+        if (UrlType === 'EpicIssues') {
+
           Data = "The following Epics are in your scrumboard: ";
-          for (var i =0; i<successdata.epic_issues.length; i++){
+          for (var i = 0; i < successdata.epic_issues.length; i++) {
             Data += `\n Epic ID:  ${successdata.epic_issues[i].issue_number} Url : ${successdata.epic_issues[i].issue_url} `
-            
+
           }
         }
 
-        if(UrlType === 'IssueToPipelines'){
+        if (UrlType === 'IssueToPipelines') {
           Data = "";
           Data += 'Sucessfully Moved Issue'
         }
 
-        log("Success Data : "+Data)
+        log("Success Data : " + Data)
         return "Command parameters not accepted";
       })
       .catch(function (err) {
@@ -438,18 +435,18 @@ module.exports = {
       .then(function (successdata) {
         var RepoId = successdata.id;
 
-        
+
         repo_id = RepoId;
         console.log(successdata);
-        return "The *Repository Id* for _"+RepositoryName+"_ is "+JSON.stringify(successdata.id)+" *repo link* : "+successdata.html_url;
+        return "The *Repository Id* for _" + RepositoryName + "_ is " + JSON.stringify(successdata.id) + " *repo link* : " + successdata.html_url;
       })
       .catch(function (err) {
         var Error = err;
         // API call failed...
         log("API call failed...");
         console.log('User has %d repos', err);
-        return "No repository with name : "+RepositoryName+" exists"        
-        
+        return "No repository with name : " + RepositoryName + " exists"
+
       });
 
   },
@@ -492,7 +489,7 @@ module.exports = {
     if (PipelineRegex.test(UserCommand)) {
 
       var IssueNo = CommandArr[2];
-      log("issue Num in getISsueUrl : "+IssueNo);
+      log("issue Num in getISsueUrl : " + IssueNo);
       var PipeLineurl = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo;
 
       var UrlObject = {
@@ -501,35 +498,34 @@ module.exports = {
         Method: 'GET',
         Body: null,
         IsGit: false,
-        UrlType:'GetPipeline'
+        UrlType: 'GetPipeline'
       };
 
       return UrlObject;
     }
 
-    
+
     // Move Pipeline
     var PipelineMoveRegex = new RegExp(/^\/issue*\s[0-9]*\s[0-9]*\s-p\s[A-Za-z0-9]*/);
 
     if (PipelineMoveRegex.test(UserCommand)) {
 
-      var data = this.getPipelineId(CommandArr[4])
-      
+      this.getPipelineId(CommandArr[4]).then((data) => {
 
-      //if moving pipeline, 3rd arg is issue num,  4th = -p, 5th = pipeline, 6t position
-      var IssueNo = CommandArr[2];
-      log("name used "+ CommandArr[4])
-    
-      
-        log("Pipeline got (using data): "+ data);
-        var PosNo = CommandArr[5]|0;
-        log("position: "+PosNo)
+        //if moving pipeline, 3rd arg is issue num,  4th = -p, 5th = pipeline, 6t position
+        var IssueNo = CommandArr[2];
+        log("name used " + CommandArr[4])
+
+
+        log("Pipeline got (using data): " + data);
+        var PosNo = CommandArr[5] | 0;
+        log("position: " + PosNo)
         var MoveIssuePipeLine = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves';
         log("building move pipeline url..")
 
         var MoveBody = {
-          pipeline_id: '5a088b638f464709cd2c77c5',
-          //pipeline_id: data,
+          //pipeline_id: '5a088b638f464709cd2c77c5',
+          pipeline_id: data,
           position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
         };
 
@@ -539,110 +535,109 @@ module.exports = {
           Method: 'POST',
           Body: MoveBody,
           IsGit: false,
-          UrlType:'IssueToPipelines'
+          UrlType: 'IssueToPipelines'
         };
 
         log("url built.");
         return UrlObject;
+      });
+    }
 
-      }
+    // Get events for the Issue 
+    var EventsRegex = new RegExp(/^\/issue*\s[0-9]*\s[0-9]*\sevents/);
 
-     
-      // Get events for the Issue 
-      var EventsRegex = new RegExp(/^\/issue*\s[0-9]*\s[0-9]*\sevents/);
+    if (EventsRegex.test(UserCommand)) {
 
-      if (EventsRegex.test(UserCommand)) {
+      var IssueNo = CommandArr[2];
+      log("issue no eventsregex " + IssueNo);
+      var EventsUrl = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/events';
 
-        var IssueNo = CommandArr[2];
-        log("issue no eventsregex "+IssueNo);
-        var EventsUrl = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/events';
-
-        var UrlObject = {
-          IsValid: true,
-          Url: EventsUrl,
-          Method: 'GET',
-          Body: null,
-          IsGit: false,
-          UrlType:'IssueEvents'
-        };
-
-        return UrlObject;
-      }
-
-      
-      // Set the estimate for the issue.
-      var EstimateAddRegex = new RegExp(/^\/issue*\s[0-9]*\s[0-9]*\s-e\s[0-9]*/);
-
-      if (EstimateAddRegex.test(UserCommand)) {
-
-        var IssueNo = CommandArr[2];
-        var EstimateVal = CommandArr[4];
-        log("EstimateVal : "+EstimateVal)
-        var SetEstimate = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/estimate';
-
-        var MoveBody = {
-          estimate : EstimateVal
-        };
-
-        var UrlObject = {
-          IsValid: true,
-          Url: SetEstimate,
-          Method: 'PUT',
-          Body: MoveBody,
-          IsGit: false,
-          UrlType:'IssueEstimate'
-        };
-
-        return UrlObject;
-      }
-
-      // Get Bugs by the user
-      var BugRegex = new RegExp(/^\/issue*\s[0-9]*\sbug/);
-
-      if (BugRegex.test(UserCommand)) {
-
-        var IssueNo = CommandArr[2];
-        var BugUrl = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo;
-
-        var UrlObject = {
-          IsValid: true,
-          Url: BugUrl,
-          Method: 'GET',
-          Body: null,
-          IsGit: false,
-          UrlType:'BugIssues'
-        };
-
-        return UrlObject;
-      }
-
-
-      //To Get User Issue by user, userIssue
-      var UserRegex = new RegExp(/^\/issue*\s[0-9]*\s-u\s[A-Za-z0-9]*/);
-
-      if (UserRegex.test(UserCommand)) {
-
-        var UserUrl = '';
-
-        var UrlObject = {
-          IsValid: true,
-          Url: UserUrl,
-          Method: 'GET',
-          Body: null,
-          IsGit: false,
-          UrlType:'UserIssues'
-        };
-
-        return UrlObject;
-      }
+      var UrlObject = {
+        IsValid: true,
+        Url: EventsUrl,
+        Method: 'GET',
+        Body: null,
+        IsGit: false,
+        UrlType: 'IssueEvents'
+      };
 
       return UrlObject;
-    },
+    }
+
+
+    // Set the estimate for the issue.
+    var EstimateAddRegex = new RegExp(/^\/issue*\s[0-9]*\s[0-9]*\s-e\s[0-9]*/);
+
+    if (EstimateAddRegex.test(UserCommand)) {
+
+      var IssueNo = CommandArr[2];
+      var EstimateVal = CommandArr[4];
+      log("EstimateVal : " + EstimateVal)
+      var SetEstimate = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/estimate';
+
+      var MoveBody = {
+        estimate: EstimateVal
+      };
+
+      var UrlObject = {
+        IsValid: true,
+        Url: SetEstimate,
+        Method: 'PUT',
+        Body: MoveBody,
+        IsGit: false,
+        UrlType: 'IssueEstimate'
+      };
+
+      return UrlObject;
+    }
+
+    // Get Bugs by the user
+    var BugRegex = new RegExp(/^\/issue*\s[0-9]*\sbug/);
+
+    if (BugRegex.test(UserCommand)) {
+
+      var IssueNo = CommandArr[2];
+      var BugUrl = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo;
+
+      var UrlObject = {
+        IsValid: true,
+        Url: BugUrl,
+        Method: 'GET',
+        Body: null,
+        IsGit: false,
+        UrlType: 'BugIssues'
+      };
+
+      return UrlObject;
+    }
+
+
+    //To Get User Issue by user, userIssue
+    var UserRegex = new RegExp(/^\/issue*\s[0-9]*\s-u\s[A-Za-z0-9]*/);
+
+    if (UserRegex.test(UserCommand)) {
+
+      var UserUrl = '';
+
+      var UrlObject = {
+        IsValid: true,
+        Url: UserUrl,
+        Method: 'GET',
+        Body: null,
+        IsGit: false,
+        UrlType: 'UserIssues'
+      };
+
+      return UrlObject;
+    }
+
+    return UrlObject;
+  },
 
 
   //To Get Blocked Issues Url
   getBlockUrl: function (UserCommand, CommandArr, RepoId) {
-    
+
     log("getBlockUrl");
     var RespositroyId = RepoId;
     var IssueNo = CommandArr[1];
@@ -653,7 +648,7 @@ module.exports = {
       Method: 'GET',
       Body: null,
       IsGit: false,
-      UrlType:'BlockedIssues'
+      UrlType: 'BlockedIssues'
     };
 
     return UrlObject;
@@ -662,18 +657,18 @@ module.exports = {
 
   //To Get epics Url
   getEpicUrl: function (UserCommand, CommandArr, RepoId) {
-    
+
     log("getEpicUrl");
     var RespositroyId = RepoId;
     var EpicUrl = 'p1/repositories/' + RespositroyId + '/epics';
 
     var UrlObject = {
-      IsValid : true,
+      IsValid: true,
       Url: EpicUrl,
       Method: 'GET',
       Body: null,
       IsGit: false,
-      UrlType:'EpicIssues'
+      UrlType: 'EpicIssues'
     };
 
     return UrlObject;
