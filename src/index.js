@@ -341,16 +341,11 @@ export const webapp = (appId, secret, wsecret, cb, eventType) => {
 
       // Handle Watson Work messages
       //scrumbot(appId, token)));
-    
+    //handle slash commands
+      process_requests(appId, token),
         //github issue events go here
-        event_listener(token, function(err,data){
+        event_listener(token)
 
-
-          process_requests(appId, token);
-
-        })
-
-      //handle slash commands
       
 
     
