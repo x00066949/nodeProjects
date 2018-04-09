@@ -219,7 +219,7 @@ const dialog = (spaceId, tok, userId, dialogId,cb) => {
 
 //get content of notification from github
 //export const 
-parseResponse(function (req , res) {
+var parseResponse = (function (req , res) {
   log('parseresponse')
   //var req = options.request;
   //var res = options.response;
