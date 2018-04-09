@@ -97,6 +97,39 @@ export const process_requests = (appId, token,cb) => (req, res) =>{
 
   }else if(eventType === 'EL'){
     res.status(201).end();
+    log(" 002 : "+eventType)
+      
+      if (res.statusCode !== 201) {
+        log(res);
+        return;
+      }
+    
+      log("Processing github event");
+    
+      if(!req)
+        throw new Error('no request provided');
+    
+      log(req.body);
+  
+      var result = parseResponse(req, res)
+      
+      .then((to_post)=>{
+        
+        log("data got = "+to_post);
+  
+        send(req.body.spaceId,
+          util.format(
+            'Hello Space : %s',
+             to_post),
+          token(),
+          (err, res) => {
+            if (!err)
+              log('Sent message to space ');
+        })
+      })
+      
+    
+    
 
     /*
     event_listener(token,
@@ -120,45 +153,6 @@ export const process_requests = (appId, token,cb) => (req, res) =>{
 
 //function for processing issue events
 export const event_listener = (token,cb) => (req, res) =>{
-  log(" 002 : "+eventType)
-  //console.dir(req.body,{depth:null})
-  
-  if(eventType === 'EL'){
-    res.status(201).end();
-    
-    
-    if (res.statusCode !== 201) {
-      log(res);
-      return;
-    }
-  
-    log("Processing github event");
-  
-    if(!req)
-      throw new Error('no request provided');
-  
-    log(req.body);
-
-    var result = parseResponse(req, res)
-    
-    .then((to_post)=>{
-      
-      log("data got = "+to_post);
-
-      send(req.body.spaceId,
-        util.format(
-          'Hello Space : %s',
-           to_post),
-        token(),
-        (err, res) => {
-          if (!err)
-            log('Sent message to space ');
-      })
-    })
-    
-  }else{
-    return;
-  }
   
 
 
@@ -342,13 +336,8 @@ export const webapp = (appId, secret, wsecret, cb, eventType) => {
       // Handle Watson Work messages
       //scrumbot(appId, token)));
 
-    //handle slash commands
-      process_requests(appId, token, cb,function(err,data){
-
-            log("We are here checkin EL")
-        //github issue events go here
-        event_listener(token)
-      })
+      //handle slash commands
+      process_requests(appId, token)
       
 
       
