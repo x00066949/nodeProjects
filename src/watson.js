@@ -7,7 +7,7 @@ import debug from 'debug';
 const log = debug('watsonwork-scrumbot');
 
 var toks;
-oToken = () => {
+export const oToken = () => {
   log("toks : "+toks)
   return toks;
 }
