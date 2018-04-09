@@ -118,9 +118,7 @@ export const process_requests = (appId, token,cb) => (req, res) =>{
     
       log(req.body);
   
-      parseResponse(req, res)
-      
-      .then((to_post)=>{
+      parseResponse(req, res).then((to_post)=>{
         
         log("data got = "+to_post);
   
@@ -133,14 +131,8 @@ export const process_requests = (appId, token,cb) => (req, res) =>{
               log('Sent message to space ');
         })
       })
-      
-    
-    
 
-    
-  
-
-      return;
+      //return;
     
   }else{
 
@@ -250,13 +242,13 @@ export const parseResponse = (req , res) => {
       FinalMessage = 'Not a comment on an issue'
   }
 
-  var FinalData = {
+ /* var FinalData = {
     "UserId": "Map",
     "Message": FinalMessage
-  };
+  };*/
 
   log(FinalMessage)
-  return FinalData;
+  return FinalMessage;
 }
 
 // Verify Watson Work request signature
