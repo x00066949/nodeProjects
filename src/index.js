@@ -221,34 +221,37 @@ export const parseResponse = (req , res) => {
   log('parseresponse')
   //var req = options.request;
   //var res = options.response;
+  return rp().then(function(){
 
-  var FinalMessage='';
-
-  if(req.get('X-Github-Event') === 'issue_comment' ){
-
-      log('action: '+req.body.action)
-
-      FinalMessage = 'A Comment has just been '
-
-      if(req.body.action === 'created'){
-          FinalMessage += 'added to issue #'+req.body.issue.id+' in repository ' +req.body.repository.name+' with ID : '+req.body.repository.id+' by user '+req.body.comment.user.login+'\n The comment can be found here : '+req.body.comment.html_url+'. \n The content of the comment is : \n'+req.body.comment.body;
-      }else{
-          FinalMessage += req.body.action+' action not coded yet...coming soon'
+    var FinalMessage='';
+    
+      if(req.get('X-Github-Event') === 'issue_comment' ){
+    
+          log('action: '+req.body.action)
+    
+          FinalMessage = 'A Comment has just been '
+    
+          if(req.body.action === 'created'){
+              FinalMessage += 'added to issue #'+req.body.issue.id+' in repository ' +req.body.repository.name+' with ID : '+req.body.repository.id+' by user '+req.body.comment.user.login+'\n The comment can be found here : '+req.body.comment.html_url+'. \n The content of the comment is : \n'+req.body.comment.body;
+          }else{
+              FinalMessage += req.body.action+' action not coded yet...coming soon'
+          }
+          
       }
-      
-  }
-  else{
-      log('Event type: '+req.get('X-Github-Event'))
-      FinalMessage = 'Not a comment on an issue'
-  }
+      else{
+          log('Event type: '+req.get('X-Github-Event'))
+          FinalMessage = 'Not a comment on an issue'
+      }
+    
+     /* var FinalData = {
+        "UserId": "Map",
+        "Message": FinalMessage
+      };*/
+    
+      log(FinalMessage)
+      return FinalMessage;
+  });
 
- /* var FinalData = {
-    "UserId": "Map",
-    "Message": FinalMessage
-  };*/
-
-  log(FinalMessage)
-  return FinalMessage;
 }
 
 // Verify Watson Work request signature
