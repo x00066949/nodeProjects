@@ -20,7 +20,7 @@ var requireEnv = require("require-environment-variables");
 const log = debug('watsonwork-scrumbot');
 var eventType;
 
-export const process_requests = (appId, token) => (req, res) =>{
+export const process_requests = (appId, token,cb) => (req, res) =>{
   log(" 001 : "+eventType)
   
 
@@ -343,11 +343,11 @@ export const webapp = (appId, secret, wsecret, cb, eventType) => {
       //scrumbot(appId, token)));
 
     //handle slash commands
-      process_requests(appId, token, function(err,data){
+      process_requests(appId, token, cb,function(err,data){
 
-          log("We are here checkin EL")
-      //github issue events go here
-      event_listener(token)
+            log("We are here checkin EL")
+        //github issue events go here
+        event_listener(token)
       })
       
 
