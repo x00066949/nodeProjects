@@ -111,7 +111,7 @@ export const process_requests = (appId, token,cb) => (req, res) =>{
     
       log(req.body);
   
-      var result = parseResponse(req, res)
+      parseResponse(req, res)
       
       .then((to_post)=>{
         
@@ -260,6 +260,7 @@ export const parseResponse = (req , res) => {
     "Message": FinalMessage
   };
 
+  log(FinalData)
   return FinalData;
 }
 
@@ -338,11 +339,7 @@ export const webapp = (appId, secret, wsecret, cb, eventType) => {
 
       //handle slash commands
       process_requests(appId, token)
-      
 
-      
-
-    
     ));
   });
 };
