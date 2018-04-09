@@ -366,6 +366,7 @@ module.exports = {
               Data += '\n *User ' +successdata[i].user_id+ '* _changed estimate_ on this issue to  '+successdata[i].to_estimate.value+' on date : '+dateFormat(successdata[i].created_at, "dddd, mmmm dS, yyyy");
   
             }else {
+              Data += "Do not recognize event type"
               log("do not recogise event type");
             }
             
@@ -394,11 +395,12 @@ module.exports = {
         }
 
         if(UrlType === 'IssueToPipelines'){
-
+          Data = "";
           Data += 'Sucessfully Moved Issue'
         }
 
-        return Data;
+        log("Success Data : "+Data)
+        return "Command parameters not accepted";
       })
       .catch(function (err) {
         var Error = err;
@@ -512,14 +514,12 @@ module.exports = {
     if (PipelineMoveRegex.test(UserCommand)) {
 
       var data = this.getPipelineId(CommandArr[4])
-      //var pipe = this.getPipelineId(CommandArr[4]).then((data)=>{
+      
 
       //if moving pipeline, 3rd arg is issue num,  4th = -p, 5th = pipeline, 6t position
       var IssueNo = CommandArr[2];
       log("name used "+ CommandArr[4])
-      //this.getPipelineId(CommandArr[4]).then(function (data){
-      //rp(this.getPipelineId(CommandArr[4])).then((data)=>{
-          
+    
       
         log("Pipeline got (using data): "+ data);
         var PosNo = CommandArr[5]|0;
@@ -544,16 +544,7 @@ module.exports = {
 
         log("url built.");
         return UrlObject;
-/*
-        }).catch(function (err) {
-          var Error = err;
-          log("failed...");
-          console.log('User has %d repos', err);
-        }); 
 
-        //log(pipeMove)
-        //console.dir(pipeMove, {depth:null})
-        return pipe;*/
       }
 
      
