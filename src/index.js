@@ -22,6 +22,8 @@ var eventType;
 
 export const process_requests = (appId, token,cb) => (req, res) =>{
   log(" 001 : "+eventType)
+  log("token : "+token)
+  log("app id "+ appId)
   
 
   if (eventType === 'WW'){
@@ -122,7 +124,7 @@ export const process_requests = (appId, token,cb) => (req, res) =>{
           util.format(
             'Hello Space : %s',
              to_post),
-          token(),
+          token,
           (err, res) => {
             if (!err)
               log('Sent message to space ');
