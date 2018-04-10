@@ -499,16 +499,9 @@ module.exports = {
 
         json: true
       };*/
-      var getPipeId = request.get(
-        'https://api.zenhub.io/p1/repositories/' + repo_id + '/board',{
-        
-                headers: {
-                  'X-Authentication-Token': process.env.ZENHUB_TOKEN
-                },
-        
-                json: true
-      })
-      return getPipeId.then(function (data){
+      var getPipeId = getPipelineId(PipelineName)
+      
+       getPipeId.then((data) =>{
         
         log(data)
         for (var i = 0; i < data['pipelines'].length; i++) {
