@@ -476,7 +476,7 @@ module.exports = {
     // Move Pipeline
     var PipelineMoveRegex = new RegExp(/^\/issue*\s[0-9]*\s[0-9]*\s-p\s[A-Za-z0-9]*/);
 
-    var getPipeId = request.get(
+    var getPipeId2 = request.get(
       'https://api.zenhub.io/p1/repositories/' + repo_id + '/board',{
       
               headers: {
@@ -699,7 +699,7 @@ var getPipelineId = function (PipelineName) {
 
     json: true
   };
-  return rp(pipelineIdRequest)
+  rp(pipelineIdRequest)
     .then((data) => {
 
       log(data)
