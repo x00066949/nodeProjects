@@ -618,6 +618,7 @@ module.exports = {
   getPipelineId: function (CommandArr) {
     var IssueNo = CommandArr[2];
     var PipelineName = CommandArr[4];
+    var RespositroyId = CommandArr[1];
 
     log("entered name : " + PipelineName)
     //var PipelineId;
