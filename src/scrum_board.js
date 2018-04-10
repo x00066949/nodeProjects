@@ -638,8 +638,8 @@ module.exports = {
     var data;
     request.get(pipelineIdRequest ,(err,res)=>{
       if(!err) {
-        log("here "+res)
-        data=res.body;
+        console.dir(res,{depth:null})
+        data=res;
         cb(null,res.body)
       }else{
         log(err+res.statusCode)
