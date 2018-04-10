@@ -623,6 +623,20 @@ module.exports = {
     var IssueNo = CommandArr[2];
     var PipelineName = CommandArr[4];
     var RespositroyId = CommandArr[1];
+    var MoveBody = {
+      pipeline_id: '5a088b638f464709cd2c77c5',
+      //pipeline_id: newPID,
+      position: '0'
+    };
+    var Urlbody ={
+
+      IsValid: false,
+      Url: 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves',
+      Method: 'POST',
+      Body: MoveBody,
+      IsGit: false,
+      UrlType: 'IssueToPipelines'
+    }
 
     log("entered name : " + PipelineName)
     //var PipelineId;
@@ -638,7 +652,7 @@ module.exports = {
     var data;
     request.get(pipelineIdRequest ,(err,res)=>{
       if(!err) {
-        console.dir(res,{depth:null})
+        console.dir(res.body,{depth:null})
         data=res.body;
         var newPID;
         
@@ -659,13 +673,13 @@ module.exports = {
                 var MoveIssuePipeLine = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves';
                 log("building move pipeline url..")
         
-                var MoveBody = {
+                MoveBody = {
                   //pipeline_id: '5a088b638f464709cd2c77c5',
                   pipeline_id: newPID,
                   position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
                 };
         
-                var UrlObject = {
+                UrlObject = {
                   IsValid: true,
                   Url: MoveIssuePipeLine,
                   Method: 'POST',
@@ -675,7 +689,7 @@ module.exports = {
                 };
         
                 log("url built.");
-                return UrlObject;
+                
         cb(null,res.body)
       }else{
         log(err+res.statusCode)
@@ -683,7 +697,7 @@ module.exports = {
       }
     })
       //.then((data) => {
-       
+       return UrlObject;
 
       /*})
       .catch((err) => {
