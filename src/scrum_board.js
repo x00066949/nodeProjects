@@ -479,7 +479,11 @@ module.exports = {
 
     if (PipelineMoveRegex.test(UserCommand)) {
 
-      return this.getPipelineId(CommandArr);
+      return this.getPipelineId(CommandArr,
+        (err, res) => {
+          if (!err)
+            log('moved issue');
+      });
 
     }
 
@@ -615,7 +619,7 @@ module.exports = {
   },
 
   //given, pipeline name, return pipeline id
-  getPipelineId: function (CommandArr) {
+  getPipelineId: function (CommandArr,cb) {
     var IssueNo = CommandArr[2];
     var PipelineName = CommandArr[4];
     var RespositroyId = CommandArr[1];
@@ -631,7 +635,13 @@ module.exports = {
 
       json: true
     };
-    var data = request.get(pipelineIdRequest)
+    var data;
+    request.get(pipelineIdRequest ,(err,res)=>{
+      if(!err) {
+        data=res.body;
+        cb(null,res.body)
+      }
+    })
       //.then((data) => {
         var newPID;
 
