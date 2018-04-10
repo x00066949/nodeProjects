@@ -476,12 +476,21 @@ module.exports = {
     // Move Pipeline
     var PipelineMoveRegex = new RegExp(/^\/issue*\s[0-9]*\s[0-9]*\s-p\s[A-Za-z0-9]*/);
 
+    var getPipeId = request.get(
+      'https://api.zenhub.io/p1/repositories/' + repo_id + '/board',{
+      
+              headers: {
+                'X-Authentication-Token': process.env.ZENHUB_TOKEN
+              },
+      
+              json: true
+    })
     if (PipelineMoveRegex.test(UserCommand)) {
       var PipelineName = CommandArr[4];
       var PipelineId;
       //get pipeline id
       //var PipelineId;
-      var pipelineIdRequest = {
+      /*var pipelineIdRequest = {
         uri: 'https://api.zenhub.io/p1/repositories/' + repo_id + '/board',
 
         headers: {
@@ -489,50 +498,62 @@ module.exports = {
         },
 
         json: true
-      };
-      rp(pipelineIdRequest)
+      };*/
+      var getPipeId = request.get(
+        'https://api.zenhub.io/p1/repositories/' + repo_id + '/board',{
+        
+                headers: {
+                  'X-Authentication-Token': process.env.ZENHUB_TOKEN
+                },
+        
+                json: true
+      })
+      return getPipeId.then(function (data){
+        
+        log(data)
+        for (var i = 0; i < data['pipelines'].length; i++) {
+          log("checking")
+          if (data['pipelines'][i].name === PipelineName) {
+            log("found pipeline id : " + data['pipelines'][i].id);
+            PipelineId = data['pipelines'][i].id;
+            //return PipelineId;
+          }
+        }
+
+        var IssueNo = CommandArr[2];
+        log("name used " + CommandArr[4])
+
+
+        log("Pipeline got (using data): " + PipelineId);
+        var PosNo = CommandArr[5] | 0;
+        log("position: " + PosNo)
+        var MoveIssuePipeLine = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves';
+        log("building move pipeline url..")
+
+        var MoveBody = {
+          //pipeline_id: '5a088b638f464709cd2c77c5',
+          pipeline_id: PipelineId,
+          position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
+        };
+
+        var UrlObject = {
+          IsValid: true,
+          Url: MoveIssuePipeLine,
+          Method: 'POST',
+          Body: MoveBody,
+          IsGit: false,
+          UrlType: 'IssueToPipelines'
+        };
+
+        log("url built.");
+        return UrlObject;
+      })
+      /*rp(pipelineIdRequest)
         .then((data) => {
 
-          log(data)
-          for (var i = 0; i < data['pipelines'].length; i++) {
-            log("checking")
-            if (data['pipelines'][i].name === PipelineName) {
-              log("found pipeline id : " + data['pipelines'][i].id);
-              PipelineId = data['pipelines'][i].id;
-              //return PipelineId;
-            }
-          }
-
-          var IssueNo = CommandArr[2];
-          log("name used " + CommandArr[4])
-  
-  
-          log("Pipeline got (using data): " + PipelineId);
-          var PosNo = CommandArr[5] | 0;
-          log("position: " + PosNo)
-          var MoveIssuePipeLine = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves';
-          log("building move pipeline url..")
-  
-          var MoveBody = {
-            //pipeline_id: '5a088b638f464709cd2c77c5',
-            pipeline_id: PipelineId,
-            position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
-          };
-  
-          var UrlObject = {
-            IsValid: true,
-            Url: MoveIssuePipeLine,
-            Method: 'POST',
-            Body: MoveBody,
-            IsGit: false,
-            UrlType: 'IssueToPipelines'
-          };
-  
-          log("url built.");
-          return UrlObject;
           log("did not find id corresponding to pipe name");
         })
-      /*
+      
         .catch((err) => {
           console.log("error = " + err)
           return err;
