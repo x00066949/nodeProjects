@@ -490,7 +490,7 @@ module.exports = {
 
         json: true
       };
-      request.post(pipelineIdRequest)
+      rp(pipelineIdRequest)
         .then((data) => {
 
           log(data)
@@ -499,6 +499,7 @@ module.exports = {
             if (data['pipelines'][i].name === PipelineName) {
               log("found pipeline id : " + data['pipelines'][i].id);
               PipelineId = data['pipelines'][i].id;
+              //return PipelineId;
             }
           }
 
