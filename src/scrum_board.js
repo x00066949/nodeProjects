@@ -628,7 +628,7 @@ module.exports = {
       //pipeline_id: newPID,
       position: '0'
     };
-    var Urlbody ={
+    var Urlbody = {
 
       IsValid: false,
       Url: 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves',
@@ -679,7 +679,8 @@ module.exports = {
                   position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
                 };
         
-                UrlObject = {
+
+                let UrlObject = {
                   IsValid: true,
                   Url: MoveIssuePipeLine,
                   Method: 'POST',
