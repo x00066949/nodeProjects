@@ -631,7 +631,7 @@ module.exports = {
 
       json: true
     };
-    rp(pipelineIdRequest)
+    return rp(pipelineIdRequest)
       .then((data) => {
         var newPID;
 
