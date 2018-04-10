@@ -490,7 +490,7 @@ module.exports = {
 
         json: true
       };
-      rp(pipelineIdRequest)
+      return rp(pipelineIdRequest)
         .then((data) => {
 
           log(data)
@@ -505,11 +505,6 @@ module.exports = {
 
           log("did not find id corresponding to pipe name");
         })
-        .catch((err) => {
-          console.log("error = " + err)
-          return err;
-        })
-
       .then((data) => {
 
         //if moving pipeline, 3rd arg is issue num,  4th = -p, 5th = pipeline, 6t position
@@ -541,6 +536,11 @@ module.exports = {
         log("url built.");
         return UrlObject;
       });
+      /*
+        .catch((err) => {
+          console.log("error = " + err)
+          return err;
+        })*/
     }
 
     // Get events for the Issue 
