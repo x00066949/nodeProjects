@@ -631,8 +631,8 @@ module.exports = {
 
       json: true
     };
-    return rp(pipelineIdRequest)
-      .then((data) => {
+    var data = request.get(pipelineIdRequest)
+      //.then((data) => {
         var newPID;
 
         log(data)
@@ -669,11 +669,11 @@ module.exports = {
 
         log("url built.");
         return UrlObject;
-      })
+      /*})
       .catch((err) => {
         console.log("error = " + err)
         return err;
-      })
+      })*/
   }
 
 
