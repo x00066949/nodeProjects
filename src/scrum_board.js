@@ -650,7 +650,7 @@ module.exports = {
       json: true
     };
     var data;
-    request.get(pipelineIdRequest, (err, res) => {
+    return request.get(pipelineIdRequest, (err, res) => {
       if (!err) {
         console.dir(res.body, { depth: null })
         data = res.body;
@@ -680,7 +680,7 @@ module.exports = {
         };
 
 
-        UrlObject = {
+        return UrlObject = {
           IsValid: true,
           Url: MoveIssuePipeLine,
           Method: 'POST',
