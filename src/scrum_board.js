@@ -483,7 +483,7 @@ module.exports = {
         (err, res) => {
           if (!err)
             log('moved issue');
-      });
+        });
 
     }
 
@@ -609,7 +609,7 @@ module.exports = {
     var UrlObject = {
       IsValid: true,
       Url: EpicUrl,
-      Method: 'GET',  
+      Method: 'GET',
       Body: null,
       IsGit: false,
       UrlType: 'EpicIssues'
@@ -619,7 +619,7 @@ module.exports = {
   },
 
   //given, pipeline name, return pipeline id
-  getPipelineId: function (CommandArr,cb) {
+  getPipelineId: function (CommandArr, cb) {
     var IssueNo = CommandArr[2];
     var PipelineName = CommandArr[4];
     var RespositroyId = CommandArr[1];
@@ -628,7 +628,7 @@ module.exports = {
       //pipeline_id: newPID,
       position: '0'
     };
-    var Urlbody = {
+    var UrlObject = {
 
       IsValid: false,
       Url: 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves',
@@ -650,61 +650,61 @@ module.exports = {
       json: true
     };
     var data;
-    request.get(pipelineIdRequest ,(err,res)=>{
-      if(!err) {
-        console.dir(res.body,{depth:null})
-        data=res.body;
+    request.get(pipelineIdRequest, (err, res) => {
+      if (!err) {
+        console.dir(res.body, { depth: null })
+        data = res.body;
         var newPID;
-        
-                log(data)
-                for (var i = 0; i < data['pipelines'].length; i++) {
-                  log("checking")
-                  if (data['pipelines'][i].name === PipelineName) {
-                    log("found pipeline id : " + data['pipelines'][i].id);
-                    newPID = data['pipelines'][i].id;
-                  }
-                }
-        
-                log("did not find id corresponding to pipe name");
-        
-                log("Pipeline got (using data): " + newPID);
-                var PosNo = CommandArr[5] | 0;
-                log("position: " + PosNo)
-                var MoveIssuePipeLine = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves';
-                log("building move pipeline url..")
-        
-                MoveBody = {
-                  //pipeline_id: '5a088b638f464709cd2c77c5',
-                  pipeline_id: newPID,
-                  position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
-                };
-        
 
-                let UrlObject = {
-                  IsValid: true,
-                  Url: MoveIssuePipeLine,
-                  Method: 'POST',
-                  Body: MoveBody,
-                  IsGit: false,
-                  UrlType: 'IssueToPipelines'
-                };
-        
-                log("url built.");
-                
-        cb(null,res.body)
-      }else{
-        log(err+res.statusCode)
+        log(data)
+        for (var i = 0; i < data['pipelines'].length; i++) {
+          log("checking")
+          if (data['pipelines'][i].name === PipelineName) {
+            log("found pipeline id : " + data['pipelines'][i].id);
+            newPID = data['pipelines'][i].id;
+          }
+        }
+
+        log("did not find id corresponding to pipe name");
+
+        log("Pipeline got (using data): " + newPID);
+        var PosNo = CommandArr[5] | 0;
+        log("position: " + PosNo)
+        var MoveIssuePipeLine = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves';
+        log("building move pipeline url..")
+
+        MoveBody = {
+          //pipeline_id: '5a088b638f464709cd2c77c5',
+          pipeline_id: newPID,
+          position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
+        };
+
+
+        UrlObject = {
+          IsValid: true,
+          Url: MoveIssuePipeLine,
+          Method: 'POST',
+          Body: MoveBody,
+          IsGit: false,
+          UrlType: 'IssueToPipelines'
+        };
+
+        log("url built.");
+
+        cb(null, res.body)
+      } else {
+        log(err + res.statusCode)
         return;
       }
     })
-      //.then((data) => {
-       return UrlObject;
+    //.then((data) => {
+    return UrlObject;
 
-      /*})
-      .catch((err) => {
-        console.log("error = " + err)
-        return err;
-      })*/
+    /*})
+    .catch((err) => {
+      console.log("error = " + err)
+      return err;
+    })*/
   }
 
 
