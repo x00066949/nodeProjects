@@ -499,7 +499,7 @@ module.exports = {
             if (data['pipelines'][i].name === PipelineName) {
               log("found pipeline id : " + data['pipelines'][i].id);
               PipelineId = data['pipelines'][i].id;
-              //return PipelineId;
+              return PipelineId;
             }
           }
 
@@ -510,7 +510,7 @@ module.exports = {
           return err;
         })
 
-      //getPipelineId(CommandArr[4]).then((data) => {
+      .then((data) => {
 
         //if moving pipeline, 3rd arg is issue num,  4th = -p, 5th = pipeline, 6t position
         var IssueNo = CommandArr[2];
@@ -540,7 +540,7 @@ module.exports = {
 
         log("url built.");
         return UrlObject;
-      //});
+      });
     }
 
     // Get events for the Issue 
