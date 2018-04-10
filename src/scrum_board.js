@@ -650,9 +650,10 @@ module.exports = {
       json: true
     };
     var data;
-    return request.get(pipelineIdRequest, (err, res) => {
+     request.get(pipelineIdRequest, (err, res) => {
       if (!err) {
         console.dir(res.body, { depth: null })
+        return res.body
         data = res.body;
         var newPID;
 
