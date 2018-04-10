@@ -609,7 +609,7 @@ module.exports = {
     var UrlObject = {
       IsValid: true,
       Url: EpicUrl,
-      Method: 'GET',
+      Method: 'GET',  
       Body: null,
       IsGit: false,
       UrlType: 'EpicIssues'
@@ -639,7 +639,7 @@ module.exports = {
     request.get(pipelineIdRequest ,(err,res)=>{
       if(!err) {
         console.dir(res,{depth:null})
-        data=res;
+        data=res.body;
         var newPID;
         
                 log(data)
