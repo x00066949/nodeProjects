@@ -501,7 +501,7 @@ module.exports = {
       };*/
       var getPipeId = getPipelineId(PipelineName)
       
-       getPipeId.then((data) =>{
+       return getPipeId.then((data) =>{
         
         log(data)
         for (var i = 0; i < data['pipelines'].length; i++) {
