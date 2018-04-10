@@ -665,7 +665,7 @@ module.exports = {
                   position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
                 };
         
-                UrlObject = {
+                var UrlObject = {
                   IsValid: true,
                   Url: MoveIssuePipeLine,
                   Method: 'POST',
