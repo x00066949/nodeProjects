@@ -640,48 +640,51 @@ module.exports = {
       if(!err) {
         console.dir(res,{depth:null})
         data=res;
+        var newPID;
+        
+                log(data)
+                for (var i = 0; i < data['pipelines'].length; i++) {
+                  log("checking")
+                  if (data['pipelines'][i].name === PipelineName) {
+                    log("found pipeline id : " + data['pipelines'][i].id);
+                    newPID = data['pipelines'][i].id;
+                  }
+                }
+        
+                log("did not find id corresponding to pipe name");
+        
+                log("Pipeline got (using data): " + newPID);
+                var PosNo = CommandArr[5] | 0;
+                log("position: " + PosNo)
+                var MoveIssuePipeLine = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves';
+                log("building move pipeline url..")
+        
+                var MoveBody = {
+                  //pipeline_id: '5a088b638f464709cd2c77c5',
+                  pipeline_id: newPID,
+                  position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
+                };
+        
+                UrlObject = {
+                  IsValid: true,
+                  Url: MoveIssuePipeLine,
+                  Method: 'POST',
+                  Body: MoveBody,
+                  IsGit: false,
+                  UrlType: 'IssueToPipelines'
+                };
+        
+                log("url built.");
+                return UrlObject;
         cb(null,res.body)
       }else{
         log(err+res.statusCode)
+        return;
       }
     })
       //.then((data) => {
-        var newPID;
+       
 
-        log(data)
-        for (var i = 0; i < data['pipelines'].length; i++) {
-          log("checking")
-          if (data['pipelines'][i].name === PipelineName) {
-            log("found pipeline id : " + data['pipelines'][i].id);
-            newPID = data['pipelines'][i].id;
-          }
-        }
-
-        log("did not find id corresponding to pipe name");
-
-        log("Pipeline got (using data): " + newPID);
-        var PosNo = CommandArr[5] | 0;
-        log("position: " + PosNo)
-        var MoveIssuePipeLine = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves';
-        log("building move pipeline url..")
-
-        var MoveBody = {
-          //pipeline_id: '5a088b638f464709cd2c77c5',
-          pipeline_id: newPID,
-          position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
-        };
-
-        var UrlObject = {
-          IsValid: true,
-          Url: MoveIssuePipeLine,
-          Method: 'POST',
-          Body: MoveBody,
-          IsGit: false,
-          UrlType: 'IssueToPipelines'
-        };
-
-        log("url built.");
-        return UrlObject;
       /*})
       .catch((err) => {
         console.log("error = " + err)
