@@ -1,3 +1,4 @@
+import * as request from 'request';
 var _ = require('lodash');
 var rp = require('request-promise');
 var Regex = require('regex');
