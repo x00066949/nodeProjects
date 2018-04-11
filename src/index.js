@@ -94,7 +94,16 @@ export const process_requests = (appId, token, cb) => (req, res) => {
               log('Sent message to space %s', req.body.spaceId);
           })
       }).catch((err) => {
-        log("unable to send message to space" + err);
+        send(req.body.spaceId,
+          util.format(
+            'Hey %s, : %s',
+            req.body.userName, 'Unable to process command'),
+          token(),
+          (err, res) => {
+            if (!err)
+              log('Sent message to space %s', req.body.spaceId);
+          })
+        log("unable to process command" + err);
       })
     };
 
