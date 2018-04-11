@@ -261,7 +261,7 @@ module.exports = {
     if (EpicRegex.test(UserCommand))
       return UrlObject = this.getEpicUrl(UserCommand, CommandArr, RepoId);
 
-    log("UrlObject = " + UrlObject);
+    console.dir(UrlObject, {depth:null});
     return UrlObject;
 
   },
