@@ -293,6 +293,7 @@ module.exports = {
 
     var UMethod = options.UMethod;
     var UrlType = options.UType;
+    log("urltype : "+UrlType)
 
     console.dir('Urlbody: ' + body, { depth: null });
 
