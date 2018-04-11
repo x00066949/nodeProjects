@@ -317,7 +317,7 @@ module.exports = {
     console.dir(UrlOptions, { depth: null });
     if (UserUrl === 'wrongCommand') {
       log(UserUrl)
-      return rp('api.github.com').then(function (successdata){
+      return rp('www.github.com').then(function (successdata){
         var errMessage = 'Wrong Command';
         return errMessage;
       })
