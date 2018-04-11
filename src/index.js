@@ -20,129 +20,129 @@ var requireEnv = require("require-environment-variables");
 const log = debug('watsonwork-scrumbot');
 var eventType;
 
-export const process_requests = (appId, token,cb) => (req, res) =>{
-  log(" 001 : "+eventType)
+export const process_requests = (appId, token, cb) => (req, res) => {
+  log(" 001 : " + eventType)
   //log("token : "+token)
-  log("app id "+ appId)
-  
+  log("app id " + appId)
 
-  if (eventType === 'WW'){
-      // Respond to the Webhook right away, as the response message will
+
+  if (eventType === 'WW') {
+    // Respond to the Webhook right away, as the response message will
     // be sent asynchronously
     res.status(201).end();
-    
-      // Only handle message-created Webhook events, and ignore the app's
-      // own messages
-      if (req.body.userId === appId) {
-        console.log('error %o', req.body);
-        return;
-    
-      }
-      if (res.statusCode !== 201) {
-        log(res);
-        return;
-      }
-    
-      log("Processing slash command");
-    
-      if(!req)
-        throw new Error('no request provided');
-    
-      log(req.body);
-    
-      if (req.body.type === 'message-annotation-added' /*&& req.body.annotationPayload.targetAppId === appId*/) {
-        let command = JSON.parse(req.body.annotationPayload).actionId;
-        //log("action id "+req.body.annotationPayload.actionId);
-        log("command "+command);
-    
-        if (!command)
-          log("no command to process");
-        
-    
-        if(command === '/issue pipeline'){
-          log("using dialog")
-          dialog(req.body.spaceId,
-            token(),
-            req.body.userId,
-            req.body.annotationPayload.targetDialogId,
-            
-            
-            (err, res) => {
-              if (!err)
-                log('sent dialog to %s', req.body.spaceId);
-            }
-    
-          )
-        }
-          
-        // message represents the message coming in from WW to be processed by the App
-        let message = '@scrumbot '+command;
-    
-    
-        board.getScrumData({request:req, response:res, UserInput:message}).then((to_post)=>{
-          
-          log("space id "+req.body.spaceId)
-          log("data got = "+to_post);
-    
-          send(req.body.spaceId,
-            util.format(
-              'Hey %s, : %s',
-              req.body.userName, to_post),
-            token(),
-            (err, res) => {
-              if (!err)
-                log('Sent message to space %s', req.body.spaceId);
-          })
-        }).catch((err)=>{
-          log("unable to send message to space" + err);
-        })
-      };
 
-  }else if(eventType === 'EL'){
-    res.status(201).end();
+    // Only handle message-created Webhook events, and ignore the app's
+    // own messages
+    if (req.body.userId === appId) {
+      console.log('error %o', req.body);
+      return;
 
-    log("EL token : "+oauth.oToken())
+    }
+    if (res.statusCode !== 201) {
+      log(res);
+      return;
+    }
 
-    //var toks = oauth.oToken;
-    log(" 002 : "+eventType)
-      
-      if (res.statusCode !== 201) {
-        log(res);
-        return;
-      }
-    
-      log("Processing github event");
-    
-      if(!req)
-        throw new Error('no request provided');
-    
-      log(req.body);
-  
-      var promise = parseResponse(req, res)
-      promise.then((to_post)=>{
-        
-        log("data got = "+to_post);
-  
-        send(5,
-            
-             to_post,
-             oauth.oToken(),
+    log("Processing slash command");
+
+    if (!req)
+      throw new Error('no request provided');
+
+    log(req.body);
+
+    if (req.body.type === 'message-annotation-added' /*&& req.body.annotationPayload.targetAppId === appId*/) {
+      let command = JSON.parse(req.body.annotationPayload).actionId;
+      //log("action id "+req.body.annotationPayload.actionId);
+      log("command " + command);
+
+      if (!command)
+        log("no command to process");
+
+
+      if (command === '/issue pipeline') {
+        log("using dialog")
+        dialog(req.body.spaceId,
+          token(),
+          req.body.userId,
+          req.body.annotationPayload.targetDialogId,
+
+
           (err, res) => {
             if (!err)
-              log('Sent message to space ');
-        })
-      })
+              log('sent dialog to %s', req.body.spaceId);
+          }
 
-      //return;
-    
-  }else{
+        )
+      }
+
+      // message represents the message coming in from WW to be processed by the App
+      let message = '@scrumbot ' + command;
+
+
+      board.getScrumData({ request: req, response: res, UserInput: message }).then((to_post) => {
+
+        log("space id " + req.body.spaceId)
+        log("data got = " + to_post);
+
+        send(req.body.spaceId,
+          util.format(
+            'Hey %s, : %s',
+            req.body.userName, to_post),
+          token(),
+          (err, res) => {
+            if (!err)
+              log('Sent message to space %s', req.body.spaceId);
+          })
+      }).catch((err) => {
+        log("unable to send message to space" + err);
+      })
+    };
+
+  } else if (eventType === 'EL') {
+    res.status(201).end();
+
+    log("EL token : " + oauth.oToken())
+
+    //var toks = oauth.oToken;
+    log(" 002 : " + eventType)
+
+    if (res.statusCode !== 201) {
+      log(res);
+      return;
+    }
+
+    log("Processing github event");
+
+    if (!req)
+      throw new Error('no request provided');
+
+    log(req.body);
+
+    var promise = parseResponse(req, res)
+    promise.then((to_post) => {
+
+      log("data got = " + to_post);
+
+      send(5,
+
+        to_post,
+        oauth.oToken(),
+        (err, res) => {
+          if (!err)
+            log('Sent message to space ');
+        })
+    })
+
+    //return;
+
+  } else {
 
     res.status(401).end();
     return;
-    
+
   }
-  
-  
+
+
 
 }
 
@@ -186,18 +186,18 @@ const send = (spaceId, text, tok, cb) => {
 };
 
 //dialog boxes
-const dialog = (spaceId, tok, userId, dialogId,cb) => {
+const dialog = (spaceId, tok, userId, dialogId, cb) => {
 
   log("trying to build dialog boxes")
 
   var q = ``
 
   request.post(
-    'https://api.watsonwork.ibm.com/graphql',{
+    'https://api.watsonwork.ibm.com/graphql', {
 
       headers: {
-        'jwt':tok,
-        'Content-Type': 'application/graphql' ,
+        'jwt': tok,
+        'Content-Type': 'application/graphql',
         'x-graphql-view': 'PUBLIC, BETA'
       },
       json: true,
@@ -205,8 +205,8 @@ const dialog = (spaceId, tok, userId, dialogId,cb) => {
 
     }, (err, res) => {
       if (err || res.statusCode !== 201) {
-        log('failed err: '+err)
-        console.dir(res,{depth:null})
+        log('failed err: ' + err)
+        console.dir(res, { depth: null })
         log('Error creating dialog %o', err || res.statusCode);
         cb(err || new Error(res.statusCode));
         return;
@@ -219,7 +219,7 @@ const dialog = (spaceId, tok, userId, dialogId,cb) => {
 
 //get content of notification from github
 //export const 
-var parseResponse = (function (req , res) {
+var parseResponse = (function (req, res) {
   log('parseresponse')
   //var req = options.request;
   //var res = options.response;
@@ -234,46 +234,61 @@ var parseResponse = (function (req , res) {
     json: true // Automatically parses the JSON string in the response
   };
 
-  return rp(UrlOptions).then(function(){
+  return rp(UrlOptions).then(function () {
 
-    var FinalMessage='';
-    
-      if(req.get('X-Github-Event') === 'issue_comment' ){
-    
-          log('action: '+req.body.action)
-    
-          FinalMessage = 'A Comment has just been '
-    
-          if(req.body.action === 'created'){
-              FinalMessage += 'added to issue #'+req.body.issue.id+' in repository ' +req.body.repository.name+' with ID : '+req.body.repository.id+' by user '+req.body.comment.user.login+'\n The comment can be found here : '+req.body.comment.html_url+'. \n The content of the comment is : \n'+req.body.comment.body;
-          }else{
-              FinalMessage += req.body.action+' action not coded yet...coming soon'
-          }
-          
-      }if(req.get('X-Github-Event') === 'issues' ){
-        log('action: '+req.body.action)
-        
-              FinalMessage = 'An issue has just been '
-        
-              if(req.body.action === 'opened'){
-                  FinalMessage += 'opened in repository '+req.body.repository.name+' with repo id: ' +req.body.repository.id+'\nIssue Details:\nIssue ID : #'+req.body.issue.id+'\nIssue Title: '+req.body.issue.title+'\n Issue opened by : '+req.body.issue.user.login+'\n The Issue can be found here : '+req.body.issue.url+'.';
-              }else{
-                  FinalMessage += req.body.action+' action not coded yet...coming soon'
-              }
-              
+    var FinalMessage = '';
+
+    //COMMENTS
+    if (req.get('X-Github-Event') === 'issue_comment') {
+
+      log('action: ' + req.body.action)
+
+      FinalMessage = 'A Comment has just been '
+
+      if (req.body.action === 'created') {
+        FinalMessage += 'added to issue #' + req.body.issue.number + ' in repository ' + req.body.repository.name + ' with ID : ' + req.body.repository.id + ' by user ' + req.body.comment.user.login + '\n The comment can be found here : ' + req.body.comment.html_url + '. \n The content of the comment is : \n' + req.body.comment.body;
       }
-      else{
-          log('Event type: '+req.get('X-Github-Event'))
-          FinalMessage = 'Not a comment on an issue'
+      else if (req.body.action === 'edited') {
+        FinalMessage += 'edited under issue #' + req.body.issue.number + ' in repository ' + req.body.repository.name + ' with ID : ' + req.body.repository.id + ' by user ' + req.body.comment.user.login + '\n The comment can be found here : ' + req.body.comment.html_url + '. \n The content of the comment is : \n' + req.body.comment.body;
+      } 
+      else if (req.body.action === 'deleted') {
+        FinalMessage += 'deleted under issue #' + req.body.issue.number + ' by user ' + req.body.comment.user.login + ' in repository ' + req.body.repository.name + ' with ID : ' + req.body.repository.id;
+      } 
+      else {
+        FinalMessage += req.body.action + ' action not coded yet...coming soon'
       }
-    
-     /* var FinalData = {
-        "UserId": "Map",
-        "Message": FinalMessage
-      };*/
-    
-      log(FinalMessage)
-      return FinalMessage;
+
+    } 
+    //ISSUES
+    else if (req.get('X-Github-Event') === 'issues') {
+      log('action: ' + req.body.action)
+
+      FinalMessage = 'An issue has just been '
+
+      if (req.body.action === 'opened') {
+        FinalMessage += 'opened in repository ' + req.body.repository.name + ' with repo id: ' + req.body.repository.id + '\nIssue Details:\nIssue ID : #' + req.body.issue.number + '\nIssue Title: ' + req.body.issue.title + '\n Issue opened by : ' + req.body.issue.user.login + '\n The Issue can be found here : ' + req.body.issue.html_url + '.';
+      } else if (req.body.action === 'closed') {
+        FinalMessage += 'closed. '+'\nIssue Details:\nIssue Number : #' + req.body.issue.number + '\nIssue Title: ' + req.body.issue.title +'\n Issue closed by : '+req.body.issue.user.login+'\nIn repository ' + req.body.repository.name + ' with repo id: ' + req.body.repository.id +'.';
+      }else if(req.body.action === 'reopened'){
+        FinalMessage += 'reopened in repository '+req.body.repository.name+' with repo id: ' +req.body.repository.id+'\n Issue Re-opened by : '+req.body.issue.user.login+'\nIssue Details:\nIssue ID : #'+req.body.issue.number+'\nIssue Title: '+req.body.issue.title+'\n The Issue can be found here : '+req.body.issue.html_url+'.';
+    } 
+      else {
+        FinalMessage += req.body.action + ' action not coded yet...coming soon'
+      }
+
+    }
+    else {
+      log('Event type: ' + req.get('X-Github-Event'))
+      FinalMessage = 'Not a comment on an issue'
+    }
+
+    /* var FinalData = {
+       "UserId": "Map",
+       "Message": FinalMessage
+     };*/
+
+    log(FinalMessage)
+    return FinalMessage;
   });
 
 });
@@ -281,27 +296,27 @@ var parseResponse = (function (req , res) {
 // Verify Watson Work request signature
 export const verify = (wsecret) => (req, res, buf, encoding) => {
   if (req.get('X-OUTBOUND-TOKEN') ===
-    createHmac('sha256', wsecret).update(buf).digest('hex') ) {
-      
-      eventType='WW'
-      log("from WW")
-      return;
-     
+    createHmac('sha256', wsecret).update(buf).digest('hex')) {
+
+    eventType = 'WW'
+    log("from WW")
+    return;
+
   }
 
   else if (req.get('X-HUB-SIGNATURE') ===
-  "sha1="+createHmac('sha1', wsecret).update(buf).digest('hex')){
+    "sha1=" + createHmac('sha1', wsecret).update(buf).digest('hex')) {
 
-    eventType='EL'
+    eventType = 'EL'
     log("github event")
     return;
 
-  }else{
+  } else {
     log("Not event from WW or github")
-    console.dir(req,{depth:null})
+    console.dir(req, { depth: null })
     log('Invalid request signature');
 
-    
+
     const err = new Error('Invalid request signature');
     err.status = 401;
     throw err;
@@ -333,7 +348,7 @@ export const webapp = (appId, secret, wsecret, cb, eventType) => {
       return;
     }
 
-    log("tok : "+token)
+    log("tok : " + token)
     // Return the Express Web app
     cb(null, express()
 
@@ -355,7 +370,7 @@ export const webapp = (appId, secret, wsecret, cb, eventType) => {
       //handle slash commands
       process_requests(appId, token)
 
-    ));
+      ));
   });
 };
 
@@ -379,14 +394,14 @@ const main = (argv, env, cb) => {
 
         http.createServer(app).listen(env.PORT, cb);
 
-       //default page
+        //default page
         app.get('/', function (request, response) {
           response.redirect('http://workspace.ibm.com');
-          
+
         });
 
-        
-        
+
+
       }
 
       else
