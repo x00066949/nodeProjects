@@ -65,21 +65,19 @@ module.exports = {
                 } else if (req.body.action === 'reopened') {
                     FinalMessage += 'reopened in repository ' + req.body.repository.name + ' with repo id: ' + req.body.repository.id + '\n Issue Re-opened by : ' + req.body.issue.user.login + '\nIssue Details:\nIssue ID : #' + req.body.issue.number + '\nIssue Title: ' + req.body.issue.title + '\n The Issue can be found here : ' + req.body.issue.html_url + '.';
                 } else if (req.body.action === 'labeled') {
-                    FinalMessage == 'Issue ID : #' + req.body.issue.number + '\nIssue Title: ' + req.body.issue.title + ' has been updated with the following labels: ';
+                    FinalMessage = 'Issue ID : #' + req.body.issue.number + '\nIssue Title: ' + req.body.issue.title + ' has been updated with the following labels: ';
                     for (var i = 0; i < req.body.issue.labels.length; i++) {
                         FinalMessage += '\n\t' + req.body.issue.labels[i].name + '\n'
                     }
                     FinalMessage += 'In repository ' + req.body.repository.name + ' with repo id: ' + req.body.repository.id + '\n Label added by : ' + req.body.issue.user.login + '\n The Issue can be found here : ' + req.body.issue.html_url + ' .';
                 } else if (req.body.action === 'unlabeled') {
-                    FinalMessage == 'The following labels : ';
-                    for (var i = 0; i < req.body.issue.labels.length; i++) {
-                        FinalMessage += '\n\t' + req.body.issue.labels[i].name + '\n'
-                    }
-                    FinalMessage += '\n Have been removed from Issue ID : #' + req.body.issue.number + '\nIssue Title: ' + req.body.issue.title;
-                    FinalMessage += 'In repository ' + req.body.repository.name + ' with repo id: ' + req.body.repository.id + '\n Label added by : ' + req.body.issue.user.login + '\n The Issue can be found here : ' + req.body.issue.html_url + ' .';
+                    FinalMessage = 'The following label : \n\t'+req.body.label.name;
+                    
+                    FinalMessage += '\n Has been removed from Issue ID : #' + req.body.issue.number + '\nIssue Title: ' + req.body.issue.title;
+                    FinalMessage += 'In repository ' + req.body.repository.name + ' with repo id: ' + req.body.repository.id + '\n Label removed by : ' + req.body.issue.user.login + '\n The Issue can be found here : ' + req.body.issue.html_url + ' .';
                 }
                 else {
-                    FinalMessage += req.body.action + ' action not coded yet...coming soon'
+                    FinalMessage = req.body.action + ' action not coded yet...coming soon'
                 }
             }
             else {
