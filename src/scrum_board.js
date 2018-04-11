@@ -388,8 +388,11 @@ module.exports = {
           Data += 'Sucessfully Moved Issue'
         }
 
+        else{
+          Data = "Command parameters not accepted";
+        }
         log("Success Data : " + Data)
-        return "Command parameters not accepted";
+        return Data;
       })
       .catch(function (err) {
         var Error = err;
