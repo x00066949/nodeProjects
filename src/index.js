@@ -118,7 +118,7 @@ export const process_requests = (appId, token, cb) => (req, res) => {
 
     log(req.body);
 
-    var promise = parseResponse(req, res)
+    var promise = events.parseResponse(req, res)
     promise.then((to_post) => {
 
       log("data got = " + to_post);
@@ -219,7 +219,7 @@ const dialog = (spaceId, tok, userId, dialogId, cb) => {
 
 //get content of notification from github
 //export const 
-var parseResponse = (function (req, res) {
+/*var parseResponse = (function (req, res) {
   log('parseresponse')
   //var req = options.request;
   //var res = options.response;
@@ -252,7 +252,7 @@ var parseResponse = (function (req, res) {
         FinalMessage += 'edited under issue #' + req.body.issue.number + ' in repository ' + req.body.repository.name + ' with ID : ' + req.body.repository.id + ' by user ' + req.body.comment.user.login + '\n The comment can be found here : ' + req.body.comment.html_url + '. \n The content of the comment is : \n' + req.body.comment.body;
       } 
       else if (req.body.action === 'deleted') {
-        FinalMessage += 'deleted under issue #' + req.body.issue.number + ' by user ' + req.body.comment.user.login + ' in repository ' + req.body.repository.name + ' with ID : ' + req.body.repository.id;
+        FinalMessage = req.body.comment.body+'\nThe above comment was deleted under issue #' + req.body.issue.number + ' by user ' + req.body.comment.user.login + ' in repository ' + req.body.repository.name + ' with ID : ' + req.body.repository.id;
       } 
       else {
         FinalMessage += req.body.action + ' action not coded yet...coming soon'
@@ -282,16 +282,14 @@ var parseResponse = (function (req, res) {
       FinalMessage = 'Not a comment on an issue'
     }
 
-    /* var FinalData = {
-       "UserId": "Map",
-       "Message": FinalMessage
-     };*/
+    
 
     log(FinalMessage)
     return FinalMessage;
   });
 
 });
+*/
 
 // Verify Watson Work request signature
 export const verify = (wsecret) => (req, res, buf, encoding) => {
