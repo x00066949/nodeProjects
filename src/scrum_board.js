@@ -260,8 +260,15 @@ module.exports = {
 
     if (EpicRegex.test(UserCommand))
       return UrlObject = this.getEpicUrl(UserCommand, CommandArr, RepoId);
-
-    console.dir(UrlObject, {depth:null});
+    else {
+      return UrlObject = {
+        IsValid: true,
+        Url: 'wrong command',
+        Method: 'GET',
+        Body: null
+      };
+    }
+    console.dir(UrlObject, { depth: null });
     return UrlObject;
 
   },
@@ -308,7 +315,9 @@ module.exports = {
     };
 
     console.dir(UrlOptions, { depth: null });
-
+    if (UserUrl === 'wrong command') {
+      return 'command not recognized';
+    }
     return rp(UrlOptions)
       .then(function (successdata) {
         var Data = successdata;
@@ -650,7 +659,7 @@ module.exports = {
       json: true
     };
     var data;
-     request.get(pipelineIdRequest, (err, res) => {
+    request.get(pipelineIdRequest, (err, res) => {
       if (!err) {
         console.dir(res.body, { depth: null })
         return res.body
