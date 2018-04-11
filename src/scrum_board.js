@@ -263,7 +263,7 @@ module.exports = {
     else {
       return UrlObject = {
         IsValid: true,
-        Url: 'wrong command',
+        Url: 'wrongCommand',
         Method: 'GET',
         Body: null
       };
@@ -315,8 +315,12 @@ module.exports = {
     };
 
     console.dir(UrlOptions, { depth: null });
-    if (UserUrl === 'wrong command') {
-      return 'command not recognized';
+    if (UserUrl === 'wrongCommand') {
+      log(UserUrl)
+      return rp('api.github.com').then(function (successdata){
+        var errMessage = 'Wrong Command';
+        return errMessage;
+      })
     }
     return rp(UrlOptions)
       .then(function (successdata) {
