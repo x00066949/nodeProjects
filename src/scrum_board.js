@@ -245,7 +245,7 @@ module.exports = {
     var RepoRegex = new RegExp(/^\/repo*\s[A-Za-z0-9]*/);
     var IssueRegex = new RegExp(/^[\/issue]*\s[0-9]*\s[0-9]*\s(-u|bug|pipeline|-p|events|-e)/);
     var EpicRegex = new RegExp(/^[\/epic]*\s[A-Za-z0-9]*/);
-    //var BlockedRegex = new RegExp(/^\/blocked/);
+    var BlockedRegex = new RegExp(/^\/blocked/);
 
     if (RepoRegex.test(UserCommand))
       return UrlObject = this.getRepoUrl(UserCommand, CommandArr);
