@@ -351,7 +351,7 @@ module.exports = {
               Data += '\n*User ' + successdata[i].user_id + '* _moved_ this issue from ' + successdata[i].from_pipeline.name + ' to ' + successdata[i].to_pipeline.name + ' on date : ' + dateFormat(successdata[i].created_at, "dddd, mmmm dS, yyyy");
 
             }
-            if (successdata[i].type === 'estimateIssue') {
+            else if (successdata[i].type === 'estimateIssue') {
               log("estimate change event " + i);
               Data += '\n *User ' + successdata[i].user_id + '* _changed estimate_ on this issue to  ' + successdata[i].to_estimate.value + ' on date : ' + dateFormat(successdata[i].created_at, "dddd, mmmm dS, yyyy");
 
@@ -364,18 +364,18 @@ module.exports = {
           Data += " ";
         }
 
-        if (UrlType === 'GetPipeline') {
+        else if (UrlType === 'GetPipeline') {
 
           Data = " ";
           Data += "That issue is currently in " + successdata.pipeline.name + " pipeline.";
         }
 
-        if (UrlType === 'IssueEstimate') {
+        else if (UrlType === 'IssueEstimate') {
           Data = '';
           Data += 'Your Issue\'s estimate has been updated to ' + successdata.estimate;
         }
 
-        if (UrlType === 'EpicIssues') {
+        else if (UrlType === 'EpicIssues') {
 
           Data = "The following Epics are in your scrumboard: ";
           for (var i = 0; i < successdata.epic_issues.length; i++) {
@@ -384,7 +384,7 @@ module.exports = {
           }
         }
 
-        if (UrlType === 'IssueToPipelines') {
+        else if (UrlType === 'IssueToPipelines') {
           Data = "";
           Data += 'Sucessfully Moved Issue'
         }
