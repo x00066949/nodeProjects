@@ -317,7 +317,18 @@ module.exports = {
     console.dir(UrlOptions, { depth: null });
     if (UserUrl === 'wrongCommand') {
       log(UserUrl)
-      return rp('www.github.com').then(function (successdata){
+      return rp({
+        uri: 'api.github.com',
+    
+        headers: {
+          'User-Agent': 'simple_rest_app',
+        },
+        qs: {
+          client_id: process.env.GIT_CLIENT_ID,
+          client_secret: process.env.GIT_CLIENT_SECRET
+        },
+        json: true
+      }).then(function (successdata){
         var errMessage = 'Wrong Command';
         return errMessage;
       })
