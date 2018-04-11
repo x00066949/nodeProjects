@@ -250,6 +250,17 @@ var parseResponse = (function (req , res) {
               FinalMessage += req.body.action+' action not coded yet...coming soon'
           }
           
+      }if(req.get('X-Github-Event') === 'issues' ){
+        log('action: '+req.body.action)
+        
+              FinalMessage = 'An issue has just been '
+        
+              if(req.body.action === 'opened'){
+                  FinalMessage += 'opened in repository '+req.body.repository.name+' with repo id: ' +req.body.repository.id+'\nIssue Details:\nIssue ID : #'+req.body.issue.id+'\nIssue Title: '+req.body.issue.title+'\n Issue opened by : '+req.body.issue.user.login+'\n The Issue can be found here : '+req.body.issue.url+'.';
+              }else{
+                  FinalMessage += req.body.action+' action not coded yet...coming soon'
+              }
+              
       }
       else{
           log('Event type: '+req.get('X-Github-Event'))
