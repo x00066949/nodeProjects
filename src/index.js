@@ -9,6 +9,7 @@ import * as https from 'https';
 import * as oauth from './watson';
 import * as board from './scrum_board';
 import * as events from './issue_events';
+import agent from 'superagent';
 
 import debug from 'debug';
 var bodyParser = require('body-parser');
@@ -228,7 +229,7 @@ const dialog = (spaceId, tok, userId, dialogId, cb) => {
       successful
     }
   }`
-  const req = request.post('https://api.watsonwork.ibm.com/graphql')
+  const req = agent.post('https://api.watsonwork.ibm.com/graphql')
   .set('Authorization', `Bearer ${tok}`)
   .set('Content-Type', 'application/graphql')
   .set('Accept-Encoding', '')
