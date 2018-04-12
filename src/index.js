@@ -73,38 +73,41 @@ export const process_requests = (appId, token, cb) => (req, res) => {
           }
 
         )
-      }
+      }else{
 
       // message represents the message coming in from WW to be processed by the App
       let message = '@scrumbot ' + command;
+      
+      
+            board.getScrumData({ request: req, response: res, UserInput: message }).then((to_post) => {
+      
+              log("space id " + req.body.spaceId)
+              log("data got = " + to_post);
+      
+              send(req.body.spaceId,
+                util.format(
+                  'Hey %s, : %s',
+                  req.body.userName, to_post),
+                token(),
+                (err, res) => {
+                  if (!err)
+                    log('Sent message to space %s', req.body.spaceId);
+                })
+            }).catch((err) => {
+              send(req.body.spaceId,
+                util.format(
+                  'Hey %s, : %s',
+                  req.body.userName, 'Unable to process command'),
+                token(),
+                (err, res) => {
+                  if (!err)
+                    log('Sent message to space %s', req.body.spaceId);
+                })
+              log("unable to process command" + err);
+            })
 
+      }
 
-      board.getScrumData({ request: req, response: res, UserInput: message }).then((to_post) => {
-
-        log("space id " + req.body.spaceId)
-        log("data got = " + to_post);
-
-        send(req.body.spaceId,
-          util.format(
-            'Hey %s, : %s',
-            req.body.userName, to_post),
-          token(),
-          (err, res) => {
-            if (!err)
-              log('Sent message to space %s', req.body.spaceId);
-          })
-      }).catch((err) => {
-        send(req.body.spaceId,
-          util.format(
-            'Hey %s, : %s',
-            req.body.userName, 'Unable to process command'),
-          token(),
-          (err, res) => {
-            if (!err)
-              log('Sent message to space %s', req.body.spaceId);
-          })
-        log("unable to process command" + err);
-      })
     };
 
   } else if (eventType === 'EL') {
@@ -199,9 +202,48 @@ const dialog = (spaceId, tok, userId, dialogId, cb) => {
 
   log("trying to build dialog boxes")
 
-  var q = ``
+  var q = `mutation {
+    createTargetedMessage(input: {
+      conversationId: ${spaceId}
+      targetUserId: ${userId}
+      targetDialogId: ${dialogId}
+      annotations: [
+      {
+        genericAnnotation: {
+          title: "Sample Title",
+          text: "Sample Body"
+          buttons: [
+            {
+              postbackButton: {
+                title: "Sample Button",
+                id: "Sample_Button",
+                style: PRIMARY
+              }
+            }
+          ]
+        }
+      }
+      ]
+      }) {
+      successful
+    }
+  }`
+  const req = request.post('https://api.watsonwork.ibm.com/graphql')
+  .set('Authorization', `Bearer ${tok}`)
+  .set('Content-Type', 'application/graphql')
+  .set('Accept-Encoding', '')
+  .send(q.replace(/\s+/g, ' '));
 
-  request.post(
+return promisify(req).then(res => {
+  if (res.body && res.body.errors) {
+      const err = new Error('Error executing GraphQL request');
+      err.res = res;
+      throw err;
+  }
+
+  return res;
+});
+  /*request.post(
     'https://api.watsonwork.ibm.com/graphql', {
 
       headers: {
@@ -210,7 +252,7 @@ const dialog = (spaceId, tok, userId, dialogId, cb) => {
         'x-graphql-view': 'PUBLIC, BETA'
       },
       json: true,
-      body: `mutation createSpace { createSpace(input: { title: \"Space title\",  members: [${userId}]}){ space { ${spaceId}}`
+      body: q
 
     }, (err, res) => {
       if (err || res.statusCode !== 201) {
@@ -223,7 +265,7 @@ const dialog = (spaceId, tok, userId, dialogId, cb) => {
       log('Send result %d, %o', res.statusCode, res.body);
       cb(null, res.body);
     }
-  );
+  );*/
 };
 
 // Verify Watson Work request signature
