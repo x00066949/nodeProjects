@@ -238,7 +238,7 @@ const dialog = (spaceId, tok, userId, dialogId, cb) => {
 
 return promisify(req).then(res => {
   log(res.body)
-  console.dir(res.body,{depth:null})
+  console.dir(req,{depth:null})
   if (res.body && res.body.errors) {
       const err = new Error('Error executing GraphQL request');
       err.res = res;
