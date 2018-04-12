@@ -207,9 +207,9 @@ const dialog = (spaceId, tok, userId, targetDialogId, cb) => {
 
   var q = `mutation {
     createTargetedMessage(input: {
-      conversationId: ${spaceId}
-      targetUserId: ${userId}
-      targetDialogId: ${targetDialogId}
+      conversationId: "${spaceId}"
+      targetUserId: "${userId}"
+      targetDialogId: "${targetDialogId}",
       annotations: [
       {
         genericAnnotation: {
