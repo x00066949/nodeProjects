@@ -62,7 +62,7 @@ export const process_requests = (appId, token, cb) => (req, res) => {
 
 
       if (command === '/issue pipeline') {
-        log("using dialog")
+        log("using dialog : "+req.body.annotationPayload.targetDialogId)
         dialog(req.body.spaceId,
           token(),
           req.body.userId,
@@ -200,15 +200,16 @@ const send = (spaceId, text, tok, cb) => {
 };
 
 //dialog boxes
-const dialog = (spaceId, tok, userId, dialogId, cb) => {
+const dialog = (spaceId, tok, userId, targetDialogId, cb) => {
 
-  log("trying to build dialog boxes")
+  log("trying to build dialog boxes : "+targetDialogId)
+
 
   var q = `mutation {
     createTargetedMessage(input: {
       conversationId: ${spaceId}
       targetUserId: ${userId}
-      targetDialogId: ${dialogId}
+      targetDialogId: ${targetDialogId}
       annotations: [
       {
         genericAnnotation: {
