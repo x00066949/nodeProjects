@@ -62,11 +62,11 @@ export const process_requests = (appId, token, cb) => (req, res) => {
 
 
       if (command === '/issue pipeline') {
-        log("using dialog : "+req.body.annotationPayload.targetDialogId)
+        log("using dialog : "+JSON.parse(req.body.annotationPayload).targetDialogId)
         dialog(req.body.spaceId,
           token(),
           req.body.userId,
-          req.body.annotationPayload.targetDialogId,
+          JSON.parse(req.body.annotationPayload).targetDialogId,
 
 
           (err, res) => {
