@@ -9,6 +9,7 @@ import * as https from 'https';
 import * as oauth from './watson';
 import * as board from './scrum_board';
 import * as events from './issue_events';
+import q from 'q';
 import agent from 'superagent';
 
 import debug from 'debug';
@@ -268,6 +269,21 @@ return promisify(req).then(res => {
     }
   );*/
 };
+
+
+export const promisify = (req)=> {
+  var deferred = q.defer();
+
+  req.end((err, res) => {
+      if (err) {
+          deferred.reject(err);
+      } else {
+          deferred.resolve(res);
+      }
+  });
+
+  return deferred.promise;
+}
 
 // Verify Watson Work request signature
 export const verify = (wsecret) => (req, res, buf, encoding) => {
