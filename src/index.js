@@ -237,6 +237,8 @@ const dialog = (spaceId, tok, userId, dialogId, cb) => {
   .send(q.replace(/\s+/g, ' '));
 
 return promisify(req).then(res => {
+  log(res.body)
+  console.dir(res.body,{depth:null})
   if (res.body && res.body.errors) {
       const err = new Error('Error executing GraphQL request');
       err.res = res;
