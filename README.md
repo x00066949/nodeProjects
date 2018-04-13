@@ -1,6 +1,5 @@
 # ScrumMaster-bot
 
-[![Build Status]
 
 ## The Aim of this Project is to develop a scrumbot to assist SCRUM Teams. 
 
