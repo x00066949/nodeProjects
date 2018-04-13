@@ -24,7 +24,6 @@ var eventType;
 
 export const process_requests = (appId, token, cb) => (req, res) => {
   log(" 001 : " + eventType)
-  //log("token : "+token)
   log("app id " + appId)
 
 
@@ -52,17 +51,17 @@ export const process_requests = (appId, token, cb) => (req, res) => {
 
     log(req.body);
 
-    if (req.body.type === 'message-annotation-added' /*&& req.body.annotationPayload.targetAppId === appId*/) {
-      let command = JSON.parse(req.body.annotationPayload).actionId;
-      //log("action id "+req.body.annotationPayload.actionId);
+    let command = JSON.parse(req.body.annotationPayload).actionId;
+
+    if (!command)
+      log("no command to process");
+
+    if (req.body.type === 'message-annotation-added' && command) {
+
       log("command " + command);
 
-      if (!command)
-        log("no command to process");
+      var PipeRegex = new RegExp(/^\/issue*\spipeline*\s[0-9]*\s[0-9]/);
 
-
-        var PipeRegex = new RegExp(/^\/issue*\spipeline*\s[0-9]*\s[0-9]/);
-        
       if (PipeRegex.test(command)) {
         var CommandArr = command.split(' ');
 
@@ -70,7 +69,7 @@ export const process_requests = (appId, token, cb) => (req, res) => {
 
         var pipePromise = getPipeId(CommandArr[2]);
 
-        pipePromise.then((nameArr) =>{
+        pipePromise.then((nameArr) => {
           dialog(req.body.spaceId,
             token(),
             req.body.userId,
@@ -78,15 +77,15 @@ export const process_requests = (appId, token, cb) => (req, res) => {
             nameArr,
             CommandArr[2],
             CommandArr[3],
-  
+
             (err, res) => {
               if (!err)
                 log('sent dialog to %s', req.body.spaceId);
             }
-  
+
           )
         })
-      
+
       } else {
 
         // message represents the message coming in from WW to be processed by the App
@@ -128,8 +127,6 @@ export const process_requests = (appId, token, cb) => (req, res) => {
     res.status(201).end();
 
     log("EL token : " + oauth.oToken())
-
-    //var toks = oauth.oToken;
     log(" 002 : " + eventType)
 
     if (res.statusCode !== 201) {
@@ -159,16 +156,12 @@ export const process_requests = (appId, token, cb) => (req, res) => {
         })
     })
 
-    //return;
-
   } else {
 
     res.status(401).end();
     return;
 
   }
-
-
 
 }
 
@@ -193,8 +186,6 @@ const send = (spaceId, text, tok, cb) => {
           color: '#6CB7FB',
           title: 'github issue tracker',
           text: text,
-
-          //text : 'Hello \n World ',
           actor: {
             name: 'github issue app'
           }
@@ -210,9 +201,10 @@ const send = (spaceId, text, tok, cb) => {
       cb(null, res.body);
     });
 };
-//
-const getPipeId = (repo_id)=>{
-  
+
+//get pipeline id for dialog boxes
+const getPipeId = (repo_id) => {
+
   //get lanes
   var pipelineIdRequest = {
     uri: 'https://api.zenhub.io/p1/repositories/' + repo_id + '/board',
@@ -225,24 +217,20 @@ const getPipeId = (repo_id)=>{
   };
   return rp(pipelineIdRequest)
     .then((data) => {
-var nameArr = [];
-var nameIndx=0;
+      var nameArr = [];
+      var nameIndx = 0;
       log(data)
       for (var i = 0; i < data['pipelines'].length; i++) {
         log("checking")
-        //if (data['pipelines'][i].name === PipelineName) {
-          log("found pipeline id : " + data['pipelines'][i].id);
-          nameArr[nameIndx] = data['pipelines'][i].name;
-          nameArr[nameIndx+1] = data['pipelines'][i].id;
+        log("found pipeline id : " + data['pipelines'][i].id);
+        nameArr[nameIndx] = data['pipelines'][i].name;
+        nameArr[nameIndx + 1] = data['pipelines'][i].id;
 
-          log(nameArr[nameIndx] +" , "+nameArr[nameIndx+1])
-          nameIndx = nameIndx+2;
+        log(nameArr[nameIndx] + " , " + nameArr[nameIndx + 1])
+        nameIndx = nameIndx + 2;
 
-        //}
       }
       return nameArr;
-
-      //log("did not find id corresponding to pipe name");
     })
     .catch((err) => {
       console.log("error = " + err)
@@ -251,19 +239,15 @@ var nameIndx=0;
 }
 
 //dialog boxes
-const dialog = (spaceId, tok, userId, targetDialogId,nameArr,repo_id,issue_id, cb) => {
+const dialog = (spaceId, tok, userId, targetDialogId, nameArr, repo_id, issue_id, cb) => {
 
   log("trying to build dialog boxes : " + targetDialogId)
+  log(nameArr)
 
-
-
-    log(nameArr)
-
-
-    var attachments = [];
-    var index = 0;
-    for(var i=0; i<nameArr.length; i=i+2){
-     attachments[index] = `
+  var attachments = [];
+  var index = 0;
+  for (var i = 0; i < nameArr.length; i = i + 2) {
+    attachments[index] = `
      {
         type: CARD,
         cardInput: {
@@ -276,7 +260,7 @@ const dialog = (spaceId, tok, userId, targetDialogId,nameArr,repo_id,issue_id, c
                 buttons: [
                     {
                         text: "Place Issue Here",
-                        payload: "/issue ${repo_id} ${issue_id} -p ${nameArr[i+1]}",
+                        payload: "/issue ${repo_id} ${issue_id} -p ${nameArr[i + 1]}",
                         style: PRIMARY
                     }
                 ]
@@ -284,9 +268,8 @@ const dialog = (spaceId, tok, userId, targetDialogId,nameArr,repo_id,issue_id, c
         }
     }`
     index++;
-    }
+  }
 
-    log(attachments[0]+attachments[1])
   var q = `
   mutation {
     createTargetedMessage(input: {
@@ -305,7 +288,7 @@ const dialog = (spaceId, tok, userId, targetDialogId,nameArr,repo_id,issue_id, c
     .set('Authorization', `Bearer ${tok}`)
     .set('Content-Type', 'application/graphql')
     .set('Accept-Encoding', '')
-    .set('x-graphql-view',' PUBLIC, BETA')
+    .set('x-graphql-view', ' PUBLIC, BETA')
     .send(q.replace(/\s+/g, ' '));
 
   return promisify(req).then(res => {
@@ -408,9 +391,6 @@ export const webapp = (appId, secret, wsecret, cb, eventType) => {
       // Handle Watson Work Webhook challenge requests
       challenge(wsecret),
 
-      // Handle Watson Work messages
-      //scrumbot(appId, token)));
-
       //handle slash commands
       process_requests(appId, token)
 
@@ -457,7 +437,6 @@ const main = (argv, env, cb) => {
           }
           const port = env.SSLPORT || 443;
           log('HTTPS server listening on port %d', port);
-          // https.createServer(conf, app).listen(port, cb);
         });
     });
 };

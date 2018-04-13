@@ -11,9 +11,7 @@ module.exports = {
 
     parseResponse: (function (req, res) {
         log('parseresponse')
-        //var req = options.request;
-        //var res = options.response;
-
+        
         var UrlOptions = {
             uri: 'https://api.github.com/',
             qs: {
