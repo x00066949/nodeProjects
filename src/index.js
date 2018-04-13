@@ -208,9 +208,9 @@ const dialog = (spaceId, tok, userId, targetDialogId, cb) => {
   var q = `
   mutation {
     createTargetedMessage(input: {
-      conversationId: "58934f00e4b0f86a34bbd085"
-      targetUserId: "83152e37-0d9f-4bbb-9d5f-024e75a97600"
-      targetDialogId: "SAMPLE_ACTION_1234"
+      conversationId: "${spaceId}"
+      targetUserId: "${userId}"
+      targetDialogId: "${targetDialogId}"
       attachments: [
       {
           type: CARD,
