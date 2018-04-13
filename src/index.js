@@ -292,7 +292,7 @@ const dialog = (spaceId, tok, userId, targetDialogId,nameArr, cb) => {
       conversationId: "${spaceId}"
       targetUserId: "${userId}"
       targetDialogId: "${targetDialogId}"
-      attachments: ${attachments}
+      attachments: [${attachments}]
               }
           }
       }
