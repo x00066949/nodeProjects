@@ -292,23 +292,7 @@ const dialog = (spaceId, tok, userId, targetDialogId,nameArr, cb) => {
       conversationId: "${spaceId}"
       targetUserId: "${userId}"
       targetDialogId: "${targetDialogId}"
-      attachments: [
-      {
-          type: CARD,
-          cardInput: {
-              type: INFORMATION,
-              informationCardInput: {
-                  title: "Sample Title",
-                  subtitle: "Sample Subtitle",
-                  text: "Sample Text",
-                  date: "1500573338000",
-                  buttons: [
-                      {
-                          text: "Sample Button Text",
-                          payload: "Sample Button Payload",
-                          style: PRIMARY
-                      }
-                  ]
+      attachments: ${attachments}
               }
           }
       }
@@ -318,6 +302,24 @@ const dialog = (spaceId, tok, userId, targetDialogId,nameArr, cb) => {
     }
   }
   `
+  /*
+  [
+    {
+        type: CARD,
+        cardInput: {
+            type: INFORMATION,
+            informationCardInput: {
+                title: "Sample Title",
+                subtitle: "Sample Subtitle",
+                text: "Sample Text",
+                date: "1500573338000",
+                buttons: [
+                    {
+                        text: "Sample Button Text",
+                        payload: "Sample Button Payload",
+                        style: PRIMARY
+                    }
+                ]*/
   const req = agent.post('https://api.watsonwork.ibm.com/graphql')
     .set('Authorization', `Bearer ${tok}`)
     .set('Content-Type', 'application/graphql')
