@@ -241,6 +241,7 @@ const dialog = (spaceId, tok, userId, targetDialogId, cb) => {
     .set('Authorization', `Bearer ${tok}`)
     .set('Content-Type', 'application/graphql')
     .set('Accept-Encoding', '')
+    .set('x-graphql-view',' PUBLIC, BETA')
     .send(q.replace(/\s+/g, ' '));
 
   return promisify(req).then(res => {
