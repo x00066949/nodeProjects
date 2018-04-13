@@ -77,6 +77,7 @@ export const process_requests = (appId, token, cb) => (req, res) => {
             JSON.parse(req.body.annotationPayload).targetDialogId,
             nameArr,
             CommandArr[2],
+            CommandArr[3],
   
             (err, res) => {
               if (!err)
