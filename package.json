@@ -30,9 +30,11 @@
     "express": "*",
     "jsonwebtoken": "^8.1.0",
     "os":"*",
+    "q": "^1.5.0",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
     "require-environment-variables": "^1.1.2",
+    "superagent":"*",
     "lodash": "^4.17.4",
     "regex": "^0.1.1"
   },
