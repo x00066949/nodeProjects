@@ -224,7 +224,7 @@ const getPipeId = (repo_id)=>{
   };
   return rp(pipelineIdRequest)
     .then((data) => {
-var nameArr;
+var nameArr = [];
       log(data)
       for (var i = 0; i < data['pipelines'].length*2; i=i+2) {
         log("checking")
