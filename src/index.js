@@ -211,8 +211,7 @@ const send = (spaceId, text, tok, cb) => {
 };
 //
 const getPipeId = (repo_id)=>{
-  var nameArr;
-  //var idArr;
+  
   //get lanes
   var pipelineIdRequest = {
     uri: 'https://api.zenhub.io/p1/repositories/' + repo_id + '/board',
@@ -223,9 +222,9 @@ const getPipeId = (repo_id)=>{
 
     json: true
   };
-  rp(pipelineIdRequest)
+  return rp(pipelineIdRequest)
     .then((data) => {
-
+var nameArr;
       log(data)
       for (var i = 0; i < data['pipelines'].length*2; i=i+2) {
         log("checking")
