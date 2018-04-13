@@ -204,7 +204,67 @@ const dialog = (spaceId, tok, userId, targetDialogId, cb) => {
 
   log("trying to build dialog boxes : " + targetDialogId)
 
+  var nameArr;
+  var idArr;
+  //get lanes
+  var pipelineIdRequest = {
+    uri: 'https://api.zenhub.io/p1/repositories/' + repo_id + '/board',
 
+    headers: {
+      'X-Authentication-Token': process.env.ZENHUB_TOKEN
+    },
+
+    json: true
+  };
+  rp(pipelineIdRequest)
+    .then((data) => {
+
+      log(data)
+      for (var i = 0; i < data['pipelines'].length; i++) {
+        log("checking")
+        //if (data['pipelines'][i].name === PipelineName) {
+          log("found pipeline id : " + data['pipelines'][i].id);
+          nameArr[i] = data['pipelines'][i].name;
+          idArr[i] = data['pipelines'][i].id;
+
+          log(nameArr[i] +" , "+idArr[i])
+        //}
+      }
+
+      //log("did not find id corresponding to pipe name");
+    })
+    .catch((err) => {
+      console.log("error = " + err)
+      return err;
+    })
+
+    log(idArr)
+
+
+    var attachments;
+    for(var i=0; i<nameArr.length; i++){
+      `{
+        type: CARD,
+        cardInput: {
+            type: INFORMATION,
+            informationCardInput: {
+                title: "${nameArr[i]}",
+                subtitle: "Sample Subtitle",
+                text: "Sample Text",
+                date: "1500573338000",
+                buttons: [
+                    {
+                        text: "Sample Button Text",
+                        payload: "${idArr[i]}",
+                        style: PRIMARY
+                    }
+                ]
+            }
+        }
+    }`
+    }
+
+    log(attachments[0]+attachments[1])
   var q = `
   mutation {
     createTargetedMessage(input: {
