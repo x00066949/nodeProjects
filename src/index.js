@@ -272,7 +272,7 @@ const dialog = (spaceId, tok, userId, targetDialogId,nameArr,repo_id,issue_id, c
                 title: "${nameArr[i]}",
                 subtitle: "",
                 text: "Click button below to place Issue in this Pipeline",                
-                date: "",
+                date: "0",
                 buttons: [
                     {
                         text: "Place Issue Here",
