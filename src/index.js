@@ -67,19 +67,25 @@ export const process_requests = (appId, token, cb) => (req, res) => {
         var CommandArr = command.split(' ');
 
         log("using dialog : " + JSON.parse(req.body.annotationPayload).targetDialogId)
-        dialog(req.body.spaceId,
-          token(),
-          req.body.userId,
-          JSON.parse(req.body.annotationPayload).targetDialogId,
-          CommandArr[2],
 
+        var pipePromise = getPipeId(CommandArr[2]);
 
-          (err, res) => {
-            if (!err)
-              log('sent dialog to %s', req.body.spaceId);
-          }
-
-        )
+        pipePromise.then((nameArr) =>{
+          dialog(req.body.spaceId,
+            token(),
+            req.body.userId,
+            JSON.parse(req.body.annotationPayload).targetDialogId,
+            nameArr,
+  
+  
+            (err, res) => {
+              if (!err)
+                log('sent dialog to %s', req.body.spaceId);
+            }
+  
+          )
+        })
+      
       } else {
 
         // message represents the message coming in from WW to be processed by the App
@@ -203,14 +209,10 @@ const send = (spaceId, text, tok, cb) => {
       cb(null, res.body);
     });
 };
-
-//dialog boxes
-const dialog = (spaceId, tok, userId, targetDialogId,repo_id, cb) => {
-
-  log("trying to build dialog boxes : " + targetDialogId)
-
+//
+const getPipeId = (repo_id)=>{
   var nameArr;
-  var idArr;
+  //var idArr;
   //get lanes
   var pipelineIdRequest = {
     uri: 'https://api.zenhub.io/p1/repositories/' + repo_id + '/board',
@@ -225,16 +227,17 @@ const dialog = (spaceId, tok, userId, targetDialogId,repo_id, cb) => {
     .then((data) => {
 
       log(data)
-      for (var i = 0; i < data['pipelines'].length; i++) {
+      for (var i = 0; i < data['pipelines'].length*2; i=i+2) {
         log("checking")
         //if (data['pipelines'][i].name === PipelineName) {
           log("found pipeline id : " + data['pipelines'][i].id);
           nameArr[i] = data['pipelines'][i].name;
-          idArr[i] = data['pipelines'][i].id;
+          nameArr[i+1] = data['pipelines'][i].id;
 
-          log(nameArr[i] +" , "+idArr[i])
+          log(nameArr[i] +" , "+nameArr[i+1])
         //}
       }
+      return nameArr;
 
       //log("did not find id corresponding to pipe name");
     })
@@ -242,13 +245,23 @@ const dialog = (spaceId, tok, userId, targetDialogId,repo_id, cb) => {
       console.log("error = " + err)
       return err;
     })
+}
 
-    log(idArr)
+//dialog boxes
+const dialog = (spaceId, tok, userId, targetDialogId,nameArr, cb) => {
+
+  log("trying to build dialog boxes : " + targetDialogId)
+
+
+
+    log(nameArr)
 
 
     var attachments;
-    for(var i=0; i<nameArr.length; i++){
-      `{
+    var index = 0;
+    for(var i=0; i<nameArr.length; i=i+2){
+     attachments[index] = `
+     {
         type: CARD,
         cardInput: {
             type: INFORMATION,
@@ -260,13 +273,14 @@ const dialog = (spaceId, tok, userId, targetDialogId,repo_id, cb) => {
                 buttons: [
                     {
                         text: "Sample Button Text",
-                        payload: "${idArr[i]}",
+                        payload: "${nameArr[i+1]}",
                         style: PRIMARY
                     }
                 ]
             }
         }
     }`
+    index++;
     }
 
     log(attachments[0]+attachments[1])
