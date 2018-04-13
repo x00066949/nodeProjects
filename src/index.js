@@ -205,7 +205,7 @@ const dialog = (spaceId, tok, userId, targetDialogId, cb) => {
   log("trying to build dialog boxes : "+targetDialogId)
 
 
-  var q = `mutation {
+  var q = /*`mutation {
     createTargetedMessage(input: {
       conversationId: "${spaceId}"
       targetUserId: "${userId}"
@@ -230,7 +230,39 @@ const dialog = (spaceId, tok, userId, targetDialogId, cb) => {
       }) {
       successful
     }
-  }`
+  }`*/
+  `
+  mutation {
+    createTargetedMessage(input: {
+      conversationId: "58934f00e4b0f86a34bbd085"
+      targetUserId: "83152e37-0d9f-4bbb-9d5f-024e75a97600"
+      targetDialogId: "SAMPLE_ACTION_1234"
+      attachments: [
+      {
+          type: CARD,
+          cardInput: {
+              type: INFORMATION,
+              informationCardInput: {
+                  title: "Sample Title",
+                  subtitle: "Sample Subtitle",
+                  text: "Sample Text",
+                  date: "1500573338000",
+                  buttons: [
+                      {
+                          text: "Sample Button Text",
+                          payload: "Sample Button Payload",
+                          style: PRIMARY
+                      }
+                  ]
+              }
+          }
+      }
+      ]
+      }) {
+      successful
+    }
+  }
+  `
   const req = agent.post('https://api.watsonwork.ibm.com/graphql')
   .set('Authorization', `Bearer ${tok}`)
   .set('Content-Type', 'application/graphql')
