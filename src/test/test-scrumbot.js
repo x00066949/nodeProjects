@@ -323,8 +323,8 @@ describe('watsonwork-scrumbot', () => {
         };
 
         var ResultObj = {
-          IsValid: false,
-          Url: '',
+          IsValid: true,
+          Url: 'wrongCommand',
           Method: 'GET',
           Body: null,
           
