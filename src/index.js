@@ -270,7 +270,9 @@ const dialog = (spaceId, tok, userId, targetDialogId,nameArr,repo_id,issue_id, c
             type: INFORMATION,
             informationCardInput: {
                 title: "${nameArr[i]}",
-                text: "Click button below to place Issue in this Pipeline",
+                subtitle: "",
+                text: "Click button below to place Issue in this Pipeline",                
+                date: "",
                 buttons: [
                     {
                         text: "Place Issue Here",
