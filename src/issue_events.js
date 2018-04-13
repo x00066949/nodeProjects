@@ -71,8 +71,8 @@ module.exports = {
                     }
                     FinalMessage += 'In repository ' + req.body.repository.name + ' with repo id: ' + req.body.repository.id + '\n Label added by : ' + req.body.issue.user.login + '\n The Issue can be found here : ' + req.body.issue.html_url + ' .';
                 } else if (req.body.action === 'unlabeled') {
-                    FinalMessage = 'The following label : \n\t'+req.body.label.name;
-                    
+                    FinalMessage = 'The following label : \n\t' + req.body.label.name;
+
                     FinalMessage += '\n Has been removed from Issue ID : #' + req.body.issue.number + '\nIssue Title: ' + req.body.issue.title;
                     FinalMessage += 'In repository ' + req.body.repository.name + ' with repo id: ' + req.body.repository.id + '\n Label removed by : ' + req.body.issue.user.login + '\n The Issue can be found here : ' + req.body.issue.html_url + ' .';
                 }
@@ -82,7 +82,7 @@ module.exports = {
             }
             else {
                 log('Event type: ' + req.get('X-Github-Event'))
-                FinalMessage = 'Event type : '+req.get('X-Github-Event')+' in board. (NOT coded yet...Coming soon)'
+                FinalMessage = 'Event type : ' + req.get('X-Github-Event') + ' in board. (NOT coded yet...Coming soon)'
             }
             log(FinalMessage)
             return FinalMessage;

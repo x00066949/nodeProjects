@@ -293,7 +293,7 @@ module.exports = {
 
     var UMethod = options.UMethod;
     var UrlType = options.UType;
-    log("urltype : "+UrlType)
+    log("urltype : " + UrlType)
 
     console.dir('Urlbody: ' + body, { depth: null });
 
@@ -320,7 +320,7 @@ module.exports = {
       log(UserUrl)
       return rp({
         uri: 'api.github.com',
-    
+
         headers: {
           'User-Agent': 'simple_rest_app',
         },
@@ -329,7 +329,7 @@ module.exports = {
           client_secret: process.env.GIT_CLIENT_SECRET
         },
         json: true
-      }).then(function (successdata){
+      }).then(function (successdata) {
         var errMessage = 'Wrong Command';
         return errMessage;
       })
@@ -389,7 +389,7 @@ module.exports = {
           Data += 'Sucessfully Moved Issue'
         }
 
-        else{
+        else {
           Data = "Command parameters not accepted";
         }
         log("Success Data : " + Data)
@@ -507,11 +507,36 @@ module.exports = {
 
     if (PipelineMoveRegex.test(UserCommand)) {
 
-      return this.getPipelineId(CommandArr,
-        (err, res) => {
-          if (!err)
-            log('moved issue');
-        });
+      var data = this.getPipelineId(CommandArr[4])
+
+      //if moving pipeline, 3rd arg is issue num,  4th = -p, 5th = pipeline, 6t position
+      var IssueNo = CommandArr[2];
+      log("name used " + CommandArr[4])
+
+
+      log("Pipeline got (using data): " + data);
+      var PosNo = CommandArr[5] | 0;
+      log("position: " + PosNo)
+      var MoveIssuePipeLine = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves';
+      log("building move pipeline url..")
+
+      var MoveBody = {
+        pipeline_id: '5a088b638f464709cd2c77c5',
+        //pipeline_id: data,
+        position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
+      };
+
+      var UrlObject = {
+        IsValid: true,
+        Url: MoveIssuePipeLine,
+        Method: 'POST',
+        Body: MoveBody,
+        IsGit: false,
+        UrlType: 'IssueToPipelines'
+      };
+
+      log("url built.");
+      return UrlObject;
 
     }
 
@@ -647,25 +672,7 @@ module.exports = {
   },
 
   //given, pipeline name, return pipeline id
-  getPipelineId: function (CommandArr, cb) {
-    var IssueNo = CommandArr[2];
-    var PipelineName = CommandArr[4];
-    var RespositroyId = CommandArr[1];
-    var MoveBody = {
-      pipeline_id: '5a088b638f464709cd2c77c5',
-      //pipeline_id: newPID,
-      position: '0'
-    };
-    var UrlObject = {
-
-      IsValid: false,
-      Url: 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves',
-      Method: 'POST',
-      Body: MoveBody,
-      IsGit: false,
-      UrlType: 'IssueToPipelines'
-    }
-
+  getPipelineId: function (PipelineName) {
     log("entered name : " + PipelineName)
     //var PipelineId;
     var pipelineIdRequest = {
@@ -677,64 +684,25 @@ module.exports = {
 
       json: true
     };
-    var data;
-    request.get(pipelineIdRequest, (err, res) => {
-      if (!err) {
-        console.dir(res.body, { depth: null })
-        return res.body
-        data = res.body;
-        var newPID;
+    rp(pipelineIdRequest)
+      .then((data) => {
 
         log(data)
         for (var i = 0; i < data['pipelines'].length; i++) {
           log("checking")
           if (data['pipelines'][i].name === PipelineName) {
             log("found pipeline id : " + data['pipelines'][i].id);
-            newPID = data['pipelines'][i].id;
+            return data['pipelines'][i].id;
           }
         }
 
         log("did not find id corresponding to pipe name");
+      })
+      .catch((err) => {
+        console.log("error = " + err)
+        return err;
+      })
 
-        log("Pipeline got (using data): " + newPID);
-        var PosNo = CommandArr[5] | 0;
-        log("position: " + PosNo)
-        var MoveIssuePipeLine = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves';
-        log("building move pipeline url..")
-
-        MoveBody = {
-          pipeline_id: '5a09b234e4b090bcd7fcf3b2',
-          //'5a088b638f464709cd2c77c5',
-          //pipeline_id: newPID,
-          position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
-        };
-
-
-        return UrlObject = {
-          IsValid: true,
-          Url: MoveIssuePipeLine,
-          Method: 'POST',
-          Body: MoveBody,
-          IsGit: false,
-          UrlType: 'IssueToPipelines'
-        };
-
-        log("url built.");
-
-        cb(null, res.body)
-      } else {
-        log(err + res.statusCode)
-        return;
-      }
-    })
-    //.then((data) => {
-    return UrlObject;
-
-    /*})
-    .catch((err) => {
-      console.log("error = " + err)
-      return err;
-    })*/
   }
 
 
