@@ -11,8 +11,8 @@ import * as board from './scrum_board';
 import * as events from './issue_events';
 import q from 'q';
 import agent from 'superagent';
-
 import debug from 'debug';
+var Regex = require('regex');
 var bodyParser = require('body-parser');
 var path = require('path');
 var rp = require('request-promise');
@@ -61,12 +61,17 @@ export const process_requests = (appId, token, cb) => (req, res) => {
         log("no command to process");
 
 
-      if (command === '/issue pipeline') {
+        var PipeRegex = new RegExp(/^\/issue*\spipeline*\s[0-9]/);
+        
+      if (PipeRegex.test(command)) {
+        var CommandArr = command.split(' ');
+
         log("using dialog : " + JSON.parse(req.body.annotationPayload).targetDialogId)
         dialog(req.body.spaceId,
           token(),
           req.body.userId,
           JSON.parse(req.body.annotationPayload).targetDialogId,
+          CommandArr[2],
 
 
           (err, res) => {
@@ -200,7 +205,7 @@ const send = (spaceId, text, tok, cb) => {
 };
 
 //dialog boxes
-const dialog = (spaceId, tok, userId, targetDialogId, cb) => {
+const dialog = (spaceId, tok, userId, targetDialogId,repo_id, cb) => {
 
   log("trying to build dialog boxes : " + targetDialogId)
 
