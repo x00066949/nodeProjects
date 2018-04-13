@@ -225,15 +225,18 @@ const getPipeId = (repo_id)=>{
   return rp(pipelineIdRequest)
     .then((data) => {
 var nameArr = [];
+var nameIndx=0;
       log(data)
-      for (var i = 0; i < data['pipelines'].length*2; i=i+2) {
+      for (var i = 0; i < data['pipelines'].length; i++) {
         log("checking")
         //if (data['pipelines'][i].name === PipelineName) {
           log("found pipeline id : " + data['pipelines'][i].id);
-          nameArr[i] = data['pipelines'][i].name;
-          nameArr[i+1] = data['pipelines'][i].id;
+          nameArr[nameIndx] = data['pipelines'][i].name;
+          nameArr[nameIndx+1] = data['pipelines'][i].id;
 
-          log(nameArr[i] +" , "+nameArr[i+1])
+          log(nameArr[nameIndx] +" , "+nameArr[nameIndx+1])
+          nameIndx = nameIndx+2;
+
         //}
       }
       return nameArr;
@@ -256,7 +259,7 @@ const dialog = (spaceId, tok, userId, targetDialogId,nameArr, cb) => {
     log(nameArr)
 
 
-    var attachments;
+    var attachments = [];
     var index = 0;
     for(var i=0; i<nameArr.length; i=i+2){
      attachments[index] = `
