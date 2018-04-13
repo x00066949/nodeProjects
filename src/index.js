@@ -61,7 +61,7 @@ export const process_requests = (appId, token, cb) => (req, res) => {
         log("no command to process");
 
 
-        var PipeRegex = new RegExp(/^\/issue*\spipeline*\s[0-9]/);
+        var PipeRegex = new RegExp(/^\/issue*\spipeline*\s[0-9]*\s[0-9]/);
         
       if (PipeRegex.test(command)) {
         var CommandArr = command.split(' ');
@@ -76,7 +76,7 @@ export const process_requests = (appId, token, cb) => (req, res) => {
             req.body.userId,
             JSON.parse(req.body.annotationPayload).targetDialogId,
             nameArr,
-  
+            CommandArr[2],
   
             (err, res) => {
               if (!err)
@@ -250,7 +250,7 @@ var nameIndx=0;
 }
 
 //dialog boxes
-const dialog = (spaceId, tok, userId, targetDialogId,nameArr, cb) => {
+const dialog = (spaceId, tok, userId, targetDialogId,nameArr,repo_id,issue_id, cb) => {
 
   log("trying to build dialog boxes : " + targetDialogId)
 
@@ -269,13 +269,11 @@ const dialog = (spaceId, tok, userId, targetDialogId,nameArr, cb) => {
             type: INFORMATION,
             informationCardInput: {
                 title: "${nameArr[i]}",
-                subtitle: "Sample Subtitle",
-                text: "Sample Text",
-                date: "1500573338000",
+                text: "Click button below to place Issue in this Pipeline",
                 buttons: [
                     {
-                        text: "Sample Button Text",
-                        payload: "${nameArr[i+1]}",
+                        text: "Place Issue Here",
+                        payload: "/issue ${repo_id} ${issue_id} -p ${nameArr[i+1]}",
                         style: PRIMARY
                     }
                 ]
@@ -299,24 +297,7 @@ const dialog = (spaceId, tok, userId, targetDialogId,nameArr, cb) => {
     }
   }
   `
-  /*
-  [
-    {
-        type: CARD,
-        cardInput: {
-            type: INFORMATION,
-            informationCardInput: {
-                title: "Sample Title",
-                subtitle: "Sample Subtitle",
-                text: "Sample Text",
-                date: "1500573338000",
-                buttons: [
-                    {
-                        text: "Sample Button Text",
-                        payload: "Sample Button Payload",
-                        style: PRIMARY
-                    }
-                ]*/
+
   const req = agent.post('https://api.watsonwork.ibm.com/graphql')
     .set('Authorization', `Bearer ${tok}`)
     .set('Content-Type', 'application/graphql')
@@ -335,29 +316,7 @@ const dialog = (spaceId, tok, userId, targetDialogId,nameArr, cb) => {
 
     return res;
   });
-  /*request.post(
-    'https://api.watsonwork.ibm.com/graphql', {
 
-      headers: {
-        'jwt': tok,
-        'Content-Type': 'application/graphql',
-        'x-graphql-view': 'PUBLIC, BETA'
-      },
-      json: true,
-      body: q
-
-    }, (err, res) => {
-      if (err || res.statusCode !== 201) {
-        log('failed err: ' + err)
-        console.dir(res, { depth: null })
-        log('Error creating dialog %o', err || res.statusCode);
-        cb(err || new Error(res.statusCode));
-        return;
-      }
-      log('Send result %d, %o', res.statusCode, res.body);
-      cb(null, res.body);
-    }
-  );*/
 };
 
 

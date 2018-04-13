@@ -507,22 +507,19 @@ module.exports = {
 
     if (PipelineMoveRegex.test(UserCommand)) {
 
-      var data = this.getPipelineId(CommandArr[4])
+      var pipe_id = CommandArr[4];
 
       //if moving pipeline, 3rd arg is issue num,  4th = -p, 5th = pipeline, 6t position
       var IssueNo = CommandArr[2];
-      log("name used " + CommandArr[4])
 
 
-      log("Pipeline got (using data): " + data);
+      log("Pipeline got (using pipe_id): " + pipe_id);
       var PosNo = CommandArr[5] | 0;
-      log("position: " + PosNo)
       var MoveIssuePipeLine = 'p1/repositories/' + RespositroyId + '/issues/' + IssueNo + '/moves';
       log("building move pipeline url..")
 
       var MoveBody = {
-        pipeline_id: '5a088b638f464709cd2c77c5',
-        //pipeline_id: data,
+        pipeline_id: pipe_id,
         position: (PosNo !== null && PosNo !== '' && typeof PosNo !== 'undefined' ? PosNo : 0)
       };
 
