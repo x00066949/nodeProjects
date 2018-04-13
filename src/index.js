@@ -293,10 +293,7 @@ const dialog = (spaceId, tok, userId, targetDialogId,nameArr, cb) => {
       targetUserId: "${userId}"
       targetDialogId: "${targetDialogId}"
       attachments: [${attachments}]
-              }
-          }
-      }
-      ]
+             
       }) {
       successful
     }
