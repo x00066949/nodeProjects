@@ -327,15 +327,18 @@ export const verify = (wsecret) => (req, res, buf, encoding) => {
 
     eventType = 'WW'
     log("from WW")
+    console.dir(req, { depth: null })
     return;
 
   }
 
   else if (req.get('X-HUB-SIGNATURE') ===
-    "sha1=" + createHmac('sha1', wsecret).update(buf).digest('hex')) {
-
+    "sha1=" + createHmac('sha1', wsecret).update(buf).digest('hex') || req.get('X-Hub-Signature') ===
+    wsecret ) {
+      
     eventType = 'EL'
     log("github event")
+    console.dir(req, { depth: null })
     return;
 
   } else {
