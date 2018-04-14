@@ -349,6 +349,7 @@ export const verify = (wsecret) => (req, res, buf, encoding) => {
 
     const err = new Error('Invalid request signature');
     err.status = 401;
+    err.message += ': Invalid Signature';
     throw err;
 
   }

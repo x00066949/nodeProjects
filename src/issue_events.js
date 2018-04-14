@@ -13,13 +13,13 @@ module.exports = {
         log('parseresponse')
         
         var UrlOptions = {
-            uri: 'https://api.github.com/',
-            qs: {
+            uri: 'https://www.github.com/',
+            /*qs: {
             },
             headers: {
                 'User-Agent': 'Request-Promise'
             },
-            json: true // Automatically parses the JSON string in the response
+            json: true // Automatically parses the JSON string in the response*/
         };
 
         return rp(UrlOptions).then(function () {
